@@ -3,7 +3,7 @@
   "name": "FabricBukkit",
   "description": "Fabric <3 Bukkit!",
   "version": "${version}",
-  "side": "server",
+  "side": "universal",
   "initializers": [
     "io.github.tz7zw.fabricbukkit.FabricBukkit"
   ],
@@ -11,6 +11,7 @@
     "fabric": "*"
   },
   "mixins": {
-    "common": "fabricbukkit.common.json"
+    "common": "fabricbukkit.common.json",
+    "client": "fabricbukkit.client.json"
   }
 }
