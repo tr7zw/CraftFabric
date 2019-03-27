@@ -1,11 +1,8 @@
 {
   "required": true,
-  "package": "net.fabricmc.example.mixin",
+  "package": "io.github.tz7zw.fabricbukkit.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ExampleMixin",
-	"MixinItemCooldownManager",
-	"MixinEntity"
   ],
   "injectors": {
     "defaultRequire": 1

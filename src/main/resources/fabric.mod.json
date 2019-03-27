@@ -1,17 +1,16 @@
 {
-  "id": "modid",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "id": "fabricbukkit",
+  "name": "FabricBukkit",
+  "description": "Fabric <3 Bukkit!",
   "version": "${version}",
-  "side": "universal",
+  "side": "server",
   "initializers": [
-    "net.fabricmc.example.ExampleMod"
+    "io.github.tz7zw.fabricbukkit.FabricBukkit"
   ],
   "requires": {
     "fabric": "*"
   },
   "mixins": {
-    "client": "modid.client.json",
-    "common": "modid.common.json"
+    "common": "fabricbukkit.common.json"
   }
 }

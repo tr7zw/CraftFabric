@@ -1,4 +1,4 @@
-package net.fabricmc.example;
+package io.github.tr7zw.fabricbukkit;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
