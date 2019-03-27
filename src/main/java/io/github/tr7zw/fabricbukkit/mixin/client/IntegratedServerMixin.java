@@ -1,4 +1,4 @@
-package io.github.tr7zw.fabricbukkit.mixin.server;
+package io.github.tr7zw.fabricbukkit.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -6,10 +6,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.server.dedicated.MinecraftDedicatedServer;
+import net.minecraft.server.integrated.IntegratedServer;
 
-@Mixin(MinecraftDedicatedServer.class)
-public class DedicatedServerMixin {
+@Mixin(IntegratedServer.class)
+public class IntegratedServerMixin {
 
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
