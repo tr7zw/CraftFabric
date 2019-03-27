@@ -5,13 +5,14 @@
   "version": "${version}",
   "side": "universal",
   "initializers": [
-    "io.github.tz7zw.fabricbukkit.FabricBukkit"
+    "io.github.tr7zw.fabricbukkit.FabricBukkit"
   ],
   "requires": {
     "fabric": "*"
   },
   "mixins": {
     "common": "fabricbukkit.common.json",
-    "client": "fabricbukkit.client.json"
+    "client": "fabricbukkit.client.json",
+	"server": "fabricbukkit.server.json"
   }
 }

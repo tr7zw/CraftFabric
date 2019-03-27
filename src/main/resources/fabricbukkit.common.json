@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.tz7zw.fabricbukkit.mixin",
+  "package": "io.github.tr7zw.fabricbukkit.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ExampleMixin",
