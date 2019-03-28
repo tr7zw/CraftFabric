@@ -41,6 +41,7 @@ dependencies {
     // Spigot API
 	compileOnly "org.spigotmc:spigot-api:${project.spigot_version}"
 	extraLibs  "org.spigotmc:spigot-api:${project.spigot_version}"
+	compileOnly "org.jetbrains:annotations:17.0.0"
 
 	configurations.modCompile.extendsFrom(configurations.extraLibs)
 }

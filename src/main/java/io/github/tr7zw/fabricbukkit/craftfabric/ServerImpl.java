@@ -66,6 +66,7 @@ import org.bukkit.util.permissions.DefaultPermissions;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
 import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerImpl implements Server {
 
@@ -86,7 +87,7 @@ public class ServerImpl implements Server {
     public void loadPlugins() {
         pluginManager.registerInterface(JavaPluginLoader.class);
 
-        File pluginFolder = (File) new File("plugins");
+        File pluginFolder = new File("plugins");
 
         if (pluginFolder.exists()) {
             Plugin[] plugins = pluginManager.loadPlugins(pluginFolder);
@@ -157,33 +158,37 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public void sendPluginMessage(Plugin source, String channel, byte[] message) {
+    public void sendPluginMessage(@NotNull Plugin source, @NotNull String channel, @NotNull byte[] message) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
+    @NotNull
     public Set<String> getListeningPluginChannels() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public String getName() {
         return "FabricBukkit";
     }
 
     @Override
+    @NotNull
     public String getVersion() {
         return "dev";
     }
 
     @Override
+    @NotNull
     public String getBukkitVersion() {
         return "Bukkit 1.14-snapshot";
     }
 
     @Override
+    @NotNull
     public Collection<? extends Player> getOnlinePlayers() {
         // TODO Auto-generated method stub
         return null;
@@ -206,23 +211,27 @@ public class ServerImpl implements Server {
     }
 
     @Override
+    @NotNull
     public String getIp() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public String getServerName() {
         return server.getServerName();
     }
 
     @Override
+    @NotNull
     public String getServerId() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public String getWorldType() {
         // TODO Auto-generated method stub
         return null;
@@ -259,6 +268,7 @@ public class ServerImpl implements Server {
     }
 
     @Override
+    @NotNull
     public Set<OfflinePlayer> getWhitelistedPlayers() {
         // TODO Auto-generated method stub
         return null;
@@ -267,24 +277,24 @@ public class ServerImpl implements Server {
     @Override
     public void reloadWhitelist() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
-    public int broadcastMessage(String message) {
+    public int broadcastMessage(@NotNull String message) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
+    @NotNull
     public String getUpdateFolder() {
-        return ""; //wtf
+        return "update"; // FIXME
     }
 
     @Override
+    @NotNull
     public File getUpdateFolderFile() {
-        // TODO Auto-generated method stub
-        return null;
+        return new File("./" + getUpdateFolder()); // FIXME
     }
 
     @Override
@@ -306,78 +316,83 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public Player getPlayer(String name) {
+    public Player getPlayer(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Player getPlayerExact(String name) {
+    public Player getPlayerExact(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<Player> matchPlayer(String name) {
+    @NotNull
+    public List<Player> matchPlayer(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Player getPlayer(UUID id) {
+    public Player getPlayer(@NotNull UUID id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public PluginManager getPluginManager() {
         return pluginManager;
     }
 
     @Override
+    @NotNull
     public BukkitScheduler getScheduler() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public ServicesManager getServicesManager() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public List<World> getWorlds() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public World createWorld(WorldCreator creator) {
+    public World createWorld(@NotNull WorldCreator creator) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean unloadWorld(String name, boolean save) {
+    public boolean unloadWorld(@NotNull String name, boolean save) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean unloadWorld(World world, boolean save) {
+    public boolean unloadWorld(@NotNull World world, boolean save) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public World getWorld(String name) {
+    public World getWorld(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public World getWorld(UUID uid) {
+    public World getWorld(@NotNull UUID uid) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -389,19 +404,22 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public MapView createMap(World world) {
+    @NotNull
+    public MapView createMap(@NotNull World world) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ItemStack createExplorerMap(World world, Location location, StructureType structureType) {
+    @NotNull
+    public ItemStack createExplorerMap(@NotNull World world, @NotNull Location location, @NotNull StructureType structureType) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ItemStack createExplorerMap(World world, Location location, StructureType structureType, int radius,
+    @NotNull
+    public ItemStack createExplorerMap(@NotNull World world, @NotNull Location location, @NotNull StructureType structureType, int radius,
                                        boolean findUnexplored) {
         // TODO Auto-generated method stub
         return null;
@@ -410,22 +428,21 @@ public class ServerImpl implements Server {
     @Override
     public void reload() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void reloadData() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
+    @NotNull
     public Logger getLogger() {
         return logger;
     }
 
     @Override
-    public PluginCommand getPluginCommand(String name) {
+    public PluginCommand getPluginCommand(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -437,7 +454,7 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public boolean dispatchCommand(CommandSender sender, String commandLine) throws CommandException {
+    public boolean dispatchCommand(@NotNull CommandSender sender, @NotNull String commandLine) throws CommandException {
         // TODO Auto-generated method stub
         return false;
     }
@@ -449,12 +466,14 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public List<Recipe> getRecipesFor(ItemStack result) {
+    @NotNull
+    public List<Recipe> getRecipesFor(@NotNull ItemStack result) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Iterator<Recipe> recipeIterator() {
         // TODO Auto-generated method stub
         return null;
@@ -463,16 +482,15 @@ public class ServerImpl implements Server {
     @Override
     public void clearRecipes() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void resetRecipes() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
+    @NotNull
     public Map<String, String[]> getCommandAliases() {
         // TODO Auto-generated method stub
         return null;
@@ -487,7 +505,6 @@ public class ServerImpl implements Server {
     @Override
     public void setSpawnRadius(int value) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -515,126 +532,142 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public int broadcast(String message, String permission) {
+    public int broadcast(@NotNull String message, @NotNull String permission) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public OfflinePlayer getOfflinePlayer(String name) {
+    @NotNull
+    public OfflinePlayer getOfflinePlayer(@NotNull String name) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public OfflinePlayer getOfflinePlayer(UUID id) {
+    @NotNull
+    public OfflinePlayer getOfflinePlayer(@NotNull UUID id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Set<String> getIPBans() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void banIP(String address) {
+    public void banIP(@NotNull String address) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void unbanIP(String address) {
+    public void unbanIP(@NotNull String address) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
+    @NotNull
     public Set<OfflinePlayer> getBannedPlayers() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BanList getBanList(Type type) {
+    @NotNull
+    public BanList getBanList(@NotNull Type type) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Set<OfflinePlayer> getOperators() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public GameMode getDefaultGameMode() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setDefaultGameMode(GameMode mode) {
+    public void setDefaultGameMode(@NotNull GameMode mode) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
+    @NotNull
     public ConsoleCommandSender getConsoleSender() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public File getWorldContainer() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public OfflinePlayer[] getOfflinePlayers() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Messenger getMessenger() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public HelpMap getHelpMap() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder owner, InventoryType type) {
+    @NotNull
+    public Inventory createInventory(InventoryHolder owner, @NotNull InventoryType type) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder owner, InventoryType type, String title) {
+    @NotNull
+    public Inventory createInventory(InventoryHolder owner, @NotNull InventoryType type, @NotNull String title) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Inventory createInventory(InventoryHolder owner, int size) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder owner, int size, String title) throws IllegalArgumentException {
+    @NotNull
+    public Inventory createInventory(InventoryHolder owner, int size, @NotNull String title) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Merchant createMerchant(String title) {
         // TODO Auto-generated method stub
         return null;
@@ -671,9 +704,9 @@ public class ServerImpl implements Server {
     }
 
     @Override
+    @NotNull
     public String getMotd() {
-        // TODO Auto-generated method stub
-        return null;
+        return server.getServerMotd();
     }
 
     @Override
@@ -683,12 +716,14 @@ public class ServerImpl implements Server {
     }
 
     @Override
+    @NotNull
     public WarningState getWarningState() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public ItemFactory getItemFactory() {
         // TODO Auto-generated method stub
         return null;
@@ -707,13 +742,15 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+    @NotNull
+    public CachedServerIcon loadServerIcon(@NotNull File file) throws IllegalArgumentException, Exception {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(BufferedImage image) throws IllegalArgumentException, Exception {
+    @NotNull
+    public CachedServerIcon loadServerIcon(@NotNull BufferedImage image) throws IllegalArgumentException, Exception {
         // TODO Auto-generated method stub
         return null;
     }
@@ -721,7 +758,6 @@ public class ServerImpl implements Server {
     @Override
     public void setIdleTimeout(int threshold) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -731,118 +767,130 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public ChunkData createChunkData(World world) {
+    @NotNull
+    public ChunkData createChunkData(@NotNull World world) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BossBar createBossBar(String title, BarColor color, BarStyle style, BarFlag... flags) {
+    @NotNull
+    public BossBar createBossBar(String title, @NotNull BarColor color, @NotNull BarStyle style, @NotNull BarFlag... flags) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public KeyedBossBar createBossBar(NamespacedKey key, String title, BarColor color, BarStyle style,
-                                      BarFlag... flags) {
+    @NotNull
+    public KeyedBossBar createBossBar(@NotNull NamespacedKey key, String title, @NotNull BarColor color, @NotNull BarStyle style,
+                                      @NotNull BarFlag... flags) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Iterator<KeyedBossBar> getBossBars() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public KeyedBossBar getBossBar(NamespacedKey key) {
+    public KeyedBossBar getBossBar(@NotNull NamespacedKey key) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean removeBossBar(NamespacedKey key) {
+    public boolean removeBossBar(@NotNull NamespacedKey key) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public Entity getEntity(UUID uuid) {
+    public Entity getEntity(@NotNull UUID uuid) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Advancement getAdvancement(NamespacedKey key) {
+    public Advancement getAdvancement(@NotNull NamespacedKey key) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Iterator<Advancement> advancementIterator() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BlockData createBlockData(Material material) {
+    @NotNull
+    public BlockData createBlockData(@NotNull Material material) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BlockData createBlockData(Material material, Consumer<BlockData> consumer) {
+    @NotNull
+    public BlockData createBlockData(@NotNull Material material, Consumer<BlockData> consumer) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public BlockData createBlockData(String data) throws IllegalArgumentException {
+    @NotNull
+    public BlockData createBlockData(@NotNull String data) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public BlockData createBlockData(Material material, String data) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <T extends Keyed> Tag<T> getTag(String registry, NamespacedKey tag, Class<T> clazz) {
+    public <T extends Keyed> Tag<T> getTag(@NotNull String registry, @NotNull NamespacedKey tag, @NotNull Class<T> clazz) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <T extends Keyed> Iterable<Tag<T>> getTags(String registry, Class<T> clazz) {
+    @NotNull
+    public <T extends Keyed> Iterable<Tag<T>> getTags(@NotNull String registry, @NotNull Class<T> clazz) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public LootTable getLootTable(NamespacedKey key) {
+    public LootTable getLootTable(@NotNull NamespacedKey key) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<Entity> selectEntities(CommandSender sender, String selector) throws IllegalArgumentException {
+    @NotNull
+    public List<Entity> selectEntities(@NotNull CommandSender sender, @NotNull String selector) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public UnsafeValues getUnsafe() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    @NotNull
     public Spigot spigot() {
         // TODO Auto-generated method stub
         return null;
     }
-
 }
