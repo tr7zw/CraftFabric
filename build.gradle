@@ -27,6 +27,10 @@ repositories {
         name = 'Sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+	maven {
+		name = 'CodeMC'
+		url = 'https://repo.codemc.org/repository/maven-public/'
+	}
 }
 
 dependencies {
