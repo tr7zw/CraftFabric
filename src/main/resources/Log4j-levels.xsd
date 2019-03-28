@@ -15,7 +15,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:log4j="http://logging.apache.org/log4j/2.0/events" targetNamespace="http://logging.apache.org/log4j/2.0/events" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:log4j="http://logging.apache.org/log4j/2.0/events"
+           targetNamespace="http://logging.apache.org/log4j/2.0/events" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
     <xs:simpleType name="LevelEnum">
         <xs:restriction base="xs:string">
             <xs:enumeration value="OFF"/>
