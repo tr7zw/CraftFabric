@@ -1,4 +1,4 @@
-package io.github.tr7zw.fabricbukkit;
+package io.github.tr7zw.fabricbukkit.craftfabric.world;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -27,8 +27,18 @@ import java.util.function.Predicate;
 
 public class WorldImpl implements World {
 
+    private final net.minecraft.world.World world;
+    private Environment environment;
+    private final ChunkGenerator generator;
+
+    public WorldImpl(net.minecraft.world.World world, ChunkGenerator generator, Environment environment) {
+        this.world = world;
+        this.generator = generator;
+        this.environment = environment;
+    }
+
     public net.minecraft.world.World getHandle() {
-        return null;
+        return world;
     }
 
     @Override
@@ -83,7 +93,7 @@ public class WorldImpl implements World {
 
     @NotNull
     @Override
-    public @NotNull Chunk[] getLoadedChunks() {
+    public Chunk[] getLoadedChunks() {
         return new Chunk[0];
     }
 
@@ -228,7 +238,7 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public @NotNull <T extends Entity> Collection<T> getEntitiesByClass(@NotNull @NotNull Class<T>... classes) {
+    public @NotNull <T extends Entity> Collection<T> getEntitiesByClass(@NotNull Class<T>... classes) {
         return null;
     }
 
@@ -238,7 +248,7 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public @NotNull Collection<Entity> getEntitiesByClasses(@NotNull @NotNull Class<?>... classes) {
+    public @NotNull Collection<Entity> getEntitiesByClasses(@NotNull Class<?>... classes) {
         return null;
     }
 
@@ -672,9 +682,9 @@ public class WorldImpl implements World {
 
     }
 
-    @NotNull
     @Override
-    public @NotNull String[] getGameRules() {
+    @NotNull
+    public String[] getGameRules() {
         return new String[0];
     }
 

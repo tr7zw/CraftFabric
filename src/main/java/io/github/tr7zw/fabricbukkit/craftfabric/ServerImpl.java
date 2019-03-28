@@ -1,6 +1,6 @@
 package io.github.tr7zw.fabricbukkit.craftfabric;
 
-import io.github.tr7zw.fabricbukkit.WorldImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.world.WorldImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
 import net.minecraft.server.config.BannedIpEntry;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
@@ -44,6 +44,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerImpl implements Server {
+    private final String serverName = "FabricBukkit";
+    private final String serverVersion;
+    private final String bukkitVersion = Versioning.getBukkitVersion();
 
     private final MinecraftDedicatedServer server;
     private final Logger logger = Logger.getLogger("Minecraft");
@@ -52,6 +55,7 @@ public class ServerImpl implements Server {
 
     public ServerImpl(MinecraftDedicatedServer server) {
         this.server = server;
+        serverVersion = ServerImpl.class.getPackage().getImplementationVersion();
     }
 
     public void setupServer() {
@@ -147,19 +151,19 @@ public class ServerImpl implements Server {
     @Override
     @NotNull
     public String getName() {
-        return "FabricBukkit";
+        return serverName;
     }
 
     @Override
     @NotNull
     public String getVersion() {
-        return "dev";
+        return serverVersion + " (MC: " + server.getVersion() + ")";
     }
 
     @Override
     @NotNull
     public String getBukkitVersion() {
-        return "Bukkit 1.14-snapshot";
+        return Versioning.getBukkitVersion();
     }
 
     @Override
