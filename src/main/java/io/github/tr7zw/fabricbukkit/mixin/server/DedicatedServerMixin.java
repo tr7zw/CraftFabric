@@ -1,5 +1,6 @@
 package io.github.tr7zw.fabricbukkit.mixin.server;
 
+import net.minecraft.server.dedicated.ServerPropertiesLoader;
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +18,7 @@ public class DedicatedServerMixin {
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
         Object server = this;
-        Bukkit.setServer(new ServerImpl((MinecraftServer) server));
+        Bukkit.setServer(new ServerImpl((MinecraftDedicatedServer) server));
         ((ServerImpl) Bukkit.getServer()).setupServer();
     }
 

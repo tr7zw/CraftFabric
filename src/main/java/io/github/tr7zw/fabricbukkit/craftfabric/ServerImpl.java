@@ -1,39 +1,17 @@
 package io.github.tr7zw.fabricbukkit.craftfabric;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.BanList;
+import io.github.tr7zw.fabricbukkit.WorldImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
+import net.minecraft.server.config.BannedIpEntry;
+import net.minecraft.server.dedicated.MinecraftDedicatedServer;
+import net.minecraft.world.dimension.DimensionType;
+import org.apache.commons.lang.Validate;
+import org.bukkit.*;
 import org.bukkit.BanList.Type;
-import org.bukkit.GameMode;
-import org.bukkit.Keyed;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.StructureType;
-import org.bukkit.Tag;
-import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.boss.KeyedBossBar;
+import org.bukkit.boss.*;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -41,41 +19,38 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.help.HelpMap;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Merchant;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.*;
 import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginLoadOrder;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
-import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.CachedServerIcon;
 import org.bukkit.util.permissions.DefaultPermissions;
-
-import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
-import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerImpl implements Server {
 
-    private final MinecraftServer server;
+    private final MinecraftDedicatedServer server;
     private final Logger logger = Logger.getLogger("Minecraft");
     private final CommandMap commandMap = new CommandMap(this);
     private final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
 
-    public ServerImpl(MinecraftServer server) {
+    public ServerImpl(MinecraftDedicatedServer server) {
         this.server = server;
     }
 
@@ -206,65 +181,56 @@ public class ServerImpl implements Server {
 
     @Override
     public int getViewDistance() {
-        // TODO Auto-generated method stub
-        return 0;
+        return server.getProperties().viewDistance;
     }
 
     @Override
     @NotNull
     public String getIp() {
-        // TODO Auto-generated method stub
-        return null;
+        return server.getServerIp();
     }
 
     @Override
     @NotNull
     public String getServerName() {
-        return server.getServerName();
+        return server.getServerName(); // TODO: hmm, is this the right name? It isn't a standard server.properties entry!
     }
 
     @Override
     @NotNull
     public String getServerId() {
-        // TODO Auto-generated method stub
-        return null;
+        return ""; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     @NotNull
     public String getWorldType() {
-        // TODO Auto-generated method stub
-        return null;
+        return server.getProperties().levelType.getName().toUpperCase();
     }
 
     @Override
     public boolean getGenerateStructures() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().generateStructures;
     }
 
     @Override
     public boolean getAllowEnd() {
-        // TODO Auto-generated method stub
-        return false;
+        return true; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     public boolean getAllowNether() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().allowNether;
     }
 
     @Override
     public boolean hasWhitelist() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().whiteList.get();
     }
 
     @Override
     public void setWhitelist(boolean value) {
-        // TODO Auto-generated method stub
-
+        server.setUseWhitelist(value);
     }
 
     @Override
@@ -276,43 +242,39 @@ public class ServerImpl implements Server {
 
     @Override
     public void reloadWhitelist() {
-        // TODO Auto-generated method stub
+        server.getPlayerManager().reloadWhitelist();
     }
 
     @Override
     public int broadcastMessage(@NotNull String message) {
-        // TODO Auto-generated method stub
-        return 0;
+        return broadcast(message, BROADCAST_CHANNEL_USERS);
     }
 
     @Override
     @NotNull
     public String getUpdateFolder() {
-        return "update"; // FIXME
+        return "update"; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     @NotNull
     public File getUpdateFolderFile() {
-        return new File("./" + getUpdateFolder()); // FIXME
+        return new File("./plugins/" + getUpdateFolder()); // FIXME: read plugin folder from cli argument
     }
 
     @Override
     public long getConnectionThrottle() {
-        // TODO Auto-generated method stub
-        return 0;
+        return -1; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config, remember that is bungee mode enabled this MUST be -1!
     }
 
     @Override
     public int getTicksPerAnimalSpawns() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 400; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     public int getTicksPerMonsterSpawns() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 1; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
@@ -449,8 +411,8 @@ public class ServerImpl implements Server {
 
     @Override
     public void savePlayers() {
-        // TODO Auto-generated method stub
-
+        // TODO plugin-induced save warning, look at bukkit implementation
+        server.getPlayerManager().saveAllPlayerData();
     }
 
     @Override
@@ -498,43 +460,58 @@ public class ServerImpl implements Server {
 
     @Override
     public int getSpawnRadius() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 16; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     public void setSpawnRadius(int value) {
-        // TODO Auto-generated method stub
+        // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
     public boolean getOnlineMode() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().onlineMode;
     }
 
     @Override
     public boolean getAllowFlight() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().allowFlight;
     }
 
     @Override
     public boolean isHardcore() {
-        // TODO Auto-generated method stub
-        return false;
+        return server.getProperties().hardcore;
     }
 
     @Override
     public void shutdown() {
-        // TODO Auto-generated method stub
-
+        // FIXME: just a placeholder!
+        server.shutdown();
     }
 
     @Override
     public int broadcast(@NotNull String message, @NotNull String permission) {
-        // TODO Auto-generated method stub
-        return 0;
+        Set<CommandSender> recipients = new HashSet<>();
+        for (Permissible permissible : getPluginManager().getPermissionSubscriptions(permission)) {
+            if (permissible instanceof CommandSender && permissible.hasPermission(permission)) {
+                recipients.add((CommandSender) permissible);
+            }
+        }
+
+        BroadcastMessageEvent broadcastMessageEvent = new BroadcastMessageEvent(message, recipients);
+        getPluginManager().callEvent(broadcastMessageEvent);
+
+        if (broadcastMessageEvent.isCancelled()) {
+            return 0;
+        }
+
+        message = broadcastMessageEvent.getMessage();
+
+        for (CommandSender recipient : recipients) {
+            recipient.sendMessage(message);
+        }
+
+        return recipients.size();
     }
 
     @Override
@@ -554,20 +531,20 @@ public class ServerImpl implements Server {
     @Override
     @NotNull
     public Set<String> getIPBans() {
-        // TODO Auto-generated method stub
-        return null;
+        // FIXME: is getNames() correct?
+        return new HashSet<>(Arrays.asList(server.getPlayerManager().getIpBanList().getNames()));
     }
 
     @Override
     public void banIP(@NotNull String address) {
-        // TODO Auto-generated method stub
-
+        Validate.notNull(address, "Address cannot be null.");
+        server.getPlayerManager().getIpBanList().add(new BannedIpEntry(address));
     }
 
     @Override
     public void unbanIP(@NotNull String address) {
-        // TODO Auto-generated method stub
-
+        Validate.notNull(address, "Address cannot be null.");
+        server.getPlayerManager().getIpBanList().remove(address);
     }
 
     @Override
@@ -594,13 +571,16 @@ public class ServerImpl implements Server {
     @Override
     @NotNull
     public GameMode getDefaultGameMode() {
-        // TODO Auto-generated method stub
-        return null;
+        return GameMode.getByValue(server.getWorld(DimensionType.OVERWORLD).getLevelProperties().getGameMode().getId());
     }
 
     @Override
     public void setDefaultGameMode(@NotNull GameMode mode) {
-        // TODO Auto-generated method stub
+        Validate.notNull(mode, "Mode cannot be null");
+
+        for (World world : getWorlds()) {
+            ((WorldImpl) world).getHandle().getLevelProperties().setGameMode(net.minecraft.world.GameMode.byId(mode.getValue()));
+        }
     }
 
     @Override
