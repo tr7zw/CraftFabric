@@ -835,8 +835,7 @@ public class ServerImpl implements Server {
 
     @Override
     public UnsafeValues getUnsafe() {
-	// TODO Auto-generated method stub
-	return null;
+	return CraftMagicNumbers.INSTANCE;
     }
 
     @Override
