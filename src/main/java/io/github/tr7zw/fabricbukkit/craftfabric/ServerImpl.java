@@ -55,7 +55,8 @@ public class ServerImpl implements Server {
 
     public ServerImpl(MinecraftDedicatedServer server) {
         this.server = server;
-        serverVersion = ServerImpl.class.getPackage().getImplementationVersion();
+        //serverVersion = ServerImpl.class.getPackage().getImplementationVersion(); TODO
+        serverVersion = "1.14 Dev";
     }
 
     public void setupServer() {
@@ -163,7 +164,7 @@ public class ServerImpl implements Server {
     @Override
     @NotNull
     public String getBukkitVersion() {
-        return Versioning.getBukkitVersion();
+        return bukkitVersion;
     }
 
     @Override
