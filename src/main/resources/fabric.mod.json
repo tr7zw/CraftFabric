@@ -13,6 +13,6 @@
   "mixins": {
     "common": "fabricbukkit.common.json",
     "client": "fabricbukkit.client.json",
-	"server": "fabricbukkit.server.json"
+    "server": "fabricbukkit.server.json"
   }
 }

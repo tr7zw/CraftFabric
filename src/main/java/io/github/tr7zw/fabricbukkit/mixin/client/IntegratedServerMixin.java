@@ -18,27 +18,27 @@ public class IntegratedServerMixin {
 
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
-	Object server = this;
-	Bukkit.setServer(new ServerImpl((MinecraftServer) server));
-	((ServerImpl) Bukkit.getServer()).setupServer();
+        Object server = this;
+        Bukkit.setServer(new ServerImpl((MinecraftServer) server));
+        ((ServerImpl) Bukkit.getServer()).setupServer();
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")
     private void shutdown(CallbackInfo info) {
-	System.out.println("FabricBukkit prepare-stopping!");
+        System.out.println("FabricBukkit prepare-stopping!");
     }
 
     @Inject(at = @At("RETURN"), method = "shutdown")
     private void shutdownFinal(CallbackInfo info) {
-	System.out.println("FabricBukkit stopped!");
-	try {
-	    Field f = Bukkit.class.getDeclaredField("server");
-	    f.setAccessible(true);
-	    f.set(null, null);
-	} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+        System.out.println("FabricBukkit stopped!");
+        try {
+            Field f = Bukkit.class.getDeclaredField("server");
+            f.setAccessible(true);
+            f.set(null, null);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 

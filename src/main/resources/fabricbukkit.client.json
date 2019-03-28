@@ -3,7 +3,7 @@
   "package": "io.github.tr7zw.fabricbukkit.mixin.client",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  "IntegratedServerMixin"
+    "IntegratedServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
