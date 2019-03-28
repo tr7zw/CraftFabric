@@ -20,6 +20,7 @@ public class IntegratedServerMixin {
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
 	Object server = this;
 	Bukkit.setServer(new ServerImpl((MinecraftServer) server));
+	((ServerImpl) Bukkit.getServer()).setupServer();
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")

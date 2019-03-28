@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.BanList;
@@ -50,23 +51,109 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.CachedServerIcon;
+import org.bukkit.util.permissions.DefaultPermissions;
 
+import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
 import net.minecraft.server.MinecraftServer;
 
 public class ServerImpl implements Server {
 
     private final MinecraftServer server;
     private final Logger logger = Logger.getLogger("Minecraft");
+    private final CommandMap commandMap = new CommandMap(this);
+    private final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
 
     public ServerImpl(MinecraftServer server) {
 	this.server = server;
+    }
+
+    public void setupServer() {
+	loadPlugins();
+	enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
+    }
+
+    public void loadPlugins() {
+	pluginManager.registerInterface(JavaPluginLoader.class);
+
+	File pluginFolder = (File) new File("plugins");
+
+	if (pluginFolder.exists()) {
+	    Plugin[] plugins = pluginManager.loadPlugins(pluginFolder);
+	    for (Plugin plugin : plugins) {
+		try {
+		    String message = String.format("Loading %s", plugin.getDescription().getFullName());
+		    plugin.getLogger().info(message);
+		    plugin.onLoad();
+		} catch (Throwable ex) {
+		    Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, ex.getMessage() + " initializing "
+			    + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+		}
+	    }
+	} else {
+	    pluginFolder.mkdir();
+	}
+    }
+
+    public void enablePlugins(PluginLoadOrder type) {
+	if (type == PluginLoadOrder.STARTUP) {
+	    // helpMap.clear();
+	    // helpMap.initializeGeneralTopics();
+	}
+
+	Plugin[] plugins = pluginManager.getPlugins();
+
+	for (Plugin plugin : plugins) {
+	    if ((!plugin.isEnabled()) && (plugin.getDescription().getLoad() == type)) {
+		enablePlugin(plugin);
+	    }
+	}
+
+	if (type == PluginLoadOrder.POSTWORLD) {
+	    // commandMap.setFallbackCommands();
+	    // setVanillaCommands();
+	    // commandMap.registerServerAliases();
+	    DefaultPermissions.registerCorePermissions();
+	    // CraftDefaultPermissions.registerCorePermissions();
+	    // loadCustomPermissions();
+	    // helpMap.initializeCommands();
+	    // syncCommands();
+	}
+    }
+
+    private void enablePlugin(Plugin plugin) {
+	try {
+	    List<Permission> perms = plugin.getDescription().getPermissions();
+
+	    for (Permission perm : perms) {
+		try {
+		    pluginManager.addPermission(perm, false);
+		} catch (IllegalArgumentException ex) {
+		    getLogger().log(Level.WARNING, "Plugin " + plugin.getDescription().getFullName()
+			    + " tried to register permission '" + perm.getName() + "' but it's already registered", ex);
+		}
+	    }
+	    pluginManager.dirtyPermissibles();
+
+	    pluginManager.enablePlugin(plugin);
+	} catch (Throwable ex) {
+	    Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE,
+		    ex.getMessage() + " loading " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+	}
+    }
+
+    public void disablePlugins() {
+	pluginManager.disablePlugins();
     }
 
     @Override
@@ -191,8 +278,7 @@ public class ServerImpl implements Server {
 
     @Override
     public String getUpdateFolder() {
-	// TODO Auto-generated method stub
-	return null;
+	return ""; //wtf
     }
 
     @Override
@@ -245,8 +331,7 @@ public class ServerImpl implements Server {
 
     @Override
     public PluginManager getPluginManager() {
-	// TODO Auto-generated method stub
-	return null;
+	return pluginManager;
     }
 
     @Override
