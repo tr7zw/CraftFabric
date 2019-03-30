@@ -1,4 +1,4 @@
-package io.github.tr7zw.fabricbukkit.mixin;
+package io.github.tr7zw.fabricbukkit.mixin.impl;
 
 import com.mojang.authlib.GameProfile;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;

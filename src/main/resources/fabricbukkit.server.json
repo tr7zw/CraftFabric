@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.tr7zw.fabricbukkit.mixin.server",
+  "package": "io.github.tr7zw.fabricbukkit.mixin.impl.server",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "DedicatedServerMixin"

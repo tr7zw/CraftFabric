@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.tr7zw.fabricbukkit.mixin",
+  "package": "io.github.tr7zw.fabricbukkit.mixin.impl",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockRedstoneWireMixin",

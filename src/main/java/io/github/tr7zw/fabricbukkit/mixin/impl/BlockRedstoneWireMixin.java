@@ -1,5 +1,6 @@
-package io.github.tr7zw.fabricbukkit.mixin;
+package io.github.tr7zw.fabricbukkit.mixin.impl;
 
+import io.github.tr7zw.fabricbukkit.mixin.IBlockRedstoneWireMixin;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RedstoneWireBlock;
 import org.spongepowered.asm.mixin.Mixin;

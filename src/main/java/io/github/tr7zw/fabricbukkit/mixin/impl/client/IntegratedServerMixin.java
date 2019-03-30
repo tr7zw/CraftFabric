@@ -1,4 +1,4 @@
-package io.github.tr7zw.fabricbukkit.mixin.client;
+package io.github.tr7zw.fabricbukkit.mixin.impl.client;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.IntegratedServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
