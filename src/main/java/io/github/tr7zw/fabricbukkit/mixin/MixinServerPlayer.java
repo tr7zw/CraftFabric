@@ -1,12 +1,10 @@
 package io.github.tr7zw.fabricbukkit.mixin;
 
 import java.net.InetSocketAddress;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.spongepowered.asm.mixin.Final;

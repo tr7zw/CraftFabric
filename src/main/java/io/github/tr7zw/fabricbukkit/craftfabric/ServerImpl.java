@@ -77,25 +77,26 @@ import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CraftConsoleCommandSender;
 import io.github.tr7zw.fabricbukkit.craftfabric.world.WorldImpl;
 import jline.console.ConsoleReader;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.config.BannedIpEntry;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 import net.minecraft.world.dimension.DimensionType;
 
-public class ServerImpl implements Server {
+public abstract class ServerImpl implements Server {
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger();
 
     private final String serverName = "FabricBukkit";
     private final String serverVersion;
     private final String bukkitVersion = Versioning.getBukkitVersion();
 
-    private final MinecraftDedicatedServer server;
+    private final MinecraftServer server;
     private final Logger logger = Logger.getLogger("Minecraft");
     private final CommandMap commandMap = new CommandMap(this);
     private final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
     private ConsoleReader reader;
     private org.bukkit.command.ConsoleCommandSender console;
 
-    public ServerImpl(MinecraftDedicatedServer server) {
+    public ServerImpl(MinecraftServer server) {
 	this.server = server;
 	//serverVersion = ServerImpl.class.getPackage().getImplementationVersion(); TODO
 	serverVersion = "1.14 Dev";
@@ -248,9 +249,7 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public int getViewDistance() {
-	return server.getProperties().viewDistance;
-    }
+    public abstract int getViewDistance();
 
     @Override
     @NotNull
@@ -272,14 +271,10 @@ public class ServerImpl implements Server {
 
     @Override
     @NotNull
-    public String getWorldType() {
-	return server.getProperties().levelType.getName().toUpperCase();
-    }
+    public abstract String getWorldType();
 
     @Override
-    public boolean getGenerateStructures() {
-	return server.getProperties().generateStructures;
-    }
+    public abstract boolean getGenerateStructures();
 
     @Override
     public boolean getAllowEnd() {
@@ -287,19 +282,13 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public boolean getAllowNether() {
-	return server.getProperties().allowNether;
-    }
+    public abstract boolean getAllowNether();
 
     @Override
-    public boolean hasWhitelist() {
-	return server.getProperties().whiteList.get();
-    }
+    public abstract boolean hasWhitelist();
 
     @Override
-    public void setWhitelist(boolean value) {
-	server.setUseWhitelist(value);
-    }
+    public abstract void setWhitelist(boolean value);
 
     @Override
     @NotNull
@@ -537,25 +526,16 @@ public class ServerImpl implements Server {
     }
 
     @Override
-    public boolean getOnlineMode() {
-	return server.getProperties().onlineMode;
-    }
+    public abstract boolean getOnlineMode();
 
     @Override
-    public boolean getAllowFlight() {
-	return server.getProperties().allowFlight;
-    }
+    public abstract boolean getAllowFlight();
 
     @Override
-    public boolean isHardcore() {
-	return server.getProperties().hardcore;
-    }
+    public abstract boolean isHardcore();
 
     @Override
-    public void shutdown() {
-	// FIXME: just a placeholder!
-	server.shutdown();
-    }
+    public abstract void shutdown();
 
     @Override
     public int broadcast(@NotNull String message, @NotNull String permission) {

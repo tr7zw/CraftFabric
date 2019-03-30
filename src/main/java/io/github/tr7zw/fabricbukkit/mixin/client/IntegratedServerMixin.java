@@ -8,6 +8,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import io.github.tr7zw.fabricbukkit.craftfabric.IntegratedServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.ServerImpl;
+
 import java.lang.reflect.Field;
 
 @Mixin(IntegratedServer.class)
@@ -15,11 +18,9 @@ public class IntegratedServerMixin {
 
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
-        /*
         Object server = this;
-        Bukkit.setServer(new ServerImpl((MinecraftServer) server));
+        Bukkit.setServer(new IntegratedServerImpl((IntegratedServer) server));
         ((ServerImpl) Bukkit.getServer()).setupServer();
-        */
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")
