@@ -3,9 +3,7 @@
   "package": "io.github.tr7zw.fabricbukkit.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ExampleMixin",
-    "MixinItemCooldownManager",
-    "MixinEntity"
+    "BlockRedstoneWireMixin"
   ],
   "injectors": {
     "defaultRequire": 1
