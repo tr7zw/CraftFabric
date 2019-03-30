@@ -2,7 +2,11 @@ package io.github.tr7zw.fabricbukkit.mixin.client;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.IntegratedServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.toast.SystemToast;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.text.StringTextComponent;
+
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +23,7 @@ public class IntegratedServerMixin {
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
         Object server = this;
         Bukkit.setServer(new IntegratedServerImpl((IntegratedServer) server));
+        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Starting Bukkit..."), null));
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
     }
 
