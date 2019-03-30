@@ -6,7 +6,6 @@ import io.github.tr7zw.fabricbukkit.mixin.IBlockRedstoneWireMixin;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -152,6 +151,11 @@ public class BlockImpl implements Block {
     }
 
     @Override
+    public void setBlockData(@NotNull BlockData data) {
+        setBlockData(data, true);
+    }
+
+    @Override
     public @NotNull Block getRelative(int modX, int modY, int modZ) {
         return getWorld().getBlockAt(getX() + modX, getY() + modY, getZ() + modZ);
     }
@@ -169,6 +173,11 @@ public class BlockImpl implements Block {
     @Override
     public @NotNull Material getType() {
         return CraftMagicNumbers.getMaterial(getNMSBlock());
+    }
+
+    @Override
+    public void setType(@NotNull Material type) {
+        setType(type, true);
     }
 
     @Override
@@ -229,18 +238,8 @@ public class BlockImpl implements Block {
     }
 
     @Override
-    public void setBlockData(@NotNull BlockData data) {
-        setBlockData(data, true);
-    }
-
-    @Override
     public void setBlockData(@NotNull BlockData data, boolean applyPhysics) {
         // TODO
-    }
-
-    @Override
-    public void setType(@NotNull Material type) {
-        setType(type, true);
     }
 
     @Override

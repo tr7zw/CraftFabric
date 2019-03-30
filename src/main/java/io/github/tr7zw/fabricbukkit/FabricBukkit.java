@@ -1,12 +1,7 @@
 package io.github.tr7zw.fabricbukkit;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
-
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -14,6 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sortme.JsonLikeTagParser;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 
 public class FabricBukkit implements ModInitializer {
 

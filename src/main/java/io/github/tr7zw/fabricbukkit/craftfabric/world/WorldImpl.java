@@ -28,8 +28,8 @@ import java.util.function.Predicate;
 public class WorldImpl implements World {
 
     private final net.minecraft.world.World world;
-    private Environment environment;
     private final ChunkGenerator generator;
+    private Environment environment;
 
     public WorldImpl(net.minecraft.world.World world, ChunkGenerator generator, Environment environment) {
         this.world = world;
@@ -578,13 +578,13 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public void setDifficulty(@NotNull Difficulty difficulty) {
-
+    public @NotNull Difficulty getDifficulty() {
+        return null;
     }
 
     @Override
-    public @NotNull Difficulty getDifficulty() {
-        return null;
+    public void setDifficulty(@NotNull Difficulty difficulty) {
+
     }
 
     @Override

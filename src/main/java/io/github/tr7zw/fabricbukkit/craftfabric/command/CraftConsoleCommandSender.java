@@ -65,7 +65,7 @@ public class CraftConsoleCommandSender extends ServerCommandSender implements Co
 
     @Override
     public Spigot spigot() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 }

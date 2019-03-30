@@ -1,15 +1,14 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.command;
 
-import java.util.EnumMap;
-import java.util.Map;
-
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Attribute;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.ServerImpl;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class ColouredConsoleSender extends CraftConsoleCommandSender {
     private final jline.Terminal terminal;
@@ -18,7 +17,7 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
 
     protected ColouredConsoleSender() {
         super();
-        this.terminal = ((ServerImpl) getServer()).getReader().getTerminal();
+        this.terminal = ((AbstractServerImpl) getServer()).getReader().getTerminal();
 
         replacements.put(ChatColor.BLACK, Ansi.ansi().a(Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
         replacements.put(ChatColor.DARK_BLUE, Ansi.ansi().a(Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
@@ -44,6 +43,14 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
         replacements.put(ChatColor.RESET, Ansi.ansi().a(Attribute.RESET).toString());
     }
 
+    public static ConsoleCommandSender getInstance() {
+        if (Bukkit.getConsoleSender() != null) {
+            return Bukkit.getConsoleSender();
+        } else {
+            return new ColouredConsoleSender();
+        }
+    }
+
     @Override
     public void sendMessage(String message) {
         if (terminal.isAnsiSupported()) {
@@ -60,14 +67,6 @@ public class ColouredConsoleSender extends CraftConsoleCommandSender {
             }
         } else {
             super.sendMessage(message);
-        }
-    }
-
-    public static ConsoleCommandSender getInstance() {
-        if (Bukkit.getConsoleSender() != null) {
-            return Bukkit.getConsoleSender();
-        } else {
-            return new ColouredConsoleSender();
         }
     }
 }

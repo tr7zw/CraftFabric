@@ -1,6 +1,6 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.ServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import net.minecraft.entity.Entity;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,16 +17,16 @@ import java.util.Objects;
 public abstract class EntityImpl implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
 
-    protected final ServerImpl server;
+    protected final AbstractServerImpl server;
     protected Entity entity;
     private EntityDamageEvent lastDamageEvent;
 
-    public EntityImpl(final ServerImpl server, final Entity entity) {
+    public EntityImpl(final AbstractServerImpl server, final Entity entity) {
         this.server = server;
         this.entity = entity;
     }
 
-    public static EntityImpl getEntity(ServerImpl server, Entity entity) {
+    public static EntityImpl getEntity(AbstractServerImpl server, Entity entity) {
         /* TODO
         if (entity instanceof LivingEntity) {
             // Players

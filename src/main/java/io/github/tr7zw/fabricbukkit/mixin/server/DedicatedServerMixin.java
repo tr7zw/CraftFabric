@@ -1,15 +1,14 @@
 package io.github.tr7zw.fabricbukkit.mixin.server;
 
+import io.github.tr7zw.fabricbukkit.craftfabric.DedicatedServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import io.github.tr7zw.fabricbukkit.craftfabric.DedicatedServerImpl;
-import io.github.tr7zw.fabricbukkit.craftfabric.ServerImpl;
-import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
 @Mixin(MinecraftDedicatedServer.class)
 public class DedicatedServerMixin {
@@ -18,7 +17,7 @@ public class DedicatedServerMixin {
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
         Object server = this;
         Bukkit.setServer(new DedicatedServerImpl((MinecraftDedicatedServer) server));
-        ((ServerImpl) Bukkit.getServer()).setupServer();
+        ((AbstractServerImpl) Bukkit.getServer()).setupServer();
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")

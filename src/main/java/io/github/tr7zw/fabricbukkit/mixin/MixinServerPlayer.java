@@ -1,21 +1,6 @@
 package io.github.tr7zw.fabricbukkit.mixin;
 
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.mojang.authlib.GameProfile;
-
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftPlayer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,11 +17,22 @@ import net.minecraft.text.TextComponent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayer extends PlayerEntity implements CraftLink<Player> {
-
-    private CraftPlayer craftHandler;
 
     @Shadow
     public ServerPlayNetworkHandler networkHandler;
@@ -46,8 +42,11 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
     @Shadow
     @Final
     public ServerPlayerInteractionManager interactionManager;
+    private CraftPlayer craftHandler;
 
-    @Shadow public abstract void sendChatMessage(TextComponent textComponent_1, ChatMessageType chatMessageType_1);
+    public MixinServerPlayer(World world_1, GameProfile gameProfile_1) { // Just needs to be here
+        super(world_1, gameProfile_1);
+    }
 
     //Testing code
    /* @Inject(at = @At("RETURN"), method = "tick")
@@ -57,32 +56,31 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
 	    System.out.println("OnlinePlayer: " + p.getName());
     }*/
 
+    @Shadow
+    public abstract void sendChatMessage(TextComponent textComponent_1, ChatMessageType chatMessageType_1);
+
     @Inject(method = "<init>*", at = @At("RETURN"))
     public void onCreate(CallbackInfo info) {
-	craftHandler = new CraftPlayer((ServerPlayerEntity)(Object)this);
+        craftHandler = new CraftPlayer((ServerPlayerEntity) (Object) this);
     }
 
     @Override
     public Player getCraftHandler() {
-	return craftHandler;
+        return craftHandler;
     }
 
-    public MixinServerPlayer(World world_1, GameProfile gameProfile_1) { // Just needs to be here
-	super(world_1, gameProfile_1);
-    }
-    
     //FIXME Nugget copy past for now, needs to be cleaned and moved to CraftPlayer
 
     public boolean isSpectator() {
-	return interactionManager.getGameMode() == GameMode.SPECTATOR;
+        return interactionManager.getGameMode() == GameMode.SPECTATOR;
     }
 
     public boolean isCreative() {
-	return this.interactionManager.getGameMode() == GameMode.CREATIVE;
+        return this.interactionManager.getGameMode() == GameMode.CREATIVE;
     }
 
     public GameProfile getProfile() {
-	return getGameProfile();
+        return getGameProfile();
     }
 
     /**
@@ -92,7 +90,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public InetSocketAddress getAddress() {
-	return (InetSocketAddress) networkHandler.getConnection().getAddress();
+        return (InetSocketAddress) networkHandler.getConnection().getAddress();
     }
 
     /**
@@ -102,7 +100,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void kickPlayer(String message) {
-	networkHandler.disconnect(new StringTextComponent(message));
+        networkHandler.disconnect(new StringTextComponent(message));
     }
 
     /**
@@ -112,7 +110,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void chat(String msg) {
-	networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
+        networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
     }
 
     /**
@@ -123,7 +121,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean performCommand(String command) {
-	return false;
+        return false;
     }
 
     /**
@@ -133,7 +131,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isSneaking() {
-	return super.isSneaking();
+        return super.isSneaking();
     }
 
     /**
@@ -143,7 +141,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setSneaking(boolean sneak) {
-	super.setSneaking(sneak);
+        super.setSneaking(sneak);
     }
 
     /**
@@ -153,7 +151,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isSprinting() {
-	return super.isSprinting();
+        return super.isSprinting();
     }
 
     /**
@@ -163,7 +161,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setSprinting(boolean sprinting) {
-	super.setSprinting(sprinting);
+        super.setSprinting(sprinting);
     }
 
     /**
@@ -173,7 +171,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void giveExp(int amount) {
-	super.experience += amount;
+        super.experience += amount;
     }
 
     /**
@@ -185,7 +183,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public float getExp() {
-	return super.experience;
+        return super.experience;
     }
 
     /**
@@ -197,7 +195,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setExp(float exp) {
-	super.experienceBarProgress = exp;
+        super.experienceBarProgress = exp;
     }
 
     /**
@@ -207,7 +205,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public int getLevel() {
-	return super.experienceLevel;
+        return super.experienceLevel;
     }
 
     /**
@@ -217,7 +215,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setLevel(int level) {
-	super.experienceLevel = level;
+        super.experienceLevel = level;
     }
 
     /**
@@ -227,7 +225,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public int getTotalExperience() {
-	return super.experience;
+        return super.experience;
     }
 
     /**
@@ -237,7 +235,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setTotalExperience(int exp) {
-	super.experience = exp;
+        super.experience = exp;
     }
 
     /**
@@ -250,7 +248,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public float getSaturation() {
-	return hungerManager.getSaturationLevel();
+        return hungerManager.getSaturationLevel();
     }
 
     /**
@@ -260,11 +258,11 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setSaturation(float value) {
-	hungerManager.setSaturationLevelClient(value);
+        hungerManager.setSaturationLevelClient(value);
     }
 
     public String getPlayerName() {
-	return super.getEntityName();
+        return super.getEntityName();
     }
 
     /**
@@ -274,7 +272,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public int getFoodLevel() {
-	return hungerManager.getFoodLevel();
+        return hungerManager.getFoodLevel();
     }
 
     /**
@@ -284,7 +282,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setFoodLevel(int value) {
-	hungerManager.setFoodLevel(value);
+        hungerManager.setFoodLevel(value);
     }
 
     /**
@@ -295,7 +293,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean getAllowFlight() {
-	return this.abilities.allowFlying;
+        return this.abilities.allowFlying;
     }
 
     /**
@@ -306,7 +304,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setAllowFlight(boolean flight) {
-	this.abilities.allowFlying = flight;
+        this.abilities.allowFlying = flight;
     }
 
     /**
@@ -338,10 +336,10 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean canSee(Player player) {
-	ServerPlayerEntity entity = server.getPlayerManager().getPlayer(player.getUniqueId());
-	if (entity == null)
-	    return false;
-	return super.canSee(entity);
+        ServerPlayerEntity entity = server.getPlayerManager().getPlayer(player.getUniqueId());
+        if (entity == null)
+            return false;
+        return super.canSee(entity);
     }
 
     /**
@@ -353,7 +351,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isOnGround() {
-	return super.onGround;
+        return super.onGround;
     }
 
     /**
@@ -363,7 +361,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isFlying() {
-	return super.abilities.flying;
+        return super.abilities.flying;
     }
 
     /**
@@ -373,7 +371,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setFlying(boolean value) {
-	super.abilities.flying = value;
+        super.abilities.flying = value;
     }
 
     /**
@@ -382,7 +380,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      * @param name the name of the group to set
      */
     public void setGroup(String name) {
-	getProperties().put("group", name);
+        getProperties().put("group", name);
     }
 
     /**
@@ -392,7 +390,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isOnline() {
-	return Objects.requireNonNull(super.getServer()).getPlayerManager().getPlayer(uuid) != null;
+        return Objects.requireNonNull(super.getServer()).getPlayerManager().getPlayer(uuid) != null;
     }
 
     /**
@@ -402,7 +400,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public UUID getUniqueId() {
-	return getGameProfile().getId();
+        return getGameProfile().getId();
     }
 
     /**
@@ -412,7 +410,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isBanned() {
-	return server.getPlayerManager().getUserBanList().contains(getGameProfile()) || server.getPlayerManager().getIpBanList().contains(networkHandler.getConnection().getAddress());
+        return server.getPlayerManager().getUserBanList().contains(getGameProfile()) || server.getPlayerManager().getIpBanList().contains(networkHandler.getConnection().getAddress());
     }
 
     /**
@@ -421,10 +419,10 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      * @param banned true if banned
      */
     public void setBanned(boolean banned) {
-	if (banned)
-	    server.getPlayerManager().getUserBanList().add(new BannedPlayerEntry(getGameProfile()));
-	else
-	    server.getPlayerManager().getUserBanList().remove(getGameProfile());
+        if (banned)
+            server.getPlayerManager().getUserBanList().add(new BannedPlayerEntry(getGameProfile()));
+        else
+            server.getPlayerManager().getUserBanList().remove(getGameProfile());
     }
 
     /**
@@ -434,7 +432,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isWhitelisted() {
-	return server.getPlayerManager().isWhitelisted(getGameProfile());
+        return server.getPlayerManager().isWhitelisted(getGameProfile());
     }
 
     /**
@@ -444,10 +442,10 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setWhitelisted(boolean value) {
-	if (value)
-	    server.getPlayerManager().getWhitelist().add(new WhitelistEntry(getGameProfile()));
-	else
-	    server.getPlayerManager().getWhitelist().remove(getGameProfile());
+        if (value)
+            server.getPlayerManager().getWhitelist().add(new WhitelistEntry(getGameProfile()));
+        else
+            server.getPlayerManager().getWhitelist().remove(getGameProfile());
     }
 
     /**
@@ -462,7 +460,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public long getFirstPlayed() {
-	return (long) getProperties().getOrDefault("firstPlayed", 0L);
+        return (long) getProperties().getOrDefault("firstPlayed", 0L);
     }
 
     /**
@@ -477,7 +475,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public long getLastPlayed() {
-	return (long) getProperties().getOrDefault("lastPlayed", 0L);
+        return (long) getProperties().getOrDefault("lastPlayed", 0L);
     }
 
     /**
@@ -487,7 +485,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean hasPlayedBefore() {
-	return (boolean) getProperties().getOrDefault("playedBefore", true);
+        return (boolean) getProperties().getOrDefault("playedBefore", true);
     }
 
     /**
@@ -498,10 +496,10 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public Location getBedSpawnLocation() {
-	BlockPos sleepingPos = this.getSleepingPosition().orElse(getSpawnPosition());
-	//FIXME
-	return null;
-	//return new Location(sleepingPos.getX(), sleepingPos.getY(), sleepingPos.getZ());
+        BlockPos sleepingPos = this.getSleepingPosition().orElse(getSpawnPosition());
+        //FIXME
+        return null;
+        //return new Location(sleepingPos.getX(), sleepingPos.getY(), sleepingPos.getZ());
     }
 
     /**
@@ -511,7 +509,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public boolean isOp() {
-	return server.getPlayerManager().isOperator(getGameProfile());
+        return server.getPlayerManager().isOperator(getGameProfile());
     }
 
     /**
@@ -521,15 +519,15 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void setOp(boolean value) {
-	if (value)
-	    server.getPlayerManager().addToOperators(getGameProfile());
-	else
-	    server.getPlayerManager().removeFromOperators(getGameProfile());
+        if (value)
+            server.getPlayerManager().addToOperators(getGameProfile());
+        else
+            server.getPlayerManager().removeFromOperators(getGameProfile());
     }
 
     public HashMap<String, Object> getProperties() {
-	return null; //FIXME
-	//return Nugget.getPlayerData(getUniqueId());
+        return null; //FIXME
+        //return Nugget.getPlayerData(getUniqueId());
     }
 
     /**
@@ -539,26 +537,26 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
      */
 
     public void sendMessage(String message) {
-	sendMessage(new StringTextComponent(message));
+        sendMessage(new StringTextComponent(message));
     }
 
 
     @SuppressWarnings("unchecked")
     public boolean hasPermission(String name) {
-	if(isOp())
-	    return true;
-	//FIXME
-	return true;
-	//return Nugget.getPermissionManager().hasPlayerPermission(this, name);
+        if (isOp())
+            return true;
+        //FIXME
+        return true;
+        //return Nugget.getPermissionManager().hasPlayerPermission(this, name);
     }
 
     public void sendMessage(TextComponent message) {
-	sendChatMessage(message, ChatMessageType.SYSTEM);
+        sendChatMessage(message, ChatMessageType.SYSTEM);
     }
 
 
     public Location getLocation() {
-	return null; //FIXME
-	//return new Location(getPos().getX(), getPos().getY(), getPos().getZ());
+        return null; //FIXME
+        //return new Location(getPos().getX(), getPos().getY(), getPos().getZ());
     }
 }

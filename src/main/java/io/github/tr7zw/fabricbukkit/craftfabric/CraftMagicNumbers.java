@@ -27,9 +27,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
     private static final Map<Block, Material> BLOCK_MATERIAL = new HashMap<>();
     private static final Map<Material, Block> MATERIAL_BLOCK = new HashMap<>();
 
-    private CraftMagicNumbers() {
-    }
-
     static {
         for (Block block : Registry.BLOCK) {
             BLOCK_MATERIAL.put(block, Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT)));
@@ -38,6 +35,9 @@ public final class CraftMagicNumbers implements UnsafeValues {
             Identifier key = key(material);
             MATERIAL_BLOCK.put(material, Registry.BLOCK.get(key));
         }
+    }
+
+    private CraftMagicNumbers() {
     }
 
     public static @NotNull Material getMaterial(Block block) {
@@ -54,6 +54,70 @@ public final class CraftMagicNumbers implements UnsafeValues {
         }
 
         return NamespaceUtils.toMinecraft(mat.getKey());
+    }
+
+    @Override
+    public Material toLegacy(Material material) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Material fromLegacy(Material material) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Material fromLegacy(MaterialData material) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Material fromLegacy(MaterialData material, boolean itemPriority) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlockData fromLegacy(Material material, byte data) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getDataVersion() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public ItemStack modifyItemStack(ItemStack stack, String arguments) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void checkSupported(PluginDescriptionFile pdf) throws InvalidPluginException {
+        // Nah
+    }
+
+    @Override
+    public byte[] processClass(PluginDescriptionFile pdf, String path, byte[] clazz) {
+        return clazz; //no processing
+    }
+
+    @Override
+    public Advancement loadAdvancement(NamespacedKey key, String advancement) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean removeAdvancement(NamespacedKey key) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     /**
@@ -76,80 +140,5 @@ public final class CraftMagicNumbers implements UnsafeValues {
         public static final int TAG_COMPOUND = 10;
         public static final int TAG_INT_ARRAY = 11;
         public static final int TAG_ANY_NUMBER = 99;
-    }
-
-
-    @Override
-    public Material toLegacy(Material material) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public Material fromLegacy(Material material) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public Material fromLegacy(MaterialData material) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public Material fromLegacy(MaterialData material, boolean itemPriority) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public BlockData fromLegacy(Material material, byte data) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public int getDataVersion() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-
-    @Override
-    public ItemStack modifyItemStack(ItemStack stack, String arguments) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public void checkSupported(PluginDescriptionFile pdf) throws InvalidPluginException {
-        // Nah
-    }
-
-
-    @Override
-    public byte[] processClass(PluginDescriptionFile pdf, String path, byte[] clazz) {
-        return clazz; //no processing
-    }
-
-
-    @Override
-    public Advancement loadAdvancement(NamespacedKey key, String advancement) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public boolean removeAdvancement(NamespacedKey key) {
-        // TODO Auto-generated method stub
-        return false;
     }
 }
