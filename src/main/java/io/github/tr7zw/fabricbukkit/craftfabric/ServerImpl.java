@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -229,11 +230,11 @@ public class ServerImpl implements Server {
 	return bukkitVersion;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     @NotNull
     public Collection<? extends Player> getOnlinePlayers() {
-	// TODO Auto-generated method stub
-	return null;
+	return server.getPlayerManager().getPlayerList().stream().map(player -> ((CraftLink<Player>)(Object)player).getCraftHandler()).collect(Collectors.toList());
     }
 
     @Override

@@ -3,7 +3,8 @@
   "package": "io.github.tr7zw.fabricbukkit.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockRedstoneWireMixin"
+    "BlockRedstoneWireMixin",
+    "MixinServerPlayer"
   ],
   "injectors": {
     "defaultRequire": 1
