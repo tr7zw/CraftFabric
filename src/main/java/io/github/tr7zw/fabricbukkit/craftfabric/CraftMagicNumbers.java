@@ -32,6 +32,9 @@ public final class CraftMagicNumbers implements UnsafeValues {
             BLOCK_MATERIAL.put(block, Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT)));
         }
         for (Material material : Material.values()) {
+            if(material.isLegacy()) {
+                continue;
+            }
             Identifier key = key(material);
             MATERIAL_BLOCK.put(material, Registry.BLOCK.get(key));
         }
