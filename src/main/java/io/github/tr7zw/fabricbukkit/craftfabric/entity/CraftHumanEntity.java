@@ -16,6 +16,7 @@ import org.bukkit.inventory.InventoryView.Property;
 import com.google.common.base.Preconditions;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
+import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemStack;
 import io.github.tr7zw.fabricbukkit.mixin.IItemCooldownManagerMixin;
 
 import org.bukkit.inventory.ItemStack;
@@ -110,8 +111,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
 	@Override
 	public ItemStack getItemInHand() {
-		// TODO Auto-generated method stub
-		return null;
+		return CraftItemStack.asBukkitCopy(getHandle().getMainHandStack());
 	}
 
 	@Override

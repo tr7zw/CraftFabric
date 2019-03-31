@@ -40,10 +40,10 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
     }
 
     //Testing code
-    /*@Inject(at = @At("RETURN"), method = "tick")
+    @Inject(at = @At("RETURN"), method = "tick")
     public void tick(CallbackInfo info) {
-	System.out.println("Players: " + Bukkit.getOnlinePlayers().size() + " World:" + craftHandler.getWorld().getName());
-    }*/
+	System.out.println("MainhandItem: " + craftHandler.getItemInHand().getType());
+    }
 
     @Shadow
     public abstract void sendChatMessage(TextComponent textComponent_1, ChatMessageType chatMessageType_1);

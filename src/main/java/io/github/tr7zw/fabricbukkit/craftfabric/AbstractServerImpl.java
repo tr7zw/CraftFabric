@@ -77,6 +77,7 @@ import org.jetbrains.annotations.NotNull;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CommandMap;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CraftConsoleCommandSender;
+import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemFactory;
 import io.github.tr7zw.fabricbukkit.craftfabric.world.CraftWorld;
 import jline.console.ConsoleReader;
 import net.minecraft.server.MinecraftServer;
@@ -94,6 +95,7 @@ public abstract class AbstractServerImpl implements Server {
 	private final Logger logger = Logger.getLogger("Minecraft");
 	private final CommandMap commandMap = new CommandMap(this);
 	private final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
+	private final ItemFactory itemFactory = new CraftItemFactory();
 	private ConsoleReader reader;
 	private org.bukkit.command.ConsoleCommandSender console;
 
@@ -757,8 +759,7 @@ public abstract class AbstractServerImpl implements Server {
 	@Override
 	@NotNull
 	public ItemFactory getItemFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return itemFactory;
 	}
 
 	@Override
