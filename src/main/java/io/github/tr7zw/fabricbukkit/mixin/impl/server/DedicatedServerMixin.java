@@ -30,4 +30,8 @@ public class DedicatedServerMixin {
         System.out.println("FabricBukkit stopped!");
     }
 
+    @Inject(at = @At("HEAD"), method = "createGui", cancellable = true)
+    public void createGui(CallbackInfo info) {
+        info.cancel();
+    }
 }
