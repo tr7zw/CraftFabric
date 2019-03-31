@@ -23,8 +23,8 @@ public class IntegratedServerMixin {
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
         Object server = this;
         Bukkit.setServer(new IntegratedServerImpl((IntegratedServer) server));
-        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Starting Bukkit..."), null));
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
+        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Loaded " + Bukkit.getPluginManager().getPlugins().length + " Bukkit Plugin(s)"), null));
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")
