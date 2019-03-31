@@ -28,6 +28,8 @@ import org.bukkit.inventory.PlayerInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.AbsoluteHand;
 
+import java.util.Collection;
+
 public abstract class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
 
 	private final PlayerEntity handler;
