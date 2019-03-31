@@ -2,7 +2,7 @@ package io.github.tr7zw.fabricbukkit.mixin.impl;
 
 import com.mojang.authlib.GameProfile;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
-import io.github.tr7zw.fabricbukkit.craftfabric.CraftPlayer;
+import io.github.tr7zw.fabricbukkit.craftfabric.entity.CraftPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.config.BannedPlayerEntry;
