@@ -3,6 +3,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric;
 import com.google.common.collect.MapMaker;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CraftCommandMap;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.CraftConsoleCommandSender;
+import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemFactory;
 import io.github.tr7zw.fabricbukkit.craftfabric.world.CraftWorld;
 import jline.console.ConsoleReader;
 import net.minecraft.server.MinecraftServer;
@@ -63,6 +64,7 @@ public abstract class AbstractServerImpl implements Server {
     //protected final SimpleHelpMap helpMap = new SimpleHelpMap(this);
     protected final StandardMessenger messenger = new StandardMessenger();
     protected final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
+    private final ItemFactory itemFactory = new CraftItemFactory();
 
     // Vanilla server instance
     protected final MinecraftServer server;
@@ -753,8 +755,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public ItemFactory getItemFactory() {
-        // TODO Auto-generated method stub
-        return null;
+        return itemFactory;
     }
 
     @Override
