@@ -1,7 +1,9 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
-import net.minecraft.entity.Entity;
+import java.util.List;
+import java.util.Objects;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -11,22 +13,22 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Objects;
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
+import net.minecraft.entity.Entity;
 
-public abstract class EntityImpl implements org.bukkit.entity.Entity {
+public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
 
-    protected final AbstractServerImpl server;
+    protected final AbstractServerImpl server = (AbstractServerImpl) Bukkit.getServer();
     protected Entity entity;
     private EntityDamageEvent lastDamageEvent;
 
-    public EntityImpl(final AbstractServerImpl server, final Entity entity) {
-        this.server = server;
+    public CraftEntity(final Entity entity) {
         this.entity = entity;
     }
 
-    public static EntityImpl getEntity(AbstractServerImpl server, Entity entity) {
+    public static CraftEntity getEntity(AbstractServerImpl server, Entity entity) {
         /* TODO
         if (entity instanceof LivingEntity) {
             // Players
@@ -391,10 +393,11 @@ public abstract class EntityImpl implements org.bukkit.entity.Entity {
         return entity.onGround;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public @NotNull World getWorld() {
-        // TODO
-        return null;
+    	return ((CraftLink<World>)(Object)entity.getEntityWorld()).getCraftHandler();
+        
     }
 
     @Override

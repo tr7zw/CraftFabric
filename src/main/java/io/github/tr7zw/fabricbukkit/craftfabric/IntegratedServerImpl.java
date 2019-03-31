@@ -1,9 +1,11 @@
 package io.github.tr7zw.fabricbukkit.craftfabric;
 
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.GameOption;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.dimension.DimensionType;
-import org.jetbrains.annotations.NotNull;
 
 public class IntegratedServerImpl extends AbstractServerImpl {
 
@@ -16,7 +18,7 @@ public class IntegratedServerImpl extends AbstractServerImpl {
 
     @Override
     public int getViewDistance() {
-        return (int) GameOption.RENDER_DISTANCE.method_18617();
+        return (int) GameOption.RENDER_DISTANCE.get(MinecraftClient.getInstance().options);
     }
 
     @Override

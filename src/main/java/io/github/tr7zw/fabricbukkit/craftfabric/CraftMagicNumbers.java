@@ -2,6 +2,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.bukkit.Material;
@@ -25,11 +26,16 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     // Mappings
     private static final Map<Block, Material> BLOCK_MATERIAL = new HashMap<>();
+    private static final Map<Item, Material> ITEM_MATERIAL = new HashMap<>();
     private static final Map<Material, Block> MATERIAL_BLOCK = new HashMap<>();
+    private static final Map<Material, Item> MATERIAL_ITEM = new HashMap<>();
 
     static {
         for (Block block : Registry.BLOCK) {
             BLOCK_MATERIAL.put(block, Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT)));
+        }
+        for (Item item : Registry.ITEM) {
+        	ITEM_MATERIAL.put(item, Material.getMaterial(Registry.ITEM.getId(item).getPath().toUpperCase(Locale.ROOT)));
         }
         for (Material material : Material.values()) {
             if(material.isLegacy()) {
@@ -37,6 +43,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
             }
             Identifier key = key(material);
             MATERIAL_BLOCK.put(material, Registry.BLOCK.get(key));
+            MATERIAL_ITEM.put(material, Registry.ITEM.get(key));
         }
     }
 
@@ -46,9 +53,17 @@ public final class CraftMagicNumbers implements UnsafeValues {
     public static @NotNull Material getMaterial(Block block) {
         return BLOCK_MATERIAL.get(block);
     }
+    
+    public static @NotNull Material getMaterial(Item item) {
+        return ITEM_MATERIAL.get(item);
+    }
 
     public static @NotNull Block getBlock(Material material) {
         return MATERIAL_BLOCK.get(material);
+    }
+    
+    public static @NotNull Item getItem(Material material) {
+        return MATERIAL_ITEM.get(material);
     }
 
     public static @NotNull Identifier key(Material mat) {
