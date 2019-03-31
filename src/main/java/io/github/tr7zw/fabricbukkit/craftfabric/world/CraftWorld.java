@@ -58,7 +58,7 @@ public class CraftWorld implements World {
 
     @Override
     public void setMetadata(String metadataKey, MetadataValue newMetadataValue) {
-        getServer().getWorldM
+        // TODO Auto-generated method stub
     }
 
     @Override
