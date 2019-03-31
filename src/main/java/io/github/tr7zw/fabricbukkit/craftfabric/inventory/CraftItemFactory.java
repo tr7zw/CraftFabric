@@ -1,7 +1,6 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.inventory;
 
-import java.util.Collection;
-
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -9,7 +8,7 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Collection;
 
 public final class CraftItemFactory implements ItemFactory {
     static final Color DEFAULT_LEATHER_COLOR = Color.fromRGB(0xA06540);
@@ -20,19 +19,19 @@ public final class CraftItemFactory implements ItemFactory {
         instance = new CraftItemFactory();
         //ConfigurationSerialization.registerClass(CraftMetaItem.SerializableMeta.class);
         KNOWN_NBT_ATTRIBUTE_NAMES = ImmutableSet.<String>builder()
-            .add("generic.armor")
-            .add("generic.armorToughness")
-            .add("generic.attackDamage")
-            .add("generic.followRange")
-            .add("generic.knockbackResistance")
-            .add("generic.maxHealth")
-            .add("generic.movementSpeed")
-            .add("generic.flyingSpeed")
-            .add("generic.attackSpeed")
-            .add("generic.luck")
-            .add("horse.jumpStrength")
-            .add("zombie.spawnReinforcements")
-            .build();
+                .add("generic.armor")
+                .add("generic.armorToughness")
+                .add("generic.attackDamage")
+                .add("generic.followRange")
+                .add("generic.knockbackResistance")
+                .add("generic.maxHealth")
+                .add("generic.movementSpeed")
+                .add("generic.flyingSpeed")
+                .add("generic.attackSpeed")
+                .add("generic.luck")
+                .add("horse.jumpStrength")
+                .add("zombie.spawnReinforcements")
+                .build();
     }
 
     public CraftItemFactory() {

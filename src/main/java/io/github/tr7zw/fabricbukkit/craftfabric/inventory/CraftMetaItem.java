@@ -382,6 +382,7 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
         final String BUKKIT;
         final String NBT;
+
         ItemMetaKey(final String both) {
             this(both, both);
         }
