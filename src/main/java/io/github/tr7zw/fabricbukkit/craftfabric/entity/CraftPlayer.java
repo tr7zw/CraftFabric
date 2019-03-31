@@ -40,11 +40,10 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.scoreboard.ScoreboardTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.packet.ChatMessageC2SPacket;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 @SuppressWarnings("deprecation")
 public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -289,8 +288,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
 	@Override
 	public void chat(String msg) {
-		// TODO Auto-generated method stub
-
+        getHandle().networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
 	}
 
 	@Override

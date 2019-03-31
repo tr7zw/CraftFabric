@@ -1,7 +1,7 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.block;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
-import io.github.tr7zw.fabricbukkit.craftfabric.world.WorldImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.world.CraftWorld;
 import io.github.tr7zw.fabricbukkit.mixin.IBlockRedstoneWireMixin;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RedstoneWireBlock;
@@ -133,8 +133,8 @@ public class BlockImpl implements Block {
         return null;
     }
 
-    public WorldImpl getWorldImpl() {
-        return (WorldImpl) getWorld();
+    public CraftWorld getWorldImpl() {
+        return (CraftWorld) getWorld();
     }
 
     // Implementation

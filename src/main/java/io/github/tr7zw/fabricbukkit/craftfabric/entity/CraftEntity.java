@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
 import net.minecraft.entity.Entity;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -392,10 +393,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
         return entity.onGround;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public @NotNull World getWorld() {
-        // TODO
-        return null;
+    	return ((CraftLink<World>)(Object)entity.getEntityWorld()).getCraftHandler();
+        
     }
 
     @Override
