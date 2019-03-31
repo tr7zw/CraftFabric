@@ -1,14 +1,13 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.world;
 
 import com.google.common.base.Preconditions;
-import io.github.tr7zw.fabricbukkit.craftfabric.block.BlockImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.block.CraftBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.palette.PalettedContainer;
 import net.minecraft.world.chunk.ChunkPos;
 import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.WorldChunk;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -17,7 +16,7 @@ import org.bukkit.entity.Entity;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
-public abstract class ChunkImpl implements Chunk {
+public abstract class CraftChunk implements Chunk {
     private WeakReference<net.minecraft.world.chunk.WorldChunk> weakChunk;
     private final ServerWorld worldServer;
     private final ChunkPos position;
@@ -35,7 +34,7 @@ public abstract class ChunkImpl implements Chunk {
         Preconditions.checkArgument(0 <= z && z <= 15, "z out of range (expected 0-15, got %s)", z);
     }
 
-    public ChunkImpl(net.minecraft.world.chunk.WorldChunk chunk) {
+    public CraftChunk(net.minecraft.world.chunk.WorldChunk chunk) {
         this.weakChunk = new WeakReference<>(chunk);
 
         worldServer = (ServerWorld) getHandle().getWorld();
@@ -47,8 +46,8 @@ public abstract class ChunkImpl implements Chunk {
         return null;
     }
 
-    public WorldImpl getCraftWorld() {
-        return (WorldImpl) getWorld();
+    public CraftWorld getCraftWorld() {
+        return (CraftWorld) getWorld();
     }
 
     public net.minecraft.world.chunk.WorldChunk getHandle() {
@@ -74,7 +73,7 @@ public abstract class ChunkImpl implements Chunk {
 
     public Block getBlock(int x, int y, int z) {
         validateChunkCoordinates(x, y, z);
-        return new BlockImpl(worldServer, new BlockPos((getX() << 4) | x, y, (getZ() << 4) | z));
+        return new CraftBlock(worldServer, new BlockPos((getX() << 4) | x, y, (getZ() << 4) | z));
     }
 
     public Entity[] getEntities() {

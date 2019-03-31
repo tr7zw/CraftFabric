@@ -29,17 +29,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class BlockImpl implements Block {
+public class CraftBlock implements Block {
     private final net.minecraft.world.World world;
     private final BlockPos position;
 
-    public BlockImpl(net.minecraft.world.World world, BlockPos position) {
+    public CraftBlock(net.minecraft.world.World world, BlockPos position) {
         this.world = world;
         this.position = position.toImmutable();
     }
 
-    public static BlockImpl at(net.minecraft.world.World world, BlockPos position) {
-        return new BlockImpl(world, position);
+    public static CraftBlock at(net.minecraft.world.World world, BlockPos position) {
+        return new CraftBlock(world, position);
     }
 
     // Utility methods
@@ -425,8 +425,8 @@ public class BlockImpl implements Block {
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
-        if (!(object instanceof BlockImpl)) return false;
-        BlockImpl other = (BlockImpl) object;
+        if (!(object instanceof CraftBlock)) return false;
+        CraftBlock other = (CraftBlock) object;
 
         return this.position.equals(other.position) && this.getWorld().equals(other.getWorld());
     }
