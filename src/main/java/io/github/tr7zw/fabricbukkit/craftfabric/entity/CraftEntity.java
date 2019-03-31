@@ -1,8 +1,8 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
-import java.util.List;
-import java.util.Objects;
-
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
+import net.minecraft.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,9 +13,8 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
-import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
-import net.minecraft.entity.Entity;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
@@ -394,10 +393,10 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public @NotNull World getWorld() {
-    	return ((CraftLink<World>)(Object)entity.getEntityWorld()).getCraftHandler();
-        
+        return ((CraftLink<World>) (Object) entity.getEntityWorld()).getCraftHandler();
+
     }
 
     @Override

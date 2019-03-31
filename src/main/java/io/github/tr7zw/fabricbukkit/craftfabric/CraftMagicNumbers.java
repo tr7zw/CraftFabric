@@ -35,10 +35,10 @@ public final class CraftMagicNumbers implements UnsafeValues {
             BLOCK_MATERIAL.put(block, Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT)));
         }
         for (Item item : Registry.ITEM) {
-        	ITEM_MATERIAL.put(item, Material.getMaterial(Registry.ITEM.getId(item).getPath().toUpperCase(Locale.ROOT)));
+            ITEM_MATERIAL.put(item, Material.getMaterial(Registry.ITEM.getId(item).getPath().toUpperCase(Locale.ROOT)));
         }
         for (Material material : Material.values()) {
-            if(material.isLegacy()) {
+            if (material.isLegacy()) {
                 continue;
             }
             Identifier key = key(material);
@@ -53,7 +53,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
     public static @NotNull Material getMaterial(Block block) {
         return BLOCK_MATERIAL.get(block);
     }
-    
+
     public static @NotNull Material getMaterial(Item item) {
         return ITEM_MATERIAL.get(item);
     }
@@ -61,7 +61,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
     public static @NotNull Block getBlock(Material material) {
         return MATERIAL_BLOCK.get(material);
     }
-    
+
     public static @NotNull Item getItem(Material material) {
         return MATERIAL_ITEM.get(material);
     }

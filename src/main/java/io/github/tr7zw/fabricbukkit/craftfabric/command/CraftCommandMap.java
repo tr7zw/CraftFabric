@@ -6,9 +6,9 @@ import org.bukkit.command.SimpleCommandMap;
 
 import java.util.Map;
 
-public class CommandMap extends SimpleCommandMap {
+public class CraftCommandMap extends SimpleCommandMap {
 
-    public CommandMap(Server server) {
+    public CraftCommandMap(Server server) {
         super(server);
     }
 

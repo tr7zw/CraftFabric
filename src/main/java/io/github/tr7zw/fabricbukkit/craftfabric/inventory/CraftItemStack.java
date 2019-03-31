@@ -1,192 +1,108 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.inventory;
 
+import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
+import net.minecraft.item.Item;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
-import net.minecraft.item.Item;
-
 public class CraftItemStack extends ItemStack {
 
-	 public static net.minecraft.item.ItemStack asNMSCopy(ItemStack original) {
-	        if (original instanceof CraftItemStack) {
-	            CraftItemStack stack = (CraftItemStack) original;
-	            return stack.handle == null ? net.minecraft.item.ItemStack.EMPTY : stack.handle.copy();
-	        }
-	        if (original == null || original.getType() == Material.AIR) {
-	            return net.minecraft.item.ItemStack.EMPTY;
-	        }
+    net.minecraft.item.ItemStack handle;
 
-	        Item item = CraftMagicNumbers.getItem(original.getType());
+    /**
+     * Mirror
+     */
+    private CraftItemStack(net.minecraft.item.ItemStack item) {
+        this.handle = item;
+    }
 
-	        if (item == null) {
-	            return net.minecraft.item.ItemStack.EMPTY;
-	        }
+    private CraftItemStack(ItemStack item) {
+        this(item.getType(), item.getAmount(), item.getDurability(), item.hasItemMeta() ? item.getItemMeta() : null);
+    }
 
-	        net.minecraft.item.ItemStack stack = new net.minecraft.item.ItemStack(item, original.getAmount());
-	        if (original.hasItemMeta()) {
-	            setItemMeta(stack, original.getItemMeta());
-	        } else {
-	            // Converted after setItemMeta
-	            //FIXME? stack.convertStack();
-	        }
-	        return stack;
-	    }
+    private CraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
+        setType(type);
+        setAmount(amount);
+        setDurability(durability);
+        setItemMeta(itemMeta);
+    }
 
-	    public static net.minecraft.item.ItemStack copyNMSStack(net.minecraft.item.ItemStack original, int amount) {
-	        net.minecraft.item.ItemStack stack = original.copy();
-	        stack.setAmount(amount);
-	        return stack;
-	    }
+    public static net.minecraft.item.ItemStack asNMSCopy(ItemStack original) {
+        if (original instanceof CraftItemStack) {
+            CraftItemStack stack = (CraftItemStack) original;
+            return stack.handle == null ? net.minecraft.item.ItemStack.EMPTY : stack.handle.copy();
+        }
+        if (original == null || original.getType() == Material.AIR) {
+            return net.minecraft.item.ItemStack.EMPTY;
+        }
 
-	    /**
-	     * Copies the NMS stack to return as a strictly-Bukkit stack
-	     */
-	    public static ItemStack asBukkitCopy(net.minecraft.item.ItemStack original) {
-	        if (original.isEmpty()) {
-	            return new ItemStack(Material.AIR);
-	        }
-	        ItemStack stack = new ItemStack(CraftMagicNumbers.getMaterial(original.getItem()), original.getAmount());
-	        if (hasItemMeta(original)) {
-	            stack.setItemMeta(getItemMeta(original));
-	        }
-	        return stack;
-	    }
+        Item item = CraftMagicNumbers.getItem(original.getType());
 
-	    public static CraftItemStack asCraftMirror(net.minecraft.item.ItemStack original) {
-	        return new CraftItemStack((original == null || original.isEmpty()) ? null : original);
-	    }
+        if (item == null) {
+            return net.minecraft.item.ItemStack.EMPTY;
+        }
 
-	    public static CraftItemStack asCraftCopy(ItemStack original) {
-	        if (original instanceof CraftItemStack) {
-	            CraftItemStack stack = (CraftItemStack) original;
-	            return new CraftItemStack(stack.handle == null ? null : stack.handle.copy());
-	        }
-	        return new CraftItemStack(original);
-	    }
+        net.minecraft.item.ItemStack stack = new net.minecraft.item.ItemStack(item, original.getAmount());
+        if (original.hasItemMeta()) {
+            setItemMeta(stack, original.getItemMeta());
+        } else {
+            // Converted after setItemMeta
+            //FIXME? stack.convertStack();
+        }
+        return stack;
+    }
 
-	    public static CraftItemStack asNewCraftStack(Item item) {
-	        return asNewCraftStack(item, 1);
-	    }
+    public static net.minecraft.item.ItemStack copyNMSStack(net.minecraft.item.ItemStack original, int amount) {
+        net.minecraft.item.ItemStack stack = original.copy();
+        stack.setAmount(amount);
+        return stack;
+    }
 
-	    public static CraftItemStack asNewCraftStack(Item item, int amount) {
-	        return new CraftItemStack(CraftMagicNumbers.getMaterial(item), amount, (short) 0, null);
-	    }
+    /**
+     * Copies the NMS stack to return as a strictly-Bukkit stack
+     */
+    public static ItemStack asBukkitCopy(net.minecraft.item.ItemStack original) {
+        if (original.isEmpty()) {
+            return new ItemStack(Material.AIR);
+        }
+        ItemStack stack = new ItemStack(CraftMagicNumbers.getMaterial(original.getItem()), original.getAmount());
+        if (hasItemMeta(original)) {
+            stack.setItemMeta(getItemMeta(original));
+        }
+        return stack;
+    }
 
-	    net.minecraft.item.ItemStack handle;
+    public static CraftItemStack asCraftMirror(net.minecraft.item.ItemStack original) {
+        return new CraftItemStack((original == null || original.isEmpty()) ? null : original);
+    }
 
-	    /**
-	     * Mirror
-	     */
-	    private CraftItemStack(net.minecraft.item.ItemStack item) {
-	        this.handle = item;
-	    }
+    public static CraftItemStack asCraftCopy(ItemStack original) {
+        if (original instanceof CraftItemStack) {
+            CraftItemStack stack = (CraftItemStack) original;
+            return new CraftItemStack(stack.handle == null ? null : stack.handle.copy());
+        }
+        return new CraftItemStack(original);
+    }
 
-	    private CraftItemStack(ItemStack item) {
-	        this(item.getType(), item.getAmount(), item.getDurability(), item.hasItemMeta() ? item.getItemMeta() : null);
-	    }
+    public static CraftItemStack asNewCraftStack(Item item) {
+        return asNewCraftStack(item, 1);
+    }
 
-	    private CraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
-	        setType(type);
-	        setAmount(amount);
-	        setDurability(durability);
-	        setItemMeta(itemMeta);
-	    }
+    public static CraftItemStack asNewCraftStack(Item item, int amount) {
+        return new CraftItemStack(CraftMagicNumbers.getMaterial(item), amount, (short) 0, null);
+    }
 
-	    @Override
-	    public MaterialData getData() {
-	        throw new UnsupportedOperationException("Material Data has been removed!");
-	    }
+    static boolean hasItemMeta(net.minecraft.item.ItemStack item) {
+        return !(item == null || item.getTag() == null || item.getTag().isEmpty());
+    }
 
-	    @Override
-	    public Material getType() {
-	        return handle != null ? CraftMagicNumbers.getMaterial(handle.getItem()) : Material.AIR;
-	    }
-	    
-	    @Override
-	    public void setType(Material type) {
-	        if (getType() == type) {
-	            return;
-	        } else if (type == Material.AIR) {
-	            handle = null;
-	        } else if (CraftMagicNumbers.getItem(type) == null) { // :(
-	            handle = null;
-	        } else if (handle == null) {
-	            handle = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), 1);
-	        } else {
-	        	net.minecraft.item.ItemStack replacement = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), handle.getAmount());
-	            if (hasItemMeta()) {
-	                // This will create the appropriate item meta, which will contain all the data we intend to keep
-	            	ItemMeta meta = getItemMeta(handle);
-	            	handle = replacement;
-	            	setItemMeta(handle, meta);
-	            }else {
-	            	handle = replacement;
-	            }
-	        }
-	        setData(null);
-	    }
-
-	    @Override
-	    public int getAmount() {
-	        return handle != null ? handle.getAmount() : 0;
-	    }
-
-	    @Override
-	    public void setAmount(int amount) {
-	        if (handle == null) {
-	            return;
-	        }
-
-	        handle.setAmount(amount);
-	        if (amount == 0) {
-	            handle = null;
-	        }
-	    }
-
-	    @Override
-	    public void setDurability(final short durability) {
-	        // Ignore damage if item is null
-	        if (handle != null) {
-	            handle.setDamage(durability);
-	        }
-	    }
-
-	    @Override
-	    public short getDurability() {
-	        if (handle != null) {
-	            return (short) handle.getDamage();
-	        } else {
-	            return -1;
-	        }
-	    }
-
-	    @Override
-	    public int getMaxStackSize() {
-	        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxAmount();
-	    }
-	    
-	    @Override
-	    public boolean hasItemMeta() {
-	        return hasItemMeta(handle); // FIXME? && !CraftItemFactory.instance().equals(getItemMeta(), null);
-	    }
-	    
-	    static boolean hasItemMeta(net.minecraft.item.ItemStack item) {
-	        return !(item == null || item.getTag() == null || item.getTag().isEmpty());
-	    }
-	    
-	    @Override
-	    public ItemMeta getItemMeta() {
-	        return getItemMeta(handle);
-	    }
-
-	    public static ItemMeta getItemMeta(net.minecraft.item.ItemStack item) {
-	        if (!hasItemMeta(item)) {
-	            // FIXME return CraftItemFactory.instance().getItemMeta(getType(item));
-	        }
-	        switch (getType(item)) {
+    public static ItemMeta getItemMeta(net.minecraft.item.ItemStack item) {
+        if (!hasItemMeta(item)) {
+            // FIXME return CraftItemFactory.instance().getItemMeta(getType(item));
+        }
+        switch (getType(item)) {
 	           /* case WRITTEN_BOOK:
 	                return new CraftMetaBookSigned(item.getTag());
 	            case WRITABLE_BOOK:
@@ -349,24 +265,107 @@ public class CraftItemStack extends ItemStack {
 	                return new CraftMetaBlockState(item.getTag(), CraftMagicNumbers.getMaterial(item.getItem()));
 	            case TROPICAL_FISH_BUCKET:
 	                return new CraftMetaTropicalFishBucket(item.getTag());*/
-	            default:
-	                return new CraftMetaItem(item.getTag());
-	        }
-	    }
+            default:
+                return new CraftMetaItem(item.getTag());
+        }
+    }
 
-	    static Material getType(net.minecraft.item.ItemStack item) {
-	        return item == null ? Material.AIR : CraftMagicNumbers.getMaterial(item.getItem());
-	    }
+    static Material getType(net.minecraft.item.ItemStack item) {
+        return item == null ? Material.AIR : CraftMagicNumbers.getMaterial(item.getItem());
+    }
 
-	    @Override
-	    public boolean setItemMeta(ItemMeta itemMeta) {
-	        return setItemMeta(handle, itemMeta);
-	    }
+    public static boolean setItemMeta(net.minecraft.item.ItemStack item, ItemMeta itemMeta) {
+        //TODO
 
-	    public static boolean setItemMeta(net.minecraft.item.ItemStack item, ItemMeta itemMeta) {
-	        //TODO 
-	    	
-	        return true;
-	    }
+        return true;
+    }
+
+    @Override
+    public MaterialData getData() {
+        throw new UnsupportedOperationException("Material Data has been removed!");
+    }
+
+    @Override
+    public Material getType() {
+        return handle != null ? CraftMagicNumbers.getMaterial(handle.getItem()) : Material.AIR;
+    }
+
+    @Override
+    public void setType(Material type) {
+        if (getType() == type) {
+            return;
+        } else if (type == Material.AIR) {
+            handle = null;
+        } else if (CraftMagicNumbers.getItem(type) == null) { // :(
+            handle = null;
+        } else if (handle == null) {
+            handle = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), 1);
+        } else {
+            net.minecraft.item.ItemStack replacement = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), handle.getAmount());
+            if (hasItemMeta()) {
+                // This will create the appropriate item meta, which will contain all the data we intend to keep
+                ItemMeta meta = getItemMeta(handle);
+                handle = replacement;
+                setItemMeta(handle, meta);
+            } else {
+                handle = replacement;
+            }
+        }
+        setData(null);
+    }
+
+    @Override
+    public int getAmount() {
+        return handle != null ? handle.getAmount() : 0;
+    }
+
+    @Override
+    public void setAmount(int amount) {
+        if (handle == null) {
+            return;
+        }
+
+        handle.setAmount(amount);
+        if (amount == 0) {
+            handle = null;
+        }
+    }
+
+    @Override
+    public short getDurability() {
+        if (handle != null) {
+            return (short) handle.getDamage();
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public void setDurability(final short durability) {
+        // Ignore damage if item is null
+        if (handle != null) {
+            handle.setDamage(durability);
+        }
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxAmount();
+    }
+
+    @Override
+    public boolean hasItemMeta() {
+        return hasItemMeta(handle); // FIXME? && !CraftItemFactory.instance().equals(getItemMeta(), null);
+    }
+
+    @Override
+    public ItemMeta getItemMeta() {
+        return getItemMeta(handle);
+    }
+
+    @Override
+    public boolean setItemMeta(ItemMeta itemMeta) {
+        return setItemMeta(handle, itemMeta);
+    }
 
 }

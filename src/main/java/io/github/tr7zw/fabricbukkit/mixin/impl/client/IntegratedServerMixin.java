@@ -1,12 +1,11 @@
 package io.github.tr7zw.fabricbukkit.mixin.impl.client;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.IntegratedServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.IntegratedServerImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.text.StringTextComponent;
-
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

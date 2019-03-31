@@ -17,9 +17,6 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 public abstract class CraftChunk implements Chunk {
-    private WeakReference<net.minecraft.world.chunk.WorldChunk> weakChunk;
-    private final ServerWorld worldServer;
-    private final ChunkPos position;
     private static final byte[] emptyData = new byte[2048];
     private static final PalettedContainer<BlockState> emptyBlockIDs = new ChunkSection(0).getContainer();
     private static final byte[] emptySkyLight = new byte[2048];
@@ -28,17 +25,21 @@ public abstract class CraftChunk implements Chunk {
         Arrays.fill(emptySkyLight, (byte) 0xFF);
     }
 
-    static void validateChunkCoordinates(int x, int y, int z) {
-        Preconditions.checkArgument(0 <= x && x <= 15, "x out of range (expected 0-15, got %s)", x);
-        Preconditions.checkArgument(0 <= y && y <= 255, "y out of range (expected 0-255, got %s)", y);
-        Preconditions.checkArgument(0 <= z && z <= 15, "z out of range (expected 0-15, got %s)", z);
-    }
+    private final ServerWorld worldServer;
+    private final ChunkPos position;
+    private WeakReference<net.minecraft.world.chunk.WorldChunk> weakChunk;
 
     public CraftChunk(net.minecraft.world.chunk.WorldChunk chunk) {
         this.weakChunk = new WeakReference<>(chunk);
 
         worldServer = (ServerWorld) getHandle().getWorld();
         position = getHandle().getPos();
+    }
+
+    static void validateChunkCoordinates(int x, int y, int z) {
+        Preconditions.checkArgument(0 <= x && x <= 15, "x out of range (expected 0-15, got %s)", x);
+        Preconditions.checkArgument(0 <= y && y <= 255, "y out of range (expected 0-255, got %s)", y);
+        Preconditions.checkArgument(0 <= z && z <= 15, "z out of range (expected 0-15, got %s)", z);
     }
 
     public World getWorld() {

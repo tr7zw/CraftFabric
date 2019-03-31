@@ -1,7 +1,7 @@
 package io.github.tr7zw.fabricbukkit.mixin.impl.server;
 
-import io.github.tr7zw.fabricbukkit.craftfabric.DedicatedServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
+import io.github.tr7zw.fabricbukkit.craftfabric.DedicatedServerImpl;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;

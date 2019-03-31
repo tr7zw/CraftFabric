@@ -1,11 +1,10 @@
 package io.github.tr7zw.fabricbukkit.craftfabric;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.GameOption;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.dimension.DimensionType;
+import org.jetbrains.annotations.NotNull;
 
 public class IntegratedServerImpl extends AbstractServerImpl {
 
