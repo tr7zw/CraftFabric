@@ -1,25 +1,32 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
-import com.google.common.base.Preconditions;
-import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
-import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemStack;
-import io.github.tr7zw.fabricbukkit.mixin.IItemCooldownManagerMixin;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.AbsoluteHand;
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Villager;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.InventoryView.Property;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.Collection;
+import com.google.common.base.Preconditions;
+
+import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
+import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemStack;
+import io.github.tr7zw.fabricbukkit.mixin.IItemCooldownManagerMixin;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.AbsoluteHand;
 
 public abstract class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
 
-    private final PlayerEntity handler;
+	private final PlayerEntity handler;
 
     public CraftHumanEntity(net.minecraft.entity.player.PlayerEntity entity) {
         super(entity);

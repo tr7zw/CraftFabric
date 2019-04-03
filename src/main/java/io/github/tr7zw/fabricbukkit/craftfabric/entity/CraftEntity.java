@@ -20,11 +20,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
 
     protected final AbstractServerImpl server = (AbstractServerImpl) Bukkit.getServer();
-    protected Entity entity;
+    protected Entity handler;
     private EntityDamageEvent lastDamageEvent;
 
     public CraftEntity(final Entity entity) {
-        this.entity = entity;
+        this.handler = entity;
+    }
+    
+    public Entity getHandle() {
+        return handler;
     }
 
     public static CraftEntity getEntity(AbstractServerImpl server, Entity entity) {
@@ -338,47 +342,47 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull Location getLocation() {
-        return new Location(getWorld(), entity.x, entity.y, entity.z, entity.yaw, entity.pitch);
+        return new Location(getWorld(), handler.x, handler.y, handler.z, handler.yaw, handler.pitch);
     }
 
     @Override
     public Location getLocation(Location location) {
         if (location != null) {
             location.setWorld(getWorld());
-            location.setX(entity.x);
-            location.setY(entity.y);
-            location.setZ(entity.z);
-            location.setYaw(entity.yaw);
-            location.setPitch(entity.pitch);
+            location.setX(handler.x);
+            location.setY(handler.y);
+            location.setZ(handler.z);
+            location.setYaw(handler.yaw);
+            location.setPitch(handler.pitch);
         }
         return location;
     }
 
     @Override
     public @NotNull Vector getVelocity() {
-        return new Vector(entity.getVelocity().getX(), entity.getVelocity().getY(), entity.getVelocity().getZ());
+        return new Vector(handler.getVelocity().getX(), handler.getVelocity().getY(), handler.getVelocity().getZ());
     }
 
     @Override
     public void setVelocity(@NotNull Vector velocity) {
         Objects.requireNonNull(velocity, "velocity");
         velocity.checkFinite();
-        entity.setVelocity(velocity.getX(), velocity.getBlockY(), velocity.getBlockZ());
+        handler.setVelocity(velocity.getX(), velocity.getBlockY(), velocity.getBlockZ());
     }
 
     @Override
     public double getHeight() {
-        return entity.getHeight();
+        return handler.getHeight();
     }
 
     @Override
     public double getWidth() {
-        return entity.getWidth();
+        return handler.getWidth();
     }
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        net.minecraft.util.math.BoundingBox box = entity.getBoundingBox();
+        net.minecraft.util.math.BoundingBox box = handler.getBoundingBox();
         return new BoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
 
@@ -389,13 +393,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             return ((EntityArrow) entity).inGround;
         }
         */
-        return entity.onGround;
+        return handler.onGround;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NotNull World getWorld() {
-        return ((CraftLink<World>) (Object) entity.getEntityWorld()).getCraftHandler();
+        return ((CraftLink<World>) (Object) handler.getEntityWorld()).getCraftHandler();
 
     }
 
@@ -422,7 +426,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull List<org.bukkit.entity.Entity> getNearbyEntities(double x, double y, double z) {
-        List<Entity> notchEntityList = entity.world.getEntities(entity, entity.getBoundingBox().expand(x, y, z), null);
+        List<Entity> notchEntityList = handler.world.getEntities(handler, handler.getBoundingBox().expand(x, y, z), null);
         List<org.bukkit.entity.Entity> bukkitEntityList = new java.util.ArrayList<>(notchEntityList.size());
 
         for (Entity entity : notchEntityList) {

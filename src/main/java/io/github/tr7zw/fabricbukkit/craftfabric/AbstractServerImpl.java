@@ -123,6 +123,10 @@ public abstract class AbstractServerImpl implements Server {
             }
         }
     }
+    
+    public MinecraftServer getHandler() {
+    	return server;
+    }
 
     public void setupServer() {
         console = new CraftConsoleCommandSender();
