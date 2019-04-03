@@ -781,4 +781,10 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     }
 
+	@Override
+	public void setRotation(float yaw, float pitch) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

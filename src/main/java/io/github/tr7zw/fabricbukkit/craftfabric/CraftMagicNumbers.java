@@ -55,7 +55,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
     }
 
     public static @NotNull Material getMaterial(Item item) {
-        return ITEM_MATERIAL.get(item);
+        return ITEM_MATERIAL.getOrDefault(item, Material.AIR);
     }
 
     public static @NotNull Block getBlock(Material material) {
