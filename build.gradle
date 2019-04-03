@@ -39,9 +39,6 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API
-	modCompile "net.fabricmc:fabric:${project.fabric_version}"
-
     // Spigot API
 	compileOnly "org.spigotmc:spigot-api:${project.spigot_version}"
 	extraLibs  "org.spigotmc:spigot-api:${project.spigot_version}"

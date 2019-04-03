@@ -8,7 +8,7 @@
     "io.github.tr7zw.fabricbukkit.FabricBukkit"
   ],
   "requires": {
-    "fabric": "*"
+
   },
   "mixins": {
     "common": "fabricbukkit.common.json",
