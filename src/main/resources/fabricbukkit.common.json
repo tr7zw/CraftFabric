@@ -5,7 +5,8 @@
   "mixins": [
     "BlockRedstoneWireMixin",
     "MixinServerPlayer",
-	"MixinWorld"
+	"MixinWorld",
+	"PlayerManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
