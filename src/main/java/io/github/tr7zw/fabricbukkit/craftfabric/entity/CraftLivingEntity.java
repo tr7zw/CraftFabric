@@ -387,7 +387,6 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public void sendMessage(String message) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -416,8 +415,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean hasPermission(String name) {
-		// TODO Auto-generated method stub
-		return false;
+		return isOp(); // FIXME perms
 	}
 
 	@Override

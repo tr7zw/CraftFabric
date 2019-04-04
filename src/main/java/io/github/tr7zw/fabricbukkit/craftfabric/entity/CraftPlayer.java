@@ -1,16 +1,27 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
-import com.google.common.base.Preconditions;
-import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.scoreboard.ScoreboardTeam;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.packet.ChatMessageC2SPacket;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.util.Identifier;
-import org.bukkit.*;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.bukkit.Achievement;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Note;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
+import org.bukkit.WeatherType;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.data.BlockData;
@@ -23,8 +34,18 @@ import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.net.InetSocketAddress;
-import java.util.*;
+import com.google.common.base.Preconditions;
+
+import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.scoreboard.ScoreboardTeam;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.packet.ChatMessageC2SPacket;
+import net.minecraft.sortme.ChatMessageType;
+import net.minecraft.stat.Stats;
+import net.minecraft.text.StringTextComponent;
+import net.minecraft.util.Identifier;
 
 @SuppressWarnings("deprecation")
 public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -71,6 +92,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
         return recipes;
     }
+    
+	@Override
+	public void sendMessage(String message) {
+		getHandle().sendChatMessage(new StringTextComponent(message), ChatMessageType.SYSTEM);
+	}
 
     @Override
     public int discoverRecipes(Collection<NamespacedKey> recipes) {
@@ -274,8 +300,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean performCommand(String command) {
-        // TODO Auto-generated method stub
-        return false;
+        return Bukkit.getServer().dispatchCommand(this, command);
     }
 
     @Override

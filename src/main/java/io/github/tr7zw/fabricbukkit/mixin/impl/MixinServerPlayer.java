@@ -39,7 +39,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
     //Testing code
     @Inject(at = @At("RETURN"), method = "tick")
     public void tick(CallbackInfo info) {
-        System.out.println("MainhandItem: " + craftHandler.getItemInHand().getType());
+        //System.out.println("MainhandItem: " + craftHandler.getItemInHand().getType());
     }
 
     @Shadow

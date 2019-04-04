@@ -16,6 +16,7 @@ import org.bukkit.Warning.WarningState;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.*;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -130,6 +131,7 @@ public abstract class AbstractServerImpl implements Server {
 
     public void setupServer() {
         console = new CraftConsoleCommandSender();
+        commandMap.setFallbackCommands();
         loadPlugins();
         enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
     }
@@ -469,8 +471,8 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public PluginCommand getPluginCommand(@NotNull String name) {
-        // TODO Auto-generated method stub
-        return null;
+       Command command = commandMap.getCommand(name);
+    	return (command instanceof PluginCommand) ? (PluginCommand)command : null ;
     }
 
     @Override
@@ -481,7 +483,22 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public boolean dispatchCommand(@NotNull CommandSender sender, @NotNull String commandLine) throws CommandException {
-        // TODO Auto-generated method stub
+        Validate.notNull(sender, "Sender cannot be null");
+        Validate.notNull(commandLine, "CommandLine cannot be null");
+    	
+        if(commandLine.startsWith("/")) {
+        	commandLine = commandLine.substring(1);
+        }
+        
+        if(commandMap.dispatch(sender, commandLine)) {
+        	return true;
+        }
+        if (sender instanceof Player) {
+            sender.sendMessage("Unknown command. Type \"/help\" for help.");
+        } else {
+            sender.sendMessage("Unknown command. Type \"help\" for help.");
+        }
+
         return false;
     }
 
