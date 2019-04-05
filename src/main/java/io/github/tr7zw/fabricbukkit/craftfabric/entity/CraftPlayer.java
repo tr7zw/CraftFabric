@@ -3,6 +3,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
+import io.github.tr7zw.fabricbukkit.craftfabric.command.ConversationTracker;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.ChatUtils;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
 import io.netty.buffer.Unpooled;
@@ -27,6 +28,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
+import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,15 +38,21 @@ import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.util.*;
 
-@SuppressWarnings("deprecation")
 public class CraftPlayer extends CraftHumanEntity implements Player {
+    private long firstPlayed = 0;
+    private long lastPlayed = 0;
+    private boolean hasPlayedBefore = false;
 
     private final ServerPlayerEntity handler;
+    private final ConversationTracker conversationTracker = new ConversationTracker();
     private final Set<String> channels = new HashSet<>();
+
+    private int hash = 0;
 
     public CraftPlayer(ServerPlayerEntity handler) {
         super(handler);
@@ -74,25 +82,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         }
     }
 
-    @Override
-    public void closeInventory() {
-        handler.closeGui();
-    }
-
-    @Override
-    public GameMode getGameMode() {
-        GameMode mode = GameMode.valueOf(getHandler().interactionManager.getGameMode().name());
-        return mode != null ? mode : GameMode.SURVIVAL;
-    }
-
-    @Override
-    public void setGameMode(GameMode mode) {
-        getHandler().interactionManager.setGameMode(net.minecraft.world.GameMode.byName(mode.name(), net.minecraft.world.GameMode.SURVIVAL));
-    }
-
     private Collection<Recipe<?>> bukkitKeysToMinecraftRecipes(Collection<NamespacedKey> recipeKeys) {
         Collection<Recipe<?>> recipes = new ArrayList<>();
-        RecipeManager manager = getHandler().world.getServer().getRecipeManager();
+        RecipeManager manager = server.getHandler().getRecipeManager();
 
         for (NamespacedKey recipeKey : recipeKeys) {
             Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtils.toMinecraft(recipeKey));
@@ -107,59 +99,68 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void closeInventory() {
+        handler.closeGui();
+    }
+
+    @Override
+    public @NotNull GameMode getGameMode() {
+        return GameMode.valueOf(getHandler().interactionManager.getGameMode().name());
+    }
+
+    @Override
+    public void setGameMode(@NotNull GameMode mode) {
+        getHandler().interactionManager.setGameMode(net.minecraft.world.GameMode.byName(mode.name(), net.minecraft.world.GameMode.SURVIVAL));
+    }
+
+    @Override
+    public void sendMessage(@NotNull String message) {
         getHandler().sendChatMessage(new StringTextComponent(message), ChatMessageType.SYSTEM);
     }
 
     @Override
-    public int discoverRecipes(Collection<NamespacedKey> recipes) {
+    public int discoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
         return getHandler().getRecipeBook().unlockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandler());
     }
 
     @Override
-    public boolean undiscoverRecipe(NamespacedKey recipe) {
-        return 1 == getHandler().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(Collections.singleton(recipe)), getHandler());
+    public boolean discoverRecipe(@NotNull NamespacedKey recipe) {
+        return undiscoverRecipes(Collections.singletonList(recipe)) != 0;
     }
 
     @Override
-    public int undiscoverRecipes(Collection<NamespacedKey> recipes) {
+    public int undiscoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
         return getHandler().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandler());
     }
 
     @Override
-    public boolean discoverRecipe(NamespacedKey recipe) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean undiscoverRecipe(@NotNull NamespacedKey recipe) {
+        return 1 == getHandler().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(Collections.singleton(recipe)), getHandler());
     }
 
     @Override
     public boolean isConversing() {
-        // TODO Auto-generated method stub
-        return false;
+        return conversationTracker.isConversing();
     }
 
     @Override
-    public void acceptConversationInput(String input) {
-        // TODO Auto-generated method stub
-
+    public void acceptConversationInput(@NotNull String input) {
+        conversationTracker.acceptConversationInput(input);
     }
 
     @Override
-    public boolean beginConversation(Conversation conversation) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean beginConversation(@NotNull Conversation conversation) {
+        return conversationTracker.beginConversation(conversation);
     }
 
     @Override
-    public void abandonConversation(Conversation conversation) {
-        // TODO Auto-generated method stub
-
+    public void abandonConversation(@NotNull Conversation conversation) {
+        conversationTracker.abandonConversation(conversation, new ConversationAbandonedEvent(conversation, new ManuallyAbandonedConversationCanceller()));
     }
 
     @Override
-    public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details) {
-        // TODO Auto-generated method stub
-
+    public void abandonConversation(@NotNull Conversation conversation, @NotNull ConversationAbandonedEvent details) {
+        conversationTracker.abandonConversation(conversation, details);
     }
 
     @Override
@@ -191,33 +192,34 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         return this;
     }
 
+    public void setFirstPlayed(long firstPlayed) {
+        this.firstPlayed = firstPlayed;
+    }
+
     @Override
     public long getFirstPlayed() {
-        // TODO Auto-generated method stub
-        return 0;
+        return firstPlayed;
     }
 
     @Override
     public long getLastPlayed() {
-        // TODO Auto-generated method stub
-        return 0;
+        return lastPlayed;
     }
 
     @Override
     public boolean hasPlayedBefore() {
-        // TODO Auto-generated method stub
-        return false;
+        return hasPlayedBefore;
     }
 
     @Override
-    public Map<String, Object> serialize() {
+    public @NotNull Map<String, Object> serialize() {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("name", getName());
         return result;
     }
 
     @Override
-    public void sendPluginMessage(Plugin source, String channel, byte[] message) {
+    public void sendPluginMessage(@NotNull Plugin source, @NotNull String channel, @NotNull byte[] message) {
         StandardMessenger.validatePluginMessage(server.getMessenger(), source, channel, message);
         if (getHandler().networkHandler == null) {
             return;
@@ -230,12 +232,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public Set<String> getListeningPluginChannels() {
+    public @NotNull Set<String> getListeningPluginChannels() {
         return ImmutableSet.copyOf(channels);
     }
 
     @Override
-    public String getDisplayName() {
+    public @NotNull String getDisplayName() {
         return getHandler().getDisplayName().getFormattedText();
     }
 
@@ -245,7 +247,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public String getPlayerListName() {
+    public @NotNull String getPlayerListName() {
         return ScoreboardTeam.modifyText(getHandler().getScoreboardTeam(), getHandler().getName()).getFormattedText();
     }
 
@@ -285,13 +287,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public Location getCompassTarget() {
+    public @NotNull Location getCompassTarget() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setCompassTarget(Location loc) {
+    public void setCompassTarget(@NotNull Location loc) {
         // TODO Auto-generated method stub
 
     }
@@ -302,7 +304,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void sendRawMessage(String message) {
+    public void sendRawMessage(@NotNull String message) {
         if (getHandler().networkHandler == null) {
             return;
         }
@@ -317,12 +319,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void chat(String msg) {
+    public void chat(@NotNull String msg) {
         getHandler().networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
     }
 
     @Override
-    public boolean performCommand(String command) {
+    public boolean performCommand(@NotNull String command) {
         return Bukkit.getServer().dispatchCommand(this, command);
     }
 
@@ -371,103 +373,103 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void playNote(Location loc, byte instrument, byte note) {
+    public void playNote(@NotNull Location loc, byte instrument, byte note) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playNote(Location loc, Instrument instrument, Note note) {
+    public void playNote(@NotNull Location loc, @NotNull Instrument instrument, @NotNull Note note) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playSound(Location location, Sound sound, float volume, float pitch) {
+    public void playSound(@NotNull Location location, @NotNull Sound sound, float volume, float pitch) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playSound(Location location, String sound, float volume, float pitch) {
+    public void playSound(@NotNull Location location, @NotNull String sound, float volume, float pitch) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playSound(Location location, Sound sound, SoundCategory category, float volume, float pitch) {
+    public void playSound(@NotNull Location location, @NotNull Sound sound, @NotNull SoundCategory category, float volume, float pitch) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playSound(Location location, String sound, SoundCategory category, float volume, float pitch) {
+    public void playSound(@NotNull Location location, @NotNull String sound, @NotNull SoundCategory category, float volume, float pitch) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void stopSound(Sound sound) {
+    public void stopSound(@NotNull Sound sound) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void stopSound(String sound) {
+    public void stopSound(@NotNull String sound) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void stopSound(Sound sound, SoundCategory category) {
+    public void stopSound(@NotNull Sound sound, SoundCategory category) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void stopSound(String sound, SoundCategory category) {
+    public void stopSound(@NotNull String sound, SoundCategory category) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void playEffect(Location loc, Effect effect, int data) {
+    public void playEffect(@NotNull Location loc, @NotNull Effect effect, int data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void playEffect(Location loc, Effect effect, T data) {
+    public <T> void playEffect(@NotNull Location loc, @NotNull Effect effect, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendBlockChange(Location loc, Material material, byte data) {
+    public void sendBlockChange(@NotNull Location loc, @NotNull Material material, byte data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendBlockChange(Location loc, BlockData block) {
+    public void sendBlockChange(@NotNull Location loc, @NotNull BlockData block) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public boolean sendChunkChange(Location loc, int sx, int sy, int sz, byte[] data) {
+    public boolean sendChunkChange(@NotNull Location loc, int sx, int sy, int sz, @NotNull byte[] data) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void sendSignChange(Location loc, String[] lines) throws IllegalArgumentException {
+    public void sendSignChange(@NotNull Location loc, String[] lines) throws IllegalArgumentException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void sendMap(MapView map) {
+    public void sendMap(@NotNull MapView map) {
         // TODO Auto-generated method stub
 
     }
@@ -479,119 +481,119 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void awardAchievement(Achievement achievement) {
+    public void awardAchievement(@NotNull Achievement achievement) {
         throw new UnsupportedOperationException("Please use the Advancement methods!");
     }
 
     @Override
-    public void removeAchievement(Achievement achievement) {
+    public void removeAchievement(@NotNull Achievement achievement) {
         throw new UnsupportedOperationException("Please use the Advancement methods!");
     }
 
     @Override
-    public boolean hasAchievement(Achievement achievement) {
+    public boolean hasAchievement(@NotNull Achievement achievement) {
         throw new UnsupportedOperationException("Please use the Advancement methods!");
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic) throws IllegalArgumentException {
+    public void incrementStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
         getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), 1);
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic) throws IllegalArgumentException {
+    public void decrementStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
         getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1);
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, int amount) throws IllegalArgumentException {
+    public void incrementStatistic(@NotNull Statistic statistic, int amount) throws IllegalArgumentException {
         getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), amount);
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, int amount) throws IllegalArgumentException {
+    public void decrementStatistic(@NotNull Statistic statistic, int amount) throws IllegalArgumentException {
         getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1 * amount);
     }
 
     @Override
-    public void setStatistic(Statistic statistic, int newValue) throws IllegalArgumentException {
+    public void setStatistic(@NotNull Statistic statistic, int newValue) throws IllegalArgumentException {
         getHandler().getStatHandler().setStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), newValue);
     }
 
     @Override
-    public int getStatistic(Statistic statistic) throws IllegalArgumentException {
+    public int getStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
         return getHandler().getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())));
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+    public void incrementStatistic(@NotNull Statistic statistic, @NotNull Material material) throws IllegalArgumentException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+    public void decrementStatistic(@NotNull Statistic statistic, @NotNull Material material) throws IllegalArgumentException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void incrementStatistic(Statistic statistic, Material material, int amount) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void decrementStatistic(Statistic statistic, Material material, int amount) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setStatistic(Statistic statistic, Material material, int newValue) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+    public int getStatistic(@NotNull Statistic statistic, @NotNull Material material) throws IllegalArgumentException {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, EntityType entityType, int amount)
+    public void incrementStatistic(@NotNull Statistic statistic, @NotNull Material material, int amount) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull Statistic statistic, @NotNull Material material, int amount) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setStatistic(@NotNull Statistic statistic, @NotNull Material material, int newValue) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int getStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType) throws IllegalArgumentException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType, int amount)
             throws IllegalArgumentException {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, EntityType entityType, int amount) {
+    public void decrementStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType, int amount) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void setStatistic(Statistic statistic, EntityType entityType, int newValue) {
+    public void setStatistic(@NotNull Statistic statistic, @NotNull EntityType entityType, int newValue) {
         // TODO Auto-generated method stub
 
     }
@@ -633,7 +635,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void setPlayerWeather(WeatherType type) {
+    public void setPlayerWeather(@NotNull WeatherType type) {
         // TODO Auto-generated method stub
 
     }
@@ -729,31 +731,31 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void hidePlayer(Player player) {
+    public void hidePlayer(@NotNull Player player) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void hidePlayer(Plugin plugin, Player player) {
+    public void hidePlayer(@NotNull Plugin plugin, @NotNull Player player) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void showPlayer(Player player) {
+    public void showPlayer(@NotNull Player player) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void showPlayer(Plugin plugin, Player player) {
+    public void showPlayer(@NotNull Plugin plugin, @NotNull Player player) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public boolean canSee(Player player) {
+    public boolean canSee(@NotNull Player player) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -789,31 +791,31 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void setTexturePack(String url) {
+    public void setTexturePack(@NotNull String url) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void setResourcePack(String url) {
+    public void setResourcePack(@NotNull String url) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void setResourcePack(String url, byte[] hash) {
+    public void setResourcePack(@NotNull String url, @NotNull byte[] hash) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public Scoreboard getScoreboard() {
+    public @NotNull Scoreboard getScoreboard() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setScoreboard(Scoreboard scoreboard) throws IllegalArgumentException, IllegalStateException {
+    public void setScoreboard(@NotNull Scoreboard scoreboard) throws IllegalArgumentException, IllegalStateException {
         // TODO Auto-generated method stub
 
     }
@@ -882,87 +884,87 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count) {
+    public void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count) {
+    public void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, T data) {
+    public <T> void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, T data) {
+    public <T> void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY,
+    public void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count, double offsetX, double offsetY,
                               double offsetZ) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX,
+    public void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count, double offsetX,
                               double offsetY, double offsetZ) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY,
+    public <T> void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count, double offsetX, double offsetY,
                                   double offsetZ, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX,
+    public <T> void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count, double offsetX,
                                   double offsetY, double offsetZ, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY,
+    public void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count, double offsetX, double offsetY,
                               double offsetZ, double extra) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX,
+    public void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count, double offsetX,
                               double offsetY, double offsetZ, double extra) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY,
+    public <T> void spawnParticle(@NotNull Particle particle, @NotNull Location location, int count, double offsetX, double offsetY,
                                   double offsetZ, double extra, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX,
+    public <T> void spawnParticle(@NotNull Particle particle, double x, double y, double z, int count, double offsetX,
                                   double offsetY, double offsetZ, double extra, T data) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+    public @NotNull AdvancementProgress getAdvancementProgress(@NotNull Advancement advancement) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -974,7 +976,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public String getLocale() {
+    public @NotNull String getLocale() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -986,8 +988,21 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public org.bukkit.entity.Player.Spigot spigot() {
+    public @NotNull org.bukkit.entity.Player.Spigot spigot() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "CraftPlayer{" + "name=" + getName() + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        if (hash == 0 || hash == 485) {
+            hash = 97 * 5 + getUniqueId().hashCode();
+        }
+        return hash;
     }
 }
