@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
 import net.minecraft.server.command.ServerCommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -19,16 +20,20 @@ public class ServerCommandManagerMixin {
 
 	@SuppressWarnings("unchecked")
 	@Inject(at = @At("HEAD"), method = "execute", cancellable = true)
-	public int execute(ServerCommandSource serverCommandSource_1, String string_1, CallbackInfoReturnable<Integer> info) {
-		System.out.println("Command and stuff " + serverCommandSource_1 + " " + string_1);
+	public int execute(ServerCommandSource serverCommandSource_1, String commandLine, CallbackInfoReturnable<Integer> info) {
 		try {
 			ServerPlayerEntity player = serverCommandSource_1.getPlayer();
-			System.out.println("Player: " + player);
 			if(player != null) {
-				boolean worked = Bukkit.getServer().dispatchCommand(((CraftLink<Player>)player).getCraftHandler(), string_1);
+				String bukkitCommand = commandLine;
+				if(bukkitCommand.startsWith("/")) {
+					bukkitCommand = bukkitCommand.substring(1);
+				}
+				boolean worked = ((AbstractServerImpl)Bukkit.getServer()).getCommandMap().dispatch(((CraftLink<Player>)player).getCraftHandler(), bukkitCommand);
+				if(worked) {	
 					info.setReturnValue(0);
 					info.cancel();
 					return 0;
+				}
 			}
 		}catch(CommandSyntaxException ex) {}
 		return 0;

@@ -18,6 +18,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -134,6 +135,10 @@ public abstract class AbstractServerImpl implements Server {
         commandMap.setFallbackCommands();
         loadPlugins();
         enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
+    }
+    
+    public CommandMap getCommandMap() {
+    	return commandMap;
     }
 
     public void loadPlugins() {
