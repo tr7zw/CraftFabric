@@ -8,6 +8,7 @@ import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
+import net.minecraft.client.network.packet.TitleS2CPacket;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.scoreboard.ScoreboardTeam;
@@ -302,7 +303,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void sendRawMessage(String message) {
-        if (getHandler().networkHandler == null){
+        if (getHandler().networkHandler == null) {
             return;
         }
         for (TextComponent component : ChatUtils.fromString(message)) {
@@ -855,20 +856,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void sendTitle(String title, String subtitle) {
-        // TODO Auto-generated method stub
-
+        sendTitle(title, subtitle, 10, 70, 20);
     }
 
     @Override
     public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
-        // TODO Auto-generated method stub
+        TitleS2CPacket times = new TitleS2CPacket(fadeIn, stay, fadeOut);
+        getHandler().networkHandler.sendPacket(times);
 
+        if (title != null) {
+            TitleS2CPacket packetTitle = new TitleS2CPacket(TitleS2CPacket.Action.TITLE, ChatUtils.fromStringOrNull(title));
+            getHandler().networkHandler.sendPacket(packetTitle);
+        }
+
+        if (subtitle != null) {
+            TitleS2CPacket packetSubtitle = new TitleS2CPacket(TitleS2CPacket.Action.SUBTITLE, ChatUtils.fromStringOrNull(subtitle));
+            getHandler().networkHandler.sendPacket(packetSubtitle);
+        }
     }
 
     @Override
     public void resetTitle() {
-        // TODO Auto-generated method stub
-
+        TitleS2CPacket packetReset = new TitleS2CPacket(TitleS2CPacket.Action.RESET, null);
+        getHandler().networkHandler.sendPacket(packetReset);
     }
 
     @Override
@@ -980,6 +990,4 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         // TODO Auto-generated method stub
         return null;
     }
-
-
 }
