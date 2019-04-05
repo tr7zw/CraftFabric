@@ -62,10 +62,10 @@ public abstract class AbstractServerImpl implements Server {
     // Services
     protected final ServicesManager servicesManager = new SimpleServicesManager();
     //protected final CraftScheduler scheduler = new CraftScheduler();
-    protected final CraftCommandMap commandMap = new CraftCommandMap(this);
+    protected CraftCommandMap commandMap;
     //protected final SimpleHelpMap helpMap = new SimpleHelpMap(this);
     protected final StandardMessenger messenger = new StandardMessenger();
-    protected final SimplePluginManager pluginManager = new SimplePluginManager(this, commandMap);
+    protected SimplePluginManager pluginManager;
     private final ItemFactory itemFactory = new CraftItemFactory();
 
     // Vanilla server instance
@@ -108,7 +108,7 @@ public abstract class AbstractServerImpl implements Server {
 
     public AbstractServerImpl(MinecraftServer server) {
         this.server = server;
-
+        Bukkit.setServer(this);
         // Setup console reader
         try {
             reader = new ConsoleReader(System.in, System.out);
@@ -124,6 +124,9 @@ public abstract class AbstractServerImpl implements Server {
                 logger.log(Level.WARNING, null, ex);
             }
         }
+        commandMap = new CraftCommandMap(this);
+        commandMap.setFallbackCommands();
+        pluginManager = new SimplePluginManager(this, commandMap);
     }
     
     public MinecraftServer getHandler() {
@@ -132,7 +135,7 @@ public abstract class AbstractServerImpl implements Server {
 
     public void setupServer() {
         console = new CraftConsoleCommandSender();
-        commandMap.setFallbackCommands();
+        
         loadPlugins();
         enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
     }

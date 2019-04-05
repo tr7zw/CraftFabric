@@ -16,7 +16,7 @@ public class DedicatedServerMixin {
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
         Object server = this;
-        Bukkit.setServer(new DedicatedServerImpl((MinecraftDedicatedServer) server));
+        new DedicatedServerImpl((MinecraftDedicatedServer) server);
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
     }
 
