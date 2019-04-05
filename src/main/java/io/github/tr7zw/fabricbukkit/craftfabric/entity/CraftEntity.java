@@ -27,7 +27,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
         this.handler = entity;
     }
     
-    public Entity getHandle() {
+    public Entity getHandler() {
         return handler;
     }
 

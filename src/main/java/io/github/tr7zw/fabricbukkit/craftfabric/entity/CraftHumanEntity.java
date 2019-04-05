@@ -33,7 +33,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
         this.handler = entity;
     }
 
-    public PlayerEntity getHandle() {
+    public PlayerEntity getHandler() {
         return handler;
     }
 
@@ -51,7 +51,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public MainHand getMainHand() {
-        if (getHandle().getMainHand() == AbsoluteHand.LEFT) {
+        if (getHandler().getMainHand() == AbsoluteHand.LEFT) {
             return MainHand.LEFT;
         } else {
             return MainHand.RIGHT;
@@ -108,7 +108,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public ItemStack getItemInHand() {
-        return CraftItemStack.asBukkitCopy(getHandle().getMainHandStack());
+        return CraftItemStack.asBukkitCopy(getHandler().getMainHandStack());
     }
 
     @Override
@@ -131,29 +131,29 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public boolean hasCooldown(Material material) {
-        return getHandle().getItemCooldownManager().isCooldown(CraftMagicNumbers.getItem(material));
+        return getHandler().getItemCooldownManager().isCooldown(CraftMagicNumbers.getItem(material));
     }
 
     @Override
     public int getCooldown(Material material) {
         Preconditions.checkArgument(material != null, "material");
 
-        return (int) getHandle().getItemCooldownManager().getCooldownProgress(CraftMagicNumbers.getItem(material), ((IItemCooldownManagerMixin) (Object) getHandle().getItemCooldownManager()).getTick());
+        return (int) getHandler().getItemCooldownManager().getCooldownProgress(CraftMagicNumbers.getItem(material), ((IItemCooldownManagerMixin) (Object) getHandler().getItemCooldownManager()).getTick());
     }
 
     @Override
     public void setCooldown(Material material, int ticks) {
-        getHandle().getItemCooldownManager().set(CraftMagicNumbers.getItem(material), ticks);
+        getHandler().getItemCooldownManager().set(CraftMagicNumbers.getItem(material), ticks);
     }
 
     @Override
     public boolean isSleeping() {
-        return getHandle().isSleeping();
+        return getHandler().isSleeping();
     }
 
     @Override
     public int getSleepTicks() {
-        return getHandle().getSleepTimer();
+        return getHandler().getSleepTimer();
     }
 
     @Override

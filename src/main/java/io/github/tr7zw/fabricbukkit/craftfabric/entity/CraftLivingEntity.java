@@ -46,7 +46,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 		handler = entity;
 	}
 
-	public net.minecraft.entity.LivingEntity getHandle() {
+	public net.minecraft.entity.LivingEntity getHandler() {
 		return handler;
 	}
 
@@ -58,7 +58,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public void damage(double amount) {
-		getHandle().damage(DamageSource.GENERIC, (float) amount);
+		getHandler().damage(DamageSource.GENERIC, (float) amount);
 	}
 
 	@Override
@@ -66,22 +66,22 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 		if(!(source instanceof LivingEntity)) {
 			throw new IllegalArgumentException("Damage source Entity has to be living!");
 		}
-		getHandle().damage(DamageSource.mob(((CraftLivingEntity)source).getHandle()), (float) amount);
+		getHandler().damage(DamageSource.mob(((CraftLivingEntity)source).getHandler()), (float) amount);
 	}
 
 	@Override
 	public double getHealth() {
-		return getHandle().getHealth();
+		return getHandler().getHealth();
 	}
 
 	@Override
 	public void setHealth(double health) {
-		getHandle().setHealth((float) health);
+		getHandler().setHealth((float) health);
 	}
 
 	@Override
 	public double getMaxHealth() {
-		return getHandle().getHealthMaximum();
+		return getHandler().getHealthMaximum();
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public int getEntityId() {
-		return getHandle().getEntityId();
+		return getHandler().getEntityId();
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public void setFireTicks(int ticks) {
-		getHandle().setOnFireFor(ticks);
+		getHandler().setOnFireFor(ticks);
 	}
 
 	@Override
@@ -121,12 +121,12 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public void remove() {
-		getHandle().remove();
+		getHandler().remove();
 	}
 
 	@Override
 	public boolean isDead() {
-		return !getHandle().isAlive();
+		return !getHandler().isAlive();
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Entity getPassenger() {
-		return ((CraftLink<Entity>)getHandle().getPrimaryPassenger()).getCraftHandler();
+		return ((CraftLink<Entity>) getHandler().getPrimaryPassenger()).getCraftHandler();
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entity> getPassengers() {
-		return getHandle().getPassengerList().stream().map(passanger -> ((CraftLink<Entity>)passanger).getCraftHandler()).collect(Collectors.toList());
+		return getHandler().getPassengerList().stream().map(passanger -> ((CraftLink<Entity>)passanger).getCraftHandler()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -190,19 +190,19 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean eject() {
-		boolean wasRiding = getHandle().getRiddenEntity() != null;
-		getHandle().stopRiding();
+		boolean wasRiding = getHandler().getRiddenEntity() != null;
+		getHandler().stopRiding();
 		return wasRiding;
 	}
 
 	@Override
 	public float getFallDistance() {
-		return getHandle().fallDistance;
+		return getHandler().fallDistance;
 	}
 
 	@Override
 	public void setFallDistance(float distance) {
-		getHandle().fallDistance = distance;
+		getHandler().fallDistance = distance;
 	}
 
 	@Override
@@ -219,17 +219,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public UUID getUniqueId() {
-		return getHandle().getUuid();
+		return getHandler().getUuid();
 	}
 
 	@Override
 	public int getTicksLived() {
-		return getHandle().age;
+		return getHandler().age;
 	}
 
 	@Override
 	public void setTicksLived(int value) {
-		getHandle().age = value;
+		getHandler().age = value;
 	}
 
 	@Override
@@ -246,7 +246,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean isInsideVehicle() {
-		return getHandle().hasVehicle();
+		return getHandler().hasVehicle();
 	}
 
 	@Override
@@ -258,27 +258,27 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 	@Override
 	public Entity getVehicle() {
 		if(!isInsideVehicle())return null;
-		return ((CraftLink<Entity>)getHandle().getRiddenEntity()).getCraftHandler();
+		return ((CraftLink<Entity>) getHandler().getRiddenEntity()).getCraftHandler();
 	}
 
 	@Override
 	public boolean isCustomNameVisible() {
-		return getHandle().isCustomNameVisible();
+		return getHandler().isCustomNameVisible();
 	}
 
 	@Override
 	public void setCustomNameVisible(boolean flag) {
-		getHandle().setCustomNameVisible(flag);
+		getHandler().setCustomNameVisible(flag);
 	}
 
 	@Override
 	public boolean isGlowing() {
-		return getHandle().isGlowing();
+		return getHandler().isGlowing();
 	}
 
 	@Override
 	public void setGlowing(boolean flag) {
-		getHandle().setGlowing(flag);
+		getHandler().setGlowing(flag);
 	}
 
 	@Override
@@ -295,12 +295,12 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean isSilent() {
-		return getHandle().isSilent();
+		return getHandler().isSilent();
 	}
 
 	@Override
 	public void setSilent(boolean flag) {
-		getHandle().setSilent(flag);
+		getHandler().setSilent(flag);
 	}
 
 	@Override
@@ -317,12 +317,12 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public int getPortalCooldown() {
-		return getHandle().portalCooldown;
+		return getHandler().portalCooldown;
 	}
 
 	@Override
 	public void setPortalCooldown(int cooldown) {
-		getHandle().portalCooldown = cooldown;
+		getHandler().portalCooldown = cooldown;
 	}
 
 	@Override
@@ -398,7 +398,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public String getName() {
-		return getHandle().getName().getFormattedText();
+		return getHandler().getName().getFormattedText();
 	}
 
 	@Override
@@ -468,7 +468,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean isOp() {
-		return getHandle().allowsPermissionLevel(2); // 2 seems to be OP
+		return getHandler().allowsPermissionLevel(2); // 2 seems to be OP
 	}
 
 	@Override
@@ -507,8 +507,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public double getEyeHeight(boolean ignorePose) {
-		if (ignorePose) return getHandle().getStandingEyeHeight();
-		return getHandle().getEyeHeight(getHandle().getPose());
+		if (ignorePose) return getHandler().getStandingEyeHeight();
+		return getHandler().getEyeHeight(getHandler().getPose());
 	}
 
 	@Override
@@ -561,17 +561,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public int getRemainingAir() {
-		return getHandle().getBreath();
+		return getHandler().getBreath();
 	}
 
 	@Override
 	public void setRemainingAir(int ticks) {
-		getHandle().setBreath(ticks);
+		getHandler().setBreath(ticks);
 	}
 
 	@Override
 	public int getMaximumAir() {
-		return getHandle().getMaxBreath();
+		return getHandler().getMaxBreath();
 	}
 
 	@Override
@@ -743,7 +743,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean isRiptiding() {
-		return getHandle().isUsingRiptide();
+		return getHandler().isUsingRiptide();
 	}
 
 	@Override
@@ -760,7 +760,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
 	@Override
 	public boolean isCollidable() {
-		return getHandle().isPushable();
+		return getHandler().isPushable();
 	}
 
 	@Override
