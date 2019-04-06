@@ -3,7 +3,6 @@ package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
 import net.minecraft.entity.Entity;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,16 +18,21 @@ import java.util.Objects;
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
 
-    protected final AbstractServerImpl server = (AbstractServerImpl) Bukkit.getServer();
-    protected Entity handler;
+    protected final AbstractServerImpl server;
+    protected Entity handle;
     private EntityDamageEvent lastDamageEvent;
 
-    public CraftEntity(final Entity entity) {
-        this.handler = entity;
+    public CraftEntity(final AbstractServerImpl server, final Entity entity) {
+        this.server = server;
+        this.handle = entity;
     }
     
-    public Entity getHandler() {
-        return handler;
+    public Entity getHandle() {
+        return handle;
+    }
+
+    public void setHandle(final Entity entity) {
+        this.handle = handle;
     }
 
     public static CraftEntity getEntity(AbstractServerImpl server, Entity entity) {
@@ -342,47 +346,47 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull Location getLocation() {
-        return new Location(getWorld(), handler.x, handler.y, handler.z, handler.yaw, handler.pitch);
+        return new Location(getWorld(), handle.x, handle.y, handle.z, handle.yaw, handle.pitch);
     }
 
     @Override
     public Location getLocation(Location location) {
         if (location != null) {
             location.setWorld(getWorld());
-            location.setX(handler.x);
-            location.setY(handler.y);
-            location.setZ(handler.z);
-            location.setYaw(handler.yaw);
-            location.setPitch(handler.pitch);
+            location.setX(handle.x);
+            location.setY(handle.y);
+            location.setZ(handle.z);
+            location.setYaw(handle.yaw);
+            location.setPitch(handle.pitch);
         }
         return location;
     }
 
     @Override
     public @NotNull Vector getVelocity() {
-        return new Vector(handler.getVelocity().getX(), handler.getVelocity().getY(), handler.getVelocity().getZ());
+        return new Vector(handle.getVelocity().getX(), handle.getVelocity().getY(), handle.getVelocity().getZ());
     }
 
     @Override
     public void setVelocity(@NotNull Vector velocity) {
         Objects.requireNonNull(velocity, "velocity");
         velocity.checkFinite();
-        handler.setVelocity(velocity.getX(), velocity.getBlockY(), velocity.getBlockZ());
+        handle.setVelocity(velocity.getX(), velocity.getBlockY(), velocity.getBlockZ());
     }
 
     @Override
     public double getHeight() {
-        return handler.getHeight();
+        return handle.getHeight();
     }
 
     @Override
     public double getWidth() {
-        return handler.getWidth();
+        return handle.getWidth();
     }
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        net.minecraft.util.math.BoundingBox box = handler.getBoundingBox();
+        net.minecraft.util.math.BoundingBox box = handle.getBoundingBox();
         return new BoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
 
@@ -393,13 +397,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             return ((EntityArrow) entity).inGround;
         }
         */
-        return handler.onGround;
+        return handle.onGround;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NotNull World getWorld() {
-        return ((CraftLink<World>) (Object) handler.getEntityWorld()).getCraftHandler();
+        return ((CraftLink<World>) (Object) handle.getEntityWorld()).getCraftHandler();
 
     }
 
@@ -426,7 +430,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull List<org.bukkit.entity.Entity> getNearbyEntities(double x, double y, double z) {
-        List<Entity> notchEntityList = handler.world.getEntities(handler, handler.getBoundingBox().expand(x, y, z), null);
+        List<Entity> notchEntityList = handle.world.getEntities(handle, handle.getBoundingBox().expand(x, y, z), null);
         List<org.bukkit.entity.Entity> bukkitEntityList = new java.util.ArrayList<>(notchEntityList.size());
 
         for (Entity entity : notchEntityList) {

@@ -3,6 +3,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.ConversationTracker;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.ChatUtils;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
@@ -34,11 +35,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRegisterChannelEvent;
 import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -48,23 +51,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     private long lastPlayed = 0;
     private boolean hasPlayedBefore = false;
 
-    private final ServerPlayerEntity handler;
     private final ConversationTracker conversationTracker = new ConversationTracker();
     private final Set<String> channels = new HashSet<>();
 
     private int hash = 0;
 
-    public CraftPlayer(ServerPlayerEntity handler) {
-        super(handler);
-        this.handler = handler;
+    public CraftPlayer(AbstractServerImpl server, ServerPlayerEntity handler) {
+        super(server, handler);
+        firstPlayed = System.currentTimeMillis();
     }
 
-    public ServerPlayerEntity getHandler() {
-        return handler;
+    public ServerPlayerEntity getHandle() {
+        return (ServerPlayerEntity) handle;
     }
 
     public GameProfile getProfile() {
-        return getHandler().getGameProfile();
+        return getHandle().getGameProfile();
     }
 
     public void addChannel(String channel) {
@@ -99,28 +101,34 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
+    public @Nullable InventoryView openWorkbench(@Nullable Location location, boolean force) {
+        // TODO
+        return null;
+    }
+
+    @Override
     public void closeInventory() {
-        handler.closeGui();
+        getHandle().closeGui();
     }
 
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(getHandler().interactionManager.getGameMode().name());
+        return GameMode.valueOf(getHandle().interactionManager.getGameMode().name());
     }
 
     @Override
     public void setGameMode(@NotNull GameMode mode) {
-        getHandler().interactionManager.setGameMode(net.minecraft.world.GameMode.byName(mode.name(), net.minecraft.world.GameMode.SURVIVAL));
+        getHandle().interactionManager.setGameMode(net.minecraft.world.GameMode.byName(mode.name(), net.minecraft.world.GameMode.SURVIVAL));
     }
 
     @Override
     public void sendMessage(@NotNull String message) {
-        getHandler().sendChatMessage(new StringTextComponent(message), ChatMessageType.SYSTEM);
+        getHandle().sendChatMessage(new StringTextComponent(message), ChatMessageType.SYSTEM);
     }
 
     @Override
     public int discoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
-        return getHandler().getRecipeBook().unlockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandler());
+        return getHandle().getRecipeBook().unlockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandle());
     }
 
     @Override
@@ -130,12 +138,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public int undiscoverRecipes(@NotNull Collection<NamespacedKey> recipes) {
-        return getHandler().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandler());
+        return getHandle().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(recipes), getHandle());
     }
 
     @Override
     public boolean undiscoverRecipe(@NotNull NamespacedKey recipe) {
-        return 1 == getHandler().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(Collections.singleton(recipe)), getHandler());
+        return 1 == getHandle().getRecipeBook().lockRecipes(bukkitKeysToMinecraftRecipes(Collections.singleton(recipe)), getHandle());
     }
 
     @Override
@@ -221,13 +229,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void sendPluginMessage(@NotNull Plugin source, @NotNull String channel, @NotNull byte[] message) {
         StandardMessenger.validatePluginMessage(server.getMessenger(), source, channel, message);
-        if (getHandler().networkHandler == null) {
+        if (getHandle().networkHandler == null) {
             return;
         }
         if (channels.contains(channel)) {
             channel = StandardMessenger.validateAndCorrectChannel(channel);
             CustomPayloadS2CPacket packet = new CustomPayloadS2CPacket(new Identifier(channel), new PacketByteBuf(Unpooled.wrappedBuffer(message)));
-            getHandler().networkHandler.sendPacket(packet);
+            getHandle().networkHandler.sendPacket(packet);
         }
     }
 
@@ -238,7 +246,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull String getDisplayName() {
-        return getHandler().getDisplayName().getFormattedText();
+        return getHandle().getDisplayName().getFormattedText();
     }
 
     @Override
@@ -248,7 +256,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull String getPlayerListName() {
-        return ScoreboardTeam.modifyText(getHandler().getScoreboardTeam(), getHandler().getName()).getFormattedText();
+        return ScoreboardTeam.modifyText(getHandle().getScoreboardTeam(), getHandle().getName()).getFormattedText();
     }
 
     @Override
@@ -300,27 +308,27 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public InetSocketAddress getAddress() {
-        return (InetSocketAddress) getHandler().networkHandler.getConnection().getAddress();
+        return (InetSocketAddress) getHandle().networkHandler.getConnection().getAddress();
     }
 
     @Override
     public void sendRawMessage(@NotNull String message) {
-        if (getHandler().networkHandler == null) {
+        if (getHandle().networkHandler == null) {
             return;
         }
         for (TextComponent component : ChatUtils.fromString(message)) {
-            getHandler().networkHandler.sendPacket(new ChatMessageS2CPacket(component));
+            getHandle().networkHandler.sendPacket(new ChatMessageS2CPacket(component));
         }
     }
 
     @Override
     public void kickPlayer(String message) {
-        getHandler().networkHandler.disconnect(new StringTextComponent(message));
+        getHandle().networkHandler.disconnect(new StringTextComponent(message));
     }
 
     @Override
     public void chat(@NotNull String msg) {
-        getHandler().networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
+        getHandle().networkHandler.onChatMessage(new ChatMessageC2SPacket(msg));
     }
 
     @Override
@@ -330,22 +338,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean isSneaking() {
-        return getHandler().isSneaking();
+        return getHandle().isSneaking();
     }
 
     @Override
     public void setSneaking(boolean sneak) {
-        getHandler().setSneaking(true);
+        getHandle().setSneaking(true);
     }
 
     @Override
     public boolean isSprinting() {
-        return getHandler().isSprinting();
+        return getHandle().isSprinting();
     }
 
     @Override
     public void setSprinting(boolean sprinting) {
-        getHandler().setSprinting(sprinting);
+        getHandle().setSprinting(sprinting);
     }
 
     @Override
@@ -497,32 +505,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void incrementStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
-        getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), 1);
+        getHandle().getStatHandler().increaseStat(getHandle(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), 1);
     }
 
     @Override
     public void decrementStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
-        getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1);
+        getHandle().getStatHandler().increaseStat(getHandle(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1);
     }
 
     @Override
     public void incrementStatistic(@NotNull Statistic statistic, int amount) throws IllegalArgumentException {
-        getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), amount);
+        getHandle().getStatHandler().increaseStat(getHandle(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), amount);
     }
 
     @Override
     public void decrementStatistic(@NotNull Statistic statistic, int amount) throws IllegalArgumentException {
-        getHandler().getStatHandler().increaseStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1 * amount);
+        getHandle().getStatHandler().increaseStat(getHandle(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), -1 * amount);
     }
 
     @Override
     public void setStatistic(@NotNull Statistic statistic, int newValue) throws IllegalArgumentException {
-        getHandler().getStatHandler().setStat(getHandler(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), newValue);
+        getHandle().getStatHandler().setStat(getHandle(), Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())), newValue);
     }
 
     @Override
     public int getStatistic(@NotNull Statistic statistic) throws IllegalArgumentException {
-        return getHandler().getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())));
+        return getHandle().getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(new Identifier(statistic.toString().toLowerCase())));
     }
 
     @Override
@@ -648,7 +656,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void giveExp(int amount) {
-        getHandler().addExperience(amount);
+        getHandle().addExperience(amount);
     }
 
     @Override
@@ -658,33 +666,33 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public float getExp() {
-        return getHandler().experienceBarProgress;
+        return getHandle().experienceBarProgress;
     }
 
     @Override
     public void setExp(float exp) {
         Preconditions.checkArgument(exp >= 0.0 && exp <= 1.0, "Experience progress must be between 0.0 and 1.0 (%s)", exp);
-        getHandler().experienceBarProgress = exp;
+        getHandle().experienceBarProgress = exp;
     }
 
     @Override
     public int getLevel() {
-        return getHandler().experienceLevel;
+        return getHandle().experienceLevel;
     }
 
     @Override
     public void setLevel(int level) {
-        getHandler().experienceLevel = level;
+        getHandle().experienceLevel = level;
     }
 
     @Override
     public int getTotalExperience() {
-        return getHandler().experience;
+        return getHandle().experience;
     }
 
     @Override
     public void setTotalExperience(int exp) {
-        getHandler().experience = exp;
+        getHandle().experience = exp;
     }
 
     @Override
@@ -701,7 +709,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public float getSaturation() {
-        return getHandler().getHungerManager().getSaturationLevel();
+        return getHandle().getHungerManager().getSaturationLevel();
     }
 
     @Override
@@ -712,22 +720,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public int getFoodLevel() {
-        return getHandler().getHungerManager().getFoodLevel();
+        return getHandle().getHungerManager().getFoodLevel();
     }
 
     @Override
     public void setFoodLevel(int value) {
-        getHandler().getHungerManager().setFoodLevel(value);
+        getHandle().getHungerManager().setFoodLevel(value);
     }
 
     @Override
     public boolean getAllowFlight() {
-        return getHandler().abilities.allowFlying;
+        return getHandle().abilities.allowFlying;
     }
 
     @Override
     public void setAllowFlight(boolean flight) {
-        getHandler().abilities.allowFlying = flight;
+        getHandle().abilities.allowFlying = flight;
     }
 
     @Override
@@ -762,32 +770,32 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean isFlying() {
-        return getHandler().abilities.flying;
+        return getHandle().abilities.flying;
     }
 
     @Override
     public void setFlying(boolean value) {
-        getHandler().abilities.flying = value;
+        getHandle().abilities.flying = value;
     }
 
     @Override
     public float getFlySpeed() {
-        return getHandler().abilities.getFlySpeed();
+        return getHandle().abilities.getFlySpeed();
     }
 
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
-        getHandler().abilities.setFlySpeed(value);
+        getHandle().abilities.setFlySpeed(value);
     }
 
     @Override
     public float getWalkSpeed() {
-        return getHandler().abilities.getWalkSpeed();
+        return getHandle().abilities.getWalkSpeed();
     }
 
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
-        getHandler().abilities.setWalkSpeed(value);
+        getHandle().abilities.setWalkSpeed(value);
     }
 
     @Override
@@ -864,23 +872,23 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         TitleS2CPacket times = new TitleS2CPacket(fadeIn, stay, fadeOut);
-        getHandler().networkHandler.sendPacket(times);
+        getHandle().networkHandler.sendPacket(times);
 
         if (title != null) {
             TitleS2CPacket packetTitle = new TitleS2CPacket(TitleS2CPacket.Action.TITLE, ChatUtils.fromStringOrNull(title));
-            getHandler().networkHandler.sendPacket(packetTitle);
+            getHandle().networkHandler.sendPacket(packetTitle);
         }
 
         if (subtitle != null) {
             TitleS2CPacket packetSubtitle = new TitleS2CPacket(TitleS2CPacket.Action.SUBTITLE, ChatUtils.fromStringOrNull(subtitle));
-            getHandler().networkHandler.sendPacket(packetSubtitle);
+            getHandle().networkHandler.sendPacket(packetSubtitle);
         }
     }
 
     @Override
     public void resetTitle() {
         TitleS2CPacket packetReset = new TitleS2CPacket(TitleS2CPacket.Action.RESET, null);
-        getHandler().networkHandler.sendPacket(packetReset);
+        getHandle().networkHandler.sendPacket(packetReset);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.tr7zw.fabricbukkit.mixin.impl;
 
 import com.mojang.authlib.GameProfile;
+import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftLink;
 import io.github.tr7zw.fabricbukkit.craftfabric.entity.CraftPlayer;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.sortme.ChatMessageType;
 import net.minecraft.text.TextComponent;
 import net.minecraft.world.World;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,7 +49,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     public void onCreate(CallbackInfo info) {
-        craftHandler = new CraftPlayer((ServerPlayerEntity) (Object) this);
+        craftHandler = new CraftPlayer((AbstractServerImpl) Bukkit.getServer(), (ServerPlayerEntity) (Object) this);
     }
 
     @Override
