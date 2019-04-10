@@ -41,6 +41,8 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
     public CraftHumanEntity(final AbstractServerImpl server, final net.minecraft.entity.player.PlayerEntity entity) {
         super(server, entity);
         mode = getServer().getDefaultGameMode();
+        op = getHandle().allowsPermissionLevel(2);
+        perm.recalculatePermissions();
         //this.inventory = new CraftInventoryPlayer(entity.inventory);
         //enderChest = new CraftInventory(entity.getEnderChest());
     }

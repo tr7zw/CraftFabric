@@ -7,6 +7,7 @@ import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.Style;
 import net.minecraft.text.TextComponent;
 import net.minecraft.text.TextFormat;
+import net.minecraft.text.TranslatableTextComponent;
 import net.minecraft.text.event.ClickEvent;
 import org.bukkit.ChatColor;
 
@@ -244,20 +245,21 @@ public final class ChatUtils {
         List<TextComponent> extras = component.getChildren();
         for (int i = 0; i < extras.size(); i++) {
             TextComponent comp = extras.get(i);
-            if (comp.getStyle() != null && comp.getStyle().h() == null) {
-                extras.set(i, fixComponent(comp, matcher));
-            }
+            //FIXME
+           // if (comp.getStyle() != null && comp.getStyle().h() == null) {
+          //      extras.set(i, fixComponent(comp, matcher));
+           // }
         }
 
-        if (component instanceof ChatMessage) {
-            Object[] subs = ((ChatMessage) component).l();
+        if (component instanceof TranslatableTextComponent) {
+            Object[] subs = ((TranslatableTextComponent) component).getParams();
             for (int i = 0; i < subs.length; i++) {
                 Object comp = subs[i];
                 if (comp instanceof TextComponent) {
-                    TextComponent c = (TextComponent) comp;
-                    if (c.getStyle() != null && c.getStyle().h() == null) {
-                        subs[i] = fixComponent(c, matcher);
-                    }
+                    TextComponent c = (TextComponent) comp; //FIXME
+                  //  if (c.getStyle() != null && c.getStyle().h() == null) {
+                  //      subs[i] = fixComponent(c, matcher);
+                  //  }
                 } else if (comp instanceof String && matcher.reset((String) comp).find()) {
                     subs[i] = fixComponent(new StringTextComponent((String) comp), matcher);
                 }

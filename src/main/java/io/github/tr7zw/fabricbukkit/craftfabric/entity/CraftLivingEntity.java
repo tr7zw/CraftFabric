@@ -410,13 +410,13 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public boolean hasPermission(String name) {
+    	System.out.println("Hasperm: " + isOp());
         return isOp(); // FIXME perms
     }
 
     @Override
     public boolean hasPermission(Permission perm) {
-        // TODO Auto-generated method stub
-        return false;
+    	return isOp(); // FIXME perms
     }
 
     @Override
