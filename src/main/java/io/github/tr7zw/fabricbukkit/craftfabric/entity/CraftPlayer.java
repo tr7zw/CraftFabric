@@ -1,8 +1,52 @@
 package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.bukkit.Achievement;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Note;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
+import org.bukkit.WeatherType;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationAbandonedEvent;
+import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerRegisterChannelEvent;
+import org.bukkit.event.player.PlayerUnregisterChannelEvent;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.map.MapView;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.messaging.StandardMessenger;
+import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
+
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.command.ConversationTracker;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.ChatUtils;
@@ -23,28 +67,6 @@ import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
-import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerRegisterChannelEvent;
-import org.bukkit.event.player.PlayerUnregisterChannelEvent;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.map.MapView;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.messaging.StandardMessenger;
-import org.bukkit.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.net.InetSocketAddress;
-import java.util.*;
 
 public class CraftPlayer extends CraftHumanEntity implements Player {
     private long firstPlayed = 0;

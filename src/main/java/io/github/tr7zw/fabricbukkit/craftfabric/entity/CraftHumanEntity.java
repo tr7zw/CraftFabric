@@ -3,6 +3,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric.entity;
 import com.google.common.base.Preconditions;
 import io.github.tr7zw.fabricbukkit.craftfabric.AbstractServerImpl;
 import io.github.tr7zw.fabricbukkit.craftfabric.CraftMagicNumbers;
+import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftInventoryPlayer;
 import io.github.tr7zw.fabricbukkit.craftfabric.inventory.CraftItemStack;
 import io.github.tr7zw.fabricbukkit.craftfabric.util.NamespaceUtils;
 import io.github.tr7zw.fabricbukkit.mixin.IItemCooldownManagerMixin;
@@ -37,20 +38,21 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
     protected final PermissibleBase perm = new PermissibleBase(this);
     private boolean op;
     private GameMode mode;
+    private final CraftInventoryPlayer inventory;
 
     public CraftHumanEntity(final AbstractServerImpl server, final net.minecraft.entity.player.PlayerEntity entity) {
         super(server, entity);
         mode = getServer().getDefaultGameMode();
         op = getHandle().allowsPermissionLevel(2);
         perm.recalculatePermissions();
+        inventory = new CraftInventoryPlayer(getHandle().inventory, this);
         //this.inventory = new CraftInventoryPlayer(entity.inventory);
         //enderChest = new CraftInventory(entity.getEnderChest());
     }
 
     @Override
     public @NotNull PlayerInventory getInventory() {
-        // TODO Auto-generated method stub
-        return null;
+        return inventory;
     }
 
     @Override
@@ -70,13 +72,12 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public @NotNull ItemStack getItemInHand() {
-        return CraftItemStack.asBukkitCopy(getHandle().getMainHandStack());
+        return inventory.getItemInHand();
     }
 
     @Override
     public void setItemInHand(ItemStack item) {
-        // TODO Auto-generated method stub
-
+        inventory.setItemInHand(item);
     }
 
     @Override

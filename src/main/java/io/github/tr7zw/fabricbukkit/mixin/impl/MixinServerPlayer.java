@@ -13,6 +13,7 @@ import net.minecraft.sortme.ChatMessageType;
 import net.minecraft.text.TextComponent;
 import net.minecraft.world.World;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,7 +42,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
     //Testing code
     @Inject(at = @At("RETURN"), method = "tick")
     public void tick(CallbackInfo info) {
-        //System.out.println("MainhandItem: " + craftHandler.getItemInHand().getType());
+        //System.out.println("Items: " + craftHandler.getInventory().contains(Material.STONE));
     }
 
     @Shadow

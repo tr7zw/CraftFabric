@@ -11,17 +11,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.tr7zw.fabricbukkit.mixin.IBasicInventory;
-import net.minecraft.inventory.BasicInventory;
 
 public abstract class CraftInventory implements Inventory{
 
-	  protected final BasicInventory inventory;
+	  protected final net.minecraft.inventory.Inventory inventory;
 
-	    public CraftInventory(BasicInventory inventory) {
+	    public CraftInventory(net.minecraft.inventory.Inventory inventory) {
 	        this.inventory = inventory;
 	    }
 
-	    public BasicInventory getInventory() {
+	    public net.minecraft.inventory.Inventory getInventory() {
 	        return inventory;
 	    }
 
