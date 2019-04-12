@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "io.github.craftfabric.craftfabric.mixin.impl.client",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7.11",
+  "mixins": [
+    "IntegratedServerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

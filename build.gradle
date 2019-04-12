@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '0.2.0-SNAPSHOT'
-	id 'maven-publish'
+    id 'fabric-loom' version '0.2.0-SNAPSHOT'
+    id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -27,88 +27,88 @@ repositories {
         name = 'Sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
-	maven {
-		name = 'CodeMC'
-		url = 'https://repo.codemc.org/repository/maven-public/'
-	}
+    maven {
+        name = 'CodeMC'
+        url = 'https://repo.codemc.org/repository/maven-public/'
+    }
 }
 
 dependencies {
-	// to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    // to change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Spigot API
-	compileOnly "org.spigotmc:spigot-api:${project.spigot_version}"
-	extraLibs  "org.spigotmc:spigot-api:${project.spigot_version}"
-	compileOnly "org.jetbrains:annotations:17.0.0"
-	
-	// CraftBukkit Dependencies
-	
-	// https://mvnrepository.com/artifact/jline/jline
-    compile group: 'jline', name: 'jline', version: '2.14.6'
-	extraLibs group: 'jline', name: 'jline', version: '2.14.6'
-	// https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
-    compile group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
-	extraLibs group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
+    compileOnly "org.spigotmc:spigot-api:${project.spigot_version}"
+    extraLibs "org.spigotmc:spigot-api:${project.spigot_version}"
+    compileOnly "org.jetbrains:annotations:17.0.0"
 
-	configurations.modCompile.extendsFrom(configurations.extraLibs)
+    // CraftBukkit Dependencies
+
+    // https://mvnrepository.com/artifact/jline/jline
+    compile group: 'jline', name: 'jline', version: '2.14.6'
+    extraLibs group: 'jline', name: 'jline', version: '2.14.6'
+    // https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
+    compile group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
+    extraLibs group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
+
+    configurations.modCompile.extendsFrom(configurations.extraLibs)
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
 
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is
 // this fixes some edge cases with special characters not displaying correctly
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
+    options.encoding = "UTF-8"
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+    classifier = "sources"
+    from sourceSets.main.allSource
 }
 
 jar {
-	exclude('com/google/**', 'junit/**')
-	from "LICENSE"
-	from {
+    exclude('com/google/**', 'junit/**')
+    from "LICENSE"
+    from {
         configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(jar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            // add all the jars that should be included when publishing to maven
+            artifact(jar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
 
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
+    // select the repositories you want to publish to
+    repositories {
+        // uncomment to publish to the local maven
+        // mavenLocal()
+    }
 }

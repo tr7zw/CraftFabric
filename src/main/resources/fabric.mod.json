@@ -1,18 +1,17 @@
 {
-  "id": "fabricbukkit",
-  "name": "FabricBukkit",
+  "id": "craftfabric",
+  "name": "CraftFabric",
   "description": "Fabric <3 Bukkit!",
   "version": "${version}",
   "side": "universal",
   "initializers": [
-    "io.github.tr7zw.fabricbukkit.FabricBukkit"
+    "io.github.craftfabric.craftfabric.CraftFabric"
   ],
   "requires": {
-
   },
   "mixins": {
-    "common": "fabricbukkit.common.json",
-    "client": "fabricbukkit.client.json",
-    "server": "fabricbukkit.server.json"
+    "common": "craftfabric.common.json",
+    "client": "craftfabric.client.json",
+    "server": "craftfabric.server.json"
   }
 }

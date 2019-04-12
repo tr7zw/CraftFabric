@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "io.github.craftfabric.craftfabric.mixin.impl",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.7.11",
+  "mixins": [
+    "BlockRedstoneWireMixin",
+    "MixinServerPlayer",
+	"MixinWorld",
+	"PlayerManagerMixin",
+	"ServerCommandManagerMixin",
+	"SimpleCommandMapMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
