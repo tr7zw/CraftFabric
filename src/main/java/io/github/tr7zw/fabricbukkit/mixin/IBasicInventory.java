@@ -5,6 +5,6 @@ import net.minecraft.util.DefaultedList;
 
 public interface IBasicInventory {
 
-	public DefaultedList<ItemStack> getContent();
-	
+    public DefaultedList<ItemStack> getContent();
+
 }

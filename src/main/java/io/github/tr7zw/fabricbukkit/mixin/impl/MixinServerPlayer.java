@@ -13,7 +13,6 @@ import net.minecraft.sortme.ChatMessageType;
 import net.minecraft.text.TextComponent;
 import net.minecraft.world.World;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

@@ -3,11 +3,7 @@ package io.github.tr7zw.fabricbukkit.craftfabric.util;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import io.github.tr7zw.fabricbukkit.mixin.ITextFormatMixin;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.Style;
-import net.minecraft.text.TextComponent;
-import net.minecraft.text.TextFormat;
-import net.minecraft.text.TranslatableTextComponent;
+import net.minecraft.text.*;
 import net.minecraft.text.event.ClickEvent;
 import org.bukkit.ChatColor;
 
@@ -60,7 +56,7 @@ public final class ChatUtils {
             String match;
             while (matcher.find()) {
                 int groupId = 0;
-                while ((match = matcher.group(++groupId)) == null);
+                while ((match = matcher.group(++groupId)) == null) ;
                 appendNewComponent(matcher.start(groupId));
                 switch (groupId) {
                     case 1:
@@ -246,9 +242,9 @@ public final class ChatUtils {
         for (int i = 0; i < extras.size(); i++) {
             TextComponent comp = extras.get(i);
             //FIXME
-           // if (comp.getStyle() != null && comp.getStyle().h() == null) {
-          //      extras.set(i, fixComponent(comp, matcher));
-           // }
+            // if (comp.getStyle() != null && comp.getStyle().h() == null) {
+            //      extras.set(i, fixComponent(comp, matcher));
+            // }
         }
 
         if (component instanceof TranslatableTextComponent) {
@@ -257,9 +253,9 @@ public final class ChatUtils {
                 Object comp = subs[i];
                 if (comp instanceof TextComponent) {
                     TextComponent c = (TextComponent) comp; //FIXME
-                  //  if (c.getStyle() != null && c.getStyle().h() == null) {
-                  //      subs[i] = fixComponent(c, matcher);
-                  //  }
+                    //  if (c.getStyle() != null && c.getStyle().h() == null) {
+                    //      subs[i] = fixComponent(c, matcher);
+                    //  }
                 } else if (comp instanceof String && matcher.reset((String) comp).find()) {
                     subs[i] = fixComponent(new StringTextComponent((String) comp), matcher);
                 }

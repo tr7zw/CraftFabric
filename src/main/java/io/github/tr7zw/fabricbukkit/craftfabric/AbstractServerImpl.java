@@ -16,12 +16,7 @@ import org.bukkit.Warning.WarningState;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -128,20 +123,20 @@ public abstract class AbstractServerImpl implements Server {
         commandMap.setFallbackCommands();
         pluginManager = new SimplePluginManager(this, commandMap);
     }
-    
+
     public MinecraftServer getHandler() {
-    	return server;
+        return server;
     }
 
     public void setupServer() {
         console = new CraftConsoleCommandSender();
-        
+
         loadPlugins();
         enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
     }
-    
+
     public CommandMap getCommandMap() {
-    	return commandMap;
+        return commandMap;
     }
 
     public void loadPlugins() {
@@ -479,8 +474,8 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public PluginCommand getPluginCommand(@NotNull String name) {
-       Command command = commandMap.getCommand(name);
-    	return (command instanceof PluginCommand) ? (PluginCommand)command : null ;
+        Command command = commandMap.getCommand(name);
+        return (command instanceof PluginCommand) ? (PluginCommand) command : null;
     }
 
     @Override
@@ -493,13 +488,13 @@ public abstract class AbstractServerImpl implements Server {
     public boolean dispatchCommand(@NotNull CommandSender sender, @NotNull String commandLine) throws CommandException {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(commandLine, "CommandLine cannot be null");
-    	
-        if(commandLine.startsWith("/")) {
-        	commandLine = commandLine.substring(1);
+
+        if (commandLine.startsWith("/")) {
+            commandLine = commandLine.substring(1);
         }
-        
-        if(commandMap.dispatch(sender, commandLine)) {
-        	return true;
+
+        if (commandMap.dispatch(sender, commandLine)) {
+            return true;
         }
         if (sender instanceof Player) {
             sender.sendMessage("Unknown command. Type \"/help\" for help.");

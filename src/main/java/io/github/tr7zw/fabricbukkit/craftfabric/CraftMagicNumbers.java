@@ -23,7 +23,7 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public final class CraftMagicNumbers implements UnsafeValues {
     public static final UnsafeValues INSTANCE = new CraftMagicNumbers();
-    
+
     public static final Material UNKNOWN_MATERIAL = Material.AIR;
 
     // Mappings
@@ -34,11 +34,11 @@ public final class CraftMagicNumbers implements UnsafeValues {
 
     static {
         for (Block block : Registry.BLOCK) {
-        	Material material = Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT));
+            Material material = Material.getMaterial(Registry.BLOCK.getId(block).getPath().toUpperCase(Locale.ROOT));
             BLOCK_MATERIAL.put(block, material != null ? material : UNKNOWN_MATERIAL);
         }
         for (Item item : Registry.ITEM) {
-        	Material material =  Material.getMaterial(Registry.ITEM.getId(item).getPath().toUpperCase(Locale.ROOT));
+            Material material = Material.getMaterial(Registry.ITEM.getId(item).getPath().toUpperCase(Locale.ROOT));
             ITEM_MATERIAL.put(item, material != null ? material : UNKNOWN_MATERIAL);
         }
         for (Material material : Material.values()) {
