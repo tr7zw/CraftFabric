@@ -32,7 +32,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     }
 
     public void setHandle(final Entity entity) {
-        this.handle = handle;
+        this.handle = entity;
     }
 
     public static CraftEntity getEntity(AbstractServerImpl server, Entity entity) {
