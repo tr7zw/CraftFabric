@@ -1345,7 +1345,8 @@ public final class SoundUtilities {
             case WEATHER_RAIN_ABOVE:
                 break;
             default:
-                throw new IllegalArgumentException("Sound " + sound.name() + " has no mapping to a valid NMS sound!");
+                break;
         }
+        throw new IllegalArgumentException("Sound " + sound.name() + " has no mapping to a valid NMS sound!");
     }
 }
