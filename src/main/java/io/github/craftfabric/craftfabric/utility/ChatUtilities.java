@@ -39,7 +39,7 @@ public final class ChatUtilities {
 
         private final List<TextComponent> list = new ArrayList<>();
         private TextComponent currentChatComponent = new StringTextComponent("");
-        private Style modifier = new Style();
+        private Style style = new Style();
         private final TextComponent[] output;
         private int currentIndex;
         private final String message;
@@ -62,29 +62,29 @@ public final class ChatUtilities {
                     case 1:
                         TextFormat format = formatMap.get(match.toLowerCase(java.util.Locale.ENGLISH).charAt(1));
                         if (format == TextFormat.RESET) {
-                            modifier = new Style();
+                            style = new Style();
                         } else if (format.isModifier()) {
                             switch (format) {
                                 case BOLD:
-                                    modifier.setBold(Boolean.TRUE);
+                                    style.setBold(Boolean.TRUE);
                                     break;
                                 case ITALIC:
-                                    modifier.setItalic(Boolean.TRUE);
+                                    style.setItalic(Boolean.TRUE);
                                     break;
                                 case STRIKETHROUGH:
-                                    modifier.setStrikethrough(Boolean.TRUE);
+                                    style.setStrikethrough(Boolean.TRUE);
                                     break;
                                 case UNDERLINE:
-                                    modifier.setUnderline(Boolean.TRUE);
+                                    style.setUnderline(Boolean.TRUE);
                                     break;
                                 case OBFUSCATED:
-                                    modifier.setObfuscated(Boolean.TRUE);
+                                    style.setObfuscated(Boolean.TRUE);
                                     break;
                                 default:
                                     throw new AssertionError("Unexpected message format");
                             }
                         } else { // Color resets formatting
-                            modifier = new Style().setColor(format);
+                            style = new Style().setColor(format);
                         }
                         break;
                     case 2:
@@ -98,9 +98,9 @@ public final class ChatUtilities {
                         if (!(match.startsWith("http://") || match.startsWith("https://"))) {
                             match = "http://" + match;
                         }
-                        modifier.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, match));
+                        style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, match));
                         appendNewComponent(matcher.end(groupId));
-                        modifier.setClickEvent(null);
+                        style.setClickEvent(null);
                 }
                 currentIndex = matcher.end(groupId);
             }
@@ -116,9 +116,9 @@ public final class ChatUtilities {
             if (index <= currentIndex) {
                 return;
             }
-            TextComponent addition = new StringTextComponent(message.substring(currentIndex, index)).setStyle(modifier);
+            TextComponent addition = new StringTextComponent(message.substring(currentIndex, index)).setStyle(style);
             currentIndex = index;
-            modifier = modifier.clone();
+            style = style.clone();
             if (currentChatComponent == null) {
                 currentChatComponent = new StringTextComponent("");
                 list.add(currentChatComponent);
@@ -163,29 +163,29 @@ public final class ChatUtilities {
         if (component == null) {
             return "";
         }
-        StringBuilder out = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
         for (TextComponent current : component) {
             Style style = current.getStyle();
-            out.append(style.getColor() == null ? defaultColor : style.getColor());
+            result.append(style.getColor() == null ? defaultColor : style.getColor());
             if (style.isBold()) {
-                out.append(TextFormat.BOLD);
+                result.append(TextFormat.BOLD);
             }
             if (style.isItalic()) {
-                out.append(TextFormat.ITALIC);
+                result.append(TextFormat.ITALIC);
             }
             if (style.isUnderlined()) {
-                out.append(TextFormat.UNDERLINE);
+                result.append(TextFormat.UNDERLINE);
             }
             if (style.isStrikethrough()) {
-                out.append(TextFormat.STRIKETHROUGH);
+                result.append(TextFormat.STRIKETHROUGH);
             }
             if (style.isObfuscated()) {
-                out.append(TextFormat.OBFUSCATED);
+                result.append(TextFormat.OBFUSCATED);
             }
-            out.append(current.getText());
+            result.append(current.getText());
         }
-        return out.toString().replaceFirst("^(" + defaultColor + ")*", "");
+        return result.toString().replaceFirst("^(" + defaultColor + ")*", "");
     }
 
     public static TextComponent fixComponent(TextComponent component) {
@@ -200,13 +200,12 @@ public final class ChatUtilities {
             if (matcher.reset(msg).find()) {
                 matcher.reset();
 
-                Style style = text.getStyle() != null ?
-                        text.getStyle() : new Style();
+                Style style = text.getStyle() != null ? text.getStyle() : new Style();
                 List<TextComponent> extras = new ArrayList<>();
                 List<TextComponent> extrasOld = new ArrayList<>(text.getChildren());
                 component = text = new StringTextComponent("");
 
-                int pos = 0;
+                int position = 0;
                 while (matcher.find()) {
                     String match = matcher.group();
 
@@ -214,7 +213,7 @@ public final class ChatUtilities {
                         match = "http://" + match;
                     }
 
-                    StringTextComponent prev = new StringTextComponent(msg.substring(pos, matcher.start()));
+                    StringTextComponent prev = new StringTextComponent(msg.substring(position, matcher.start()));
                     prev.setStyle(style);
                     extras.add(prev);
 
@@ -224,10 +223,10 @@ public final class ChatUtilities {
                     link.setStyle(linkStyle);
                     extras.add(link);
 
-                    pos = matcher.end();
+                    position = matcher.end();
                 }
 
-                StringTextComponent prev = new StringTextComponent(msg.substring(pos));
+                StringTextComponent prev = new StringTextComponent(msg.substring(position));
                 prev.setStyle(style);
                 extras.add(prev);
                 extras.addAll(extrasOld);
