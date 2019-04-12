@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.util;
+package io.github.craftfabric.craftfabric.utility;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ChatUtils {
+public final class ChatUtilities {
 
     private static final Pattern LINK_PATTERN = Pattern.compile("((?:(?:https?)://)?(?:[-\\w_.]{2,}\\.[a-z]{2,4}.*?(?=[.?!,;:]?(?:[" + ChatColor.COLOR_CHAR + " \\n]|$))))");
     private static final Map<Character, TextFormat> formatMap;
@@ -265,6 +265,6 @@ public final class ChatUtils {
         return component;
     }
 
-    private ChatUtils() {
+    private ChatUtilities() {
     }
 }

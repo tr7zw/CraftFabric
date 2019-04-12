@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.util;
+package io.github.craftfabric.craftfabric.utility;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.sound.SoundEvent;
@@ -7,57 +7,57 @@ import net.minecraft.util.registry.Registry;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
-public final class SoundUtils {
+public final class SoundUtilities {
 
-    private SoundUtils() {
+    private SoundUtilities() {
     }
 
-    public static @NotNull SoundEvent getNMSSound(@NotNull Sound sound) {
-        String soundIdentifier = null;
+    public static @NotNull SoundEvent getNMSSound(@NotNull String identifier) {
+        SoundEvent effect = Registry.SOUND_EVENT.get(new Identifier(identifier));
+        Preconditions.checkArgument(effect != null, "Sound effect %s does not exist in NMS", identifier);
+        return effect;
+    }
+
+    public static @NotNull String getSoundIdentifier(@NotNull Sound sound) {
         switch (sound) {
             case AMBIENT_CAVE:
-                soundIdentifier = "ambient.cave";
-                break;
+                return "ambient.cave";
             case AMBIENT_UNDERWATER_ENTER:
-                soundIdentifier = "ambient.underwater.enter";
-                break;
+                return "ambient.underwater.enter";
             case AMBIENT_UNDERWATER_EXIT:
-                soundIdentifier = "ambient.underwater.exit";
-                break;
+                return "ambient.underwater.exit";
             case AMBIENT_UNDERWATER_LOOP:
-                soundIdentifier = "ambient.underwater.loop";
-                break;
+                return "ambient.underwater.loop";
             case AMBIENT_UNDERWATER_LOOP_ADDITIONS:
-                soundIdentifier = "ambient.underwater.loop.additions";
-                break;
+                return "ambient.underwater.loop.additions";
             case AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE:
-                break;
+                return "ambient.underwater.loop.additions_rare";
             case AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE:
-                break;
+                return "ambient.underwater.loop.additions_ultra_rare";
             case BLOCK_ANVIL_BREAK:
-                break;
+                return "block.anvil.break";
             case BLOCK_ANVIL_DESTROY:
-                break;
+                return "block.anvil.destroy";
             case BLOCK_ANVIL_FALL:
-                break;
+                return "block.anvil.fall";
             case BLOCK_ANVIL_HIT:
-                break;
+                return "block.anvil.hit";
             case BLOCK_ANVIL_LAND:
-                break;
+                return "block.anvil.land";
             case BLOCK_ANVIL_PLACE:
-                break;
+                return "block.anvil.place";
             case BLOCK_ANVIL_STEP:
-                break;
+                return "block.anvil.step";
             case BLOCK_ANVIL_USE:
-                break;
+                return "block.anvil.use";
             case BLOCK_BEACON_ACTIVATE:
-                break;
+                return "block.beacon.activate";
             case BLOCK_BEACON_AMBIENT:
-                break;
+                return "block.beacon.ambient";
             case BLOCK_BEACON_DEACTIVATE:
-                break;
+                return "block.beacon.deactivate";
             case BLOCK_BEACON_POWER_SELECT:
-                break;
+                return "block.beacon.power_select";
             case BLOCK_BREWING_STAND_BREW:
                 break;
             case BLOCK_BUBBLE_COLUMN_BUBBLE_POP:
@@ -1347,8 +1347,5 @@ public final class SoundUtils {
             default:
                 throw new IllegalArgumentException("Sound " + sound.name() + " has no mapping to a valid NMS sound!");
         }
-        SoundEvent effect = Registry.SOUND_EVENT.get(new Identifier(soundIdentifier));
-        Preconditions.checkArgument(effect != null, "Sound effect %s does not exist in NMS", sound.name());
-        return effect;
     }
 }

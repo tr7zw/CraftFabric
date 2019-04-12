@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.command.ConversationTracker;
-import io.github.craftfabric.craftfabric.util.ChatUtils;
-import io.github.craftfabric.craftfabric.util.NamespaceUtils;
+import io.github.craftfabric.craftfabric.utility.ChatUtilities;
+import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
@@ -89,7 +89,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         RecipeManager manager = server.getHandler().getRecipeManager();
 
         for (NamespacedKey recipeKey : recipeKeys) {
-            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtils.toMinecraft(recipeKey));
+            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtilities.toMinecraft(recipeKey));
             if (!recipe.isPresent()) {
                 continue;
             }
@@ -316,7 +316,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         if (getHandle().networkHandler == null) {
             return;
         }
-        for (TextComponent component : ChatUtils.fromString(message)) {
+        for (TextComponent component : ChatUtilities.fromString(message)) {
             getHandle().networkHandler.sendPacket(new ChatMessageS2CPacket(component));
         }
     }
@@ -875,12 +875,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         getHandle().networkHandler.sendPacket(times);
 
         if (title != null) {
-            TitleS2CPacket packetTitle = new TitleS2CPacket(TitleS2CPacket.Action.TITLE, ChatUtils.fromStringOrNull(title));
+            TitleS2CPacket packetTitle = new TitleS2CPacket(TitleS2CPacket.Action.TITLE, ChatUtilities.fromStringOrNull(title));
             getHandle().networkHandler.sendPacket(packetTitle);
         }
 
         if (subtitle != null) {
-            TitleS2CPacket packetSubtitle = new TitleS2CPacket(TitleS2CPacket.Action.SUBTITLE, ChatUtils.fromStringOrNull(subtitle));
+            TitleS2CPacket packetSubtitle = new TitleS2CPacket(TitleS2CPacket.Action.SUBTITLE, ChatUtilities.fromStringOrNull(subtitle));
             getHandle().networkHandler.sendPacket(packetSubtitle);
         }
     }

@@ -1,6 +1,6 @@
 package io.github.craftfabric.craftfabric;
 
-import io.github.craftfabric.craftfabric.util.NamespaceUtils;
+import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
@@ -75,7 +75,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
             throw new IllegalArgumentException("Legacy materials aren't supported!");
         }
 
-        return NamespaceUtils.toMinecraft(mat.getKey());
+        return NamespaceUtilities.toMinecraft(mat.getKey());
     }
 
     @Override

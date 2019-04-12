@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric;
+package io.github.craftfabric.craftfabric.utility;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class Versioning {
+public final class VersioningUtilities {
 
-    private Versioning() {
+    private VersioningUtilities() {
     }
 
     @NotNull
@@ -27,5 +27,10 @@ public final class Versioning {
         }
 
         return result;
+    }
+
+    @NotNull
+    public static String getServerVersion() {
+        return VersioningUtilities.class.getPackage().getImplementationVersion();
     }
 }

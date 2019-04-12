@@ -3,8 +3,10 @@ package io.github.craftfabric.craftfabric;
 import com.google.common.collect.MapMaker;
 import io.github.craftfabric.craftfabric.command.CraftCommandMap;
 import io.github.craftfabric.craftfabric.command.CraftConsoleCommandSender;
-import io.github.craftfabric.craftfabric.world.CraftWorld;
 import io.github.craftfabric.craftfabric.inventory.CraftItemFactory;
+import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
+import io.github.craftfabric.craftfabric.utility.VersioningUtilities;
+import io.github.craftfabric.craftfabric.world.CraftWorld;
 import jline.console.ConsoleReader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.config.BannedIpEntry;
@@ -49,9 +51,9 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractServerImpl implements Server {
 
-    protected final String serverName = "FabricBukkit";
-    protected final String serverVersion = AbstractServerImpl.class.getPackage().getImplementationVersion();
-    protected final String bukkitVersion = Versioning.getBukkitVersion();
+    protected final String serverName = "CraftFabric";
+    protected final String serverVersion = VersioningUtilities.getServerVersion();
+    protected final String bukkitVersion = VersioningUtilities.getBukkitVersion();
     protected final Logger logger = Logger.getLogger("Minecraft");
 
     // Services
@@ -646,7 +648,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public GameMode getDefaultGameMode() {
-        return GameMode.getByValue(server.getWorld(DimensionType.OVERWORLD).getLevelProperties().getGameMode().getId());
+        return GameModeUtilities.getBukkitGameMode(server.getWorld(DimensionType.OVERWORLD).getLevelProperties().getGameMode());
     }
 
     @Override

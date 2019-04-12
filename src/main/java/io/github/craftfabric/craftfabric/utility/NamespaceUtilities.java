@@ -1,12 +1,12 @@
-package io.github.craftfabric.craftfabric.util;
+package io.github.craftfabric.craftfabric.utility;
 
 import net.minecraft.util.Identifier;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
-public final class NamespaceUtils {
+public final class NamespaceUtilities {
 
-    private NamespaceUtils() {
+    private NamespaceUtilities() {
     }
 
     public static NamespacedKey fromStringOrNull(String string) {

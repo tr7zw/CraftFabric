@@ -8,7 +8,7 @@ import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
 import io.github.craftfabric.craftfabric.mixin.ILivingEntityMixin;
 import io.github.craftfabric.craftfabric.mixin.IPlayerEntityMixin;
 import io.github.craftfabric.craftfabric.mixin.IServerPlayerEntityMixin;
-import io.github.craftfabric.craftfabric.util.NamespaceUtils;
+import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import io.github.craftfabric.craftfabric.mixin.IItemCooldownManagerMixin;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.recipe.Recipe;
@@ -336,7 +336,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
         RecipeManager manager = server.getHandler().getRecipeManager();
 
         for (NamespacedKey recipeKey : recipeKeys) {
-            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtils.toMinecraft(recipeKey));
+            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtilities.toMinecraft(recipeKey));
             if (!recipe.isPresent()) {
                 continue;
             }
