@@ -196,8 +196,8 @@ public final class ChatUtilities {
     private static TextComponent fixComponent(TextComponent component, Matcher matcher) {
         if (component instanceof StringTextComponent) {
             StringTextComponent text = ((StringTextComponent) component);
-            String msg = text.getText();
-            if (matcher.reset(msg).find()) {
+            String message = text.getText();
+            if (matcher.reset(message).find()) {
                 matcher.reset();
 
                 Style style = text.getStyle() != null ? text.getStyle() : new Style();
@@ -213,9 +213,9 @@ public final class ChatUtilities {
                         match = "http://" + match;
                     }
 
-                    StringTextComponent prev = new StringTextComponent(msg.substring(position, matcher.start()));
-                    prev.setStyle(style);
-                    extras.add(prev);
+                    StringTextComponent previous = new StringTextComponent(message.substring(position, matcher.start()));
+                    previous.setStyle(style);
+                    extras.add(previous);
 
                     StringTextComponent link = new StringTextComponent(matcher.group());
                     Style linkStyle = style.clone();
@@ -226,9 +226,9 @@ public final class ChatUtilities {
                     position = matcher.end();
                 }
 
-                StringTextComponent prev = new StringTextComponent(msg.substring(position));
-                prev.setStyle(style);
-                extras.add(prev);
+                StringTextComponent previous = new StringTextComponent(message.substring(position));
+                previous.setStyle(style);
+                extras.add(previous);
                 extras.addAll(extrasOld);
 
                 for (TextComponent current : extras) {
@@ -239,24 +239,23 @@ public final class ChatUtilities {
 
         List<TextComponent> extras = component.getChildren();
         for (int i = 0; i < extras.size(); i++) {
-            TextComponent comp = extras.get(i);
-            //FIXME
-            // if (comp.getStyle() != null && comp.getStyle().h() == null) {
-            //      extras.set(i, fixComponent(comp, matcher));
-            // }
+            TextComponent currentComponent = extras.get(i);
+            if (currentComponent.getStyle() != null && currentComponent.getStyle().getClickEvent() == null) {
+                extras.set(i, fixComponent(currentComponent, matcher));
+            }
         }
 
         if (component instanceof TranslatableTextComponent) {
-            Object[] subs = ((TranslatableTextComponent) component).getParams();
-            for (int i = 0; i < subs.length; i++) {
-                Object comp = subs[i];
-                if (comp instanceof TextComponent) {
-                    TextComponent c = (TextComponent) comp; //FIXME
-                    //  if (c.getStyle() != null && c.getStyle().h() == null) {
-                    //      subs[i] = fixComponent(c, matcher);
-                    //  }
-                } else if (comp instanceof String && matcher.reset((String) comp).find()) {
-                    subs[i] = fixComponent(new StringTextComponent((String) comp), matcher);
+            Object[] parameters = ((TranslatableTextComponent) component).getParams();
+            for (int i = 0; i < parameters.length; i++) {
+                Object currentParameter = parameters[i];
+                if (currentParameter instanceof TextComponent) {
+                    TextComponent componentParameter = (TextComponent) currentParameter;
+                    if (componentParameter.getStyle() != null && componentParameter.getStyle().getClickEvent() == null) {
+                        parameters[i] = fixComponent(componentParameter, matcher);
+                    }
+                } else if (currentParameter instanceof String && matcher.reset((String) currentParameter).find()) {
+                    parameters[i] = fixComponent(new StringTextComponent((String) currentParameter), matcher);
                 }
             }
         }
