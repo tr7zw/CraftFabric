@@ -648,7 +648,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public GameMode getDefaultGameMode() {
-        return GameModeUtilities.getBukkitGameMode(server.getWorld(DimensionType.OVERWORLD).getLevelProperties().getGameMode());
+        return GameModeUtilities.fromNMS(server.getWorld(DimensionType.OVERWORLD).getLevelProperties().getGameMode());
     }
 
     @Override

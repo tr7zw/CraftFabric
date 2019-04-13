@@ -9,9 +9,6 @@ import java.util.Properties;
 
 public final class VersioningUtilities {
 
-    private VersioningUtilities() {
-    }
-
     @NotNull
     public static String getBukkitVersion() {
         String result = "Unknown-Version";
@@ -32,5 +29,8 @@ public final class VersioningUtilities {
     @NotNull
     public static String getServerVersion() {
         return VersioningUtilities.class.getPackage().getImplementationVersion();
+    }
+
+    private VersioningUtilities() {
     }
 }

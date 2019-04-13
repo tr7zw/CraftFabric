@@ -6,26 +6,26 @@ import org.jetbrains.annotations.NotNull;
 
 public final class NamespaceUtilities {
 
-    private NamespaceUtilities() {
-    }
-
-    public static NamespacedKey fromStringOrNull(String string) {
+    public static NamespacedKey stringToNMSOrNull(String string) {
         if (string == null || string.isEmpty()) {
             return null;
         }
         Identifier minecraft = Identifier.create(string);
-        return (minecraft == null) ? null : fromMinecraft(minecraft);
+        return (minecraft == null) ? null : fromNMS(minecraft);
     }
 
-    public static @NotNull NamespacedKey fromString(String string) {
-        return fromMinecraft(new Identifier(string));
+    public static @NotNull NamespacedKey stringToNMS(String string) {
+        return fromNMS(new Identifier(string));
     }
 
-    public static @NotNull NamespacedKey fromMinecraft(Identifier minecraft) {
-        return new NamespacedKey(minecraft.getPath(), minecraft.getNamespace());
+    public static @NotNull NamespacedKey fromNMS(Identifier identifier) {
+        return new NamespacedKey(identifier.getPath(), identifier.getNamespace());
     }
 
-    public static @NotNull Identifier toMinecraft(NamespacedKey key) {
+    public static @NotNull Identifier toNMS(NamespacedKey key) {
         return new Identifier(key.getNamespace(), key.getKey());
+    }
+
+    private NamespaceUtilities() {
     }
 }

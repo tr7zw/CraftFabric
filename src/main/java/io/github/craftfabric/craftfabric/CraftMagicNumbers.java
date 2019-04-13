@@ -75,7 +75,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
             throw new IllegalArgumentException("Legacy materials aren't supported!");
         }
 
-        return NamespaceUtilities.toMinecraft(mat.getKey());
+        return NamespaceUtilities.toNMS(mat.getKey());
     }
 
     @Override

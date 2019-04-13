@@ -16,18 +16,18 @@ import java.util.regex.Pattern;
 public final class ChatUtilities {
 
     private static final Pattern LINK_PATTERN = Pattern.compile("((?:(?:https?)://)?(?:[-\\w_.]{2,}\\.[a-z]{2,4}.*?(?=[.?!,;:]?(?:[" + ChatColor.COLOR_CHAR + " \\n]|$))))");
-    private static final Map<Character, TextFormat> formatMap;
+    private static final Map<Character, TextFormat> FORMAT_MAP;
 
     static {
         Builder<Character, TextFormat> builder = ImmutableMap.builder();
         for (TextFormat format : TextFormat.values()) {
             builder.put(Character.toLowerCase(format.toString().charAt(1)), format);
         }
-        formatMap = builder.build();
+        FORMAT_MAP = builder.build();
     }
 
     public static TextFormat getColor(ChatColor color) {
-        return formatMap.get(color.getChar());
+        return FORMAT_MAP.get(color.getChar());
     }
 
     public static ChatColor getColor(TextFormat format) {
@@ -60,7 +60,7 @@ public final class ChatUtilities {
                 appendNewComponent(matcher.start(groupId));
                 switch (groupId) {
                     case 1:
-                        TextFormat format = formatMap.get(match.toLowerCase(java.util.Locale.ENGLISH).charAt(1));
+                        TextFormat format = FORMAT_MAP.get(match.toLowerCase(java.util.Locale.ENGLISH).charAt(1));
                         if (format == TextFormat.RESET) {
                             style = new Style();
                         } else if (format.isModifier()) {

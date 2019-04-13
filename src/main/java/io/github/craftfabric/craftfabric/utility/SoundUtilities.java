@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SoundUtilities {
 
-    private SoundUtilities() {
-    }
-
     public static @NotNull SoundEvent getNMSSound(@NotNull String identifier) {
         SoundEvent effect = Registry.SOUND_EVENT.get(new Identifier(identifier));
         Preconditions.checkArgument(effect != null, "Sound effect %s does not exist in NMS", identifier);
@@ -1348,5 +1345,8 @@ public final class SoundUtilities {
                 break;
         }
         throw new IllegalArgumentException("Sound " + sound.name() + " has no mapping to a valid NMS sound!");
+    }
+
+    private SoundUtilities() {
     }
 }

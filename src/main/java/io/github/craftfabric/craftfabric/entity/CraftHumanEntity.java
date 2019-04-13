@@ -336,7 +336,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
         RecipeManager manager = server.getHandler().getRecipeManager();
 
         for (NamespacedKey recipeKey : recipeKeys) {
-            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtilities.toMinecraft(recipeKey));
+            Optional<? extends Recipe<?>> recipe = manager.get(NamespaceUtilities.toNMS(recipeKey));
             if (!recipe.isPresent()) {
                 continue;
             }

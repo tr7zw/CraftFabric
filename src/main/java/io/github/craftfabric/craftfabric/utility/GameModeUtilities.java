@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public final class GameModeUtilities {
 
     @NotNull
-    public static GameMode getBukkitGameMode(@NotNull net.minecraft.world.GameMode gameMode) {
+    public static GameMode fromNMS(@NotNull net.minecraft.world.GameMode gameMode) {
         switch (gameMode) {
             case SURVIVAL:
                 return GameMode.SURVIVAL;
@@ -22,7 +22,7 @@ public final class GameModeUtilities {
     }
 
     @NotNull
-    public static net.minecraft.world.GameMode getNMSGameMode(@NotNull GameMode gameMode) {
+    public static net.minecraft.world.GameMode toNMS(@NotNull GameMode gameMode) {
         switch (gameMode) {
             case SURVIVAL:
                 return net.minecraft.world.GameMode.SURVIVAL;
