@@ -202,7 +202,7 @@ public final class ChatUtilities {
 
                 Style style = text.getStyle() != null ? text.getStyle() : new Style();
                 List<TextComponent> extras = new ArrayList<>();
-                List<TextComponent> extrasOld = new ArrayList<>(text.getChildren());
+                List<TextComponent> extrasOld = new ArrayList<>(text.getSiblings());
                 component = text = new StringTextComponent("");
 
                 int position = 0;
@@ -237,7 +237,7 @@ public final class ChatUtilities {
             }
         }
 
-        List<TextComponent> extras = component.getChildren();
+        List<TextComponent> extras = component.getSiblings();
         for (int i = 0; i < extras.size(); i++) {
             TextComponent currentComponent = extras.get(i);
             if (currentComponent.getStyle() != null && currentComponent.getStyle().getClickEvent() == null) {

@@ -295,7 +295,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
     @Override
     public boolean hasCooldown(@NotNull Material material) {
         Objects.requireNonNull(material, "material");
-        return getHandle().getItemCooldownManager().isCooldown(CraftMagicNumbers.getItem(material));
+        return getHandle().getItemCooldownManager().isCoolingDown(CraftMagicNumbers.getItem(material));
     }
 
     @Override

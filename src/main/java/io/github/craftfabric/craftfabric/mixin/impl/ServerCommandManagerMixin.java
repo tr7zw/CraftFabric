@@ -3,7 +3,7 @@ package io.github.craftfabric.craftfabric.mixin.impl;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
-import net.minecraft.server.command.ServerCommandManager;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.bukkit.Bukkit;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ServerCommandManager.class)
+@Mixin(CommandManager.class)
 public class ServerCommandManagerMixin {
 
     @SuppressWarnings("unchecked")

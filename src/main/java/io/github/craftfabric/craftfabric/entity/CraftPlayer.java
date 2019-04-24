@@ -1,29 +1,29 @@
 package io.github.craftfabric.craftfabric.entity;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
-import com.mojang.authlib.GameProfile;
-import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.command.ConversationTracker;
-import io.github.craftfabric.craftfabric.utility.ChatUtilities;
-import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
-import io.netty.buffer.Unpooled;
-import net.minecraft.client.network.packet.ChatMessageS2CPacket;
-import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
-import net.minecraft.client.network.packet.TitleS2CPacket;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.scoreboard.ScoreboardTeam;
-import net.minecraft.server.config.WhitelistEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.packet.ChatMessageC2SPacket;
-import net.minecraft.sortme.ChatMessageType;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.PacketByteBuf;
-import org.bukkit.*;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.bukkit.Achievement;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Note;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
+import org.bukkit.WeatherType;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.data.BlockData;
@@ -43,8 +43,30 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.net.InetSocketAddress;
-import java.util.*;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import com.mojang.authlib.GameProfile;
+
+import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.command.ConversationTracker;
+import io.github.craftfabric.craftfabric.utility.ChatUtilities;
+import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
+import io.netty.buffer.Unpooled;
+import net.minecraft.client.network.packet.ChatMessageS2CPacket;
+import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
+import net.minecraft.client.network.packet.TitleS2CPacket;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.server.WhitelistEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.packet.ChatMessageC2SPacket;
+import net.minecraft.stat.Stats;
+import net.minecraft.text.ChatMessageType;
+import net.minecraft.text.StringTextComponent;
+import net.minecraft.text.TextComponent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.PacketByteBuf;
 
 public class CraftPlayer extends CraftHumanEntity implements Player {
     private long firstPlayed = 0;
@@ -108,7 +130,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void closeInventory() {
-        getHandle().closeGui();
+        getHandle().closeContainer();
     }
 
     @Override
@@ -256,7 +278,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull String getPlayerListName() {
-        return ScoreboardTeam.modifyText(getHandle().getScoreboardTeam(), getHandle().getName()).getFormattedText();
+        return Team.modifyText(getHandle().getScoreboardTeam(), getHandle().getName()).getFormattedText();
     }
 
     @Override
@@ -666,13 +688,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public float getExp() {
-        return getHandle().experienceBarProgress;
+        return getHandle().experienceLevelProgress;
     }
 
     @Override
     public void setExp(float exp) {
         Preconditions.checkArgument(exp >= 0.0 && exp <= 1.0, "Experience progress must be between 0.0 and 1.0 (%s)", exp);
-        getHandle().experienceBarProgress = exp;
+        getHandle().experienceLevelProgress = exp;
     }
 
     @Override

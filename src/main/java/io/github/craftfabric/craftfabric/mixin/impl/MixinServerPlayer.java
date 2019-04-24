@@ -9,7 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.sortme.ChatMessageType;
+import net.minecraft.text.ChatMessageType;
 import net.minecraft.text.TextComponent;
 import net.minecraft.world.World;
 import org.bukkit.Bukkit;

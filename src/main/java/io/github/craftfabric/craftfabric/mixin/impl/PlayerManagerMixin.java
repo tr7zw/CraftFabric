@@ -44,7 +44,7 @@ public class PlayerManagerMixin {
     }
 
     @SuppressWarnings("unchecked")
-    @Inject(at = @At("HEAD"), method = "method_14611")
+    @Inject(at = @At("HEAD"), method = "remove")
     public void onQuit(ServerPlayerEntity serverPlayerEntity_1, CallbackInfo info) {
         Bukkit.getPluginManager().callEvent(new PlayerQuitEvent(((CraftLink<Player>) (Object) serverPlayerEntity_1).getCraftHandler(), "")); //FIXME message
     }

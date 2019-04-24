@@ -185,7 +185,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public boolean eject() {
-        boolean wasRiding = getHandle().getRiddenEntity() != null;
+        boolean wasRiding = getHandle().getVehicle() != null;
         getHandle().stopRiding();
         return wasRiding;
     }
@@ -253,7 +253,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     @Override
     public Entity getVehicle() {
         if (!isInsideVehicle()) return null;
-        return ((CraftLink<Entity>) getHandle().getRiddenEntity()).getCraftHandler();
+        return ((CraftLink<Entity>) getHandle().getVehicle()).getCraftHandler();
     }
 
     @Override
