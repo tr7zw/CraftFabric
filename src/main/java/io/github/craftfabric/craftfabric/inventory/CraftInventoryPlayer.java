@@ -264,16 +264,6 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
     }
 
     @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public String getTitle() {
-        return null;
-    }
-
-    @Override
     public InventoryType getType() {
         return InventoryType.PLAYER;
     }

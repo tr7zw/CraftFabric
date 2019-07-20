@@ -1,13 +1,15 @@
 package io.github.craftfabric.craftfabric.inventory;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonParseException;
-import io.github.craftfabric.craftfabric.CraftMagicNumbers;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -17,12 +19,17 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.persistence.PersistentDataContainer;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.*;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonParseException;
+
+import io.github.craftfabric.craftfabric.CraftMagicNumbers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
@@ -60,8 +67,8 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
     static final ItemMetaKey DAMAGE = new ItemMetaKey("Damage");
     static final ItemMetaKey BUKKIT_CUSTOM_TAG = new ItemMetaKey("PublicBukkitValues");
     private static final Set<String> HANDLED_TAGS = Sets.newHashSet();
-    private TextComponent displayName;
-    private TextComponent locName;
+    private Text displayName;
+    private Text locName;
     private List<String> lore;
     private Map<Enchantment, Integer> enchantments;
     private Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -78,7 +85,7 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
             if (display.containsKey(NAME.NBT)) {
                 try {
-                    displayName = TextComponent.Serializer.fromJsonString(display.getString(NAME.NBT));
+                    displayName = Text.Serializer.fromJson(display.getString(NAME.NBT));
                 } catch (JsonParseException ex) {
                     // Ignore (stripped like Vanilla)
                 }
@@ -86,7 +93,7 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
             if (display.containsKey(LOCNAME.NBT)) {
                 try {
-                    locName = TextComponent.Serializer.fromJsonString(display.getString(LOCNAME.NBT));
+                    locName = Text.Serializer.fromJson(display.getString(LOCNAME.NBT));
                 } catch (JsonParseException ex) {
                     // Ignore (stripped like Vanilla)
                 }
@@ -150,12 +157,12 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
     @Override
     public String getDisplayName() {
-        return displayName.getFormattedText();
+        return displayName.asFormattedString();
     }
 
     @Override
     public void setDisplayName(String name) {
-        displayName = new StringTextComponent(name);
+        displayName = new LiteralText(name);
     }
 
     @Override
@@ -404,6 +411,36 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
             }
         }
     }
+
+	@Override
+	public PersistentDataContainer getPersistentDataContainer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomModelData() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getCustomModelData() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setCustomModelData(Integer data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setVersion(int version) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

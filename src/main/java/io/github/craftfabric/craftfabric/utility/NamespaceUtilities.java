@@ -10,7 +10,7 @@ public final class NamespaceUtilities {
         if (string == null || string.isEmpty()) {
             return null;
         }
-        Identifier minecraft = Identifier.create(string);
+        Identifier minecraft = Identifier.tryParse(string);
         return (minecraft == null) ? null : fromNMS(minecraft);
     }
 

@@ -1,19 +1,12 @@
 package io.github.craftfabric.craftfabric.entity;
 
-import com.google.common.base.Preconditions;
-import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.CraftMagicNumbers;
-import io.github.craftfabric.craftfabric.inventory.CraftInventoryPlayer;
-import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
-import io.github.craftfabric.craftfabric.mixin.ILivingEntityMixin;
-import io.github.craftfabric.craftfabric.mixin.IPlayerEntityMixin;
-import io.github.craftfabric.craftfabric.mixin.IServerPlayerEntityMixin;
-import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
-import io.github.craftfabric.craftfabric.mixin.IItemCooldownManagerMixin;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.util.AbsoluteHand;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,8 +14,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Villager;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.InventoryView.Property;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -30,7 +28,21 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import com.google.common.base.Preconditions;
+
+import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.CraftMagicNumbers;
+import io.github.craftfabric.craftfabric.inventory.CraftInventoryPlayer;
+import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
+import io.github.craftfabric.craftfabric.mixin.IItemCooldownManagerMixin;
+import io.github.craftfabric.craftfabric.mixin.ILivingEntityMixin;
+import io.github.craftfabric.craftfabric.mixin.IPlayerEntityMixin;
+import io.github.craftfabric.craftfabric.mixin.IServerPlayerEntityMixin;
+import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.util.Arm;
 
 public abstract class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     //private CraftInventoryPlayer inventory;
@@ -63,7 +75,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public @NotNull MainHand getMainHand() {
-        if (getHandle().getMainHand() == AbsoluteHand.LEFT) {
+        if (getHandle().getMainArm() == Arm.LEFT) {
             return MainHand.LEFT;
         } else {
             return MainHand.RIGHT;
@@ -142,7 +154,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public @NotNull String getName() {
-        return getHandle().getName().getFormattedText();
+        return getHandle().getName().asFormattedString();
     }
 
     @Override

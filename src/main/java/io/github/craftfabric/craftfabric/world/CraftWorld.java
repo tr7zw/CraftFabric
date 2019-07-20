@@ -20,6 +20,7 @@ import org.bukkit.util.Vector;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -200,19 +201,7 @@ public class CraftWorld implements World {
     }
 
     @Override
-    public boolean unloadChunk(int x, int z, boolean save, boolean safe) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public boolean unloadChunkRequest(int x, int z) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean unloadChunkRequest(int x, int z, boolean safe) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -261,13 +250,6 @@ public class CraftWorld implements World {
 
     @Override
     public Arrow spawnArrow(Location location, Vector direction, float speed, float spread) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public <T extends Arrow> T spawnArrow(Location location, Vector direction, float speed, float spread,
-                                          Class<T> clazz) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -1010,6 +992,43 @@ public class CraftWorld implements World {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public boolean addPluginChunkTicket(int x, int z, Plugin plugin) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removePluginChunkTicket(int x, int z, Plugin plugin) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void removePluginChunkTickets(Plugin plugin) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Collection<Plugin> getPluginChunkTickets(int x, int z) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Plugin, Collection<Chunk>> getPluginChunkTickets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends AbstractArrow> T spawnArrow(Location location, Vector direction, float speed, float spread,
+			Class<T> clazz) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

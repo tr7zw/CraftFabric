@@ -12,16 +12,10 @@ import net.minecraft.util.registry.Registry;
 
 public class CraftFabric implements ModInitializer {
 
-    public static final Item FABRIC_ITEM = new Item(new Item.Settings().itemGroup(ItemGroup.MISC));
     private static final Logger LOG = LogManager.getLogger();
 
     @Override
     public void onInitialize() {
-        LOG.info("FabricBukkit is starting...");
-        Registry.register(Registry.ITEM, new Identifier("my-mod", "fabric_item"), FABRIC_ITEM);
-
-        LOG.info(Registry.BLOCK.get(1).getTranslationKey());
-
-        Bukkit.getServer();
+        LOG.info("FabricBukkit loaded...");
     }
 }

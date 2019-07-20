@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Instrument;
@@ -33,10 +34,14 @@ import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.player.PlayerRegisterChannelEvent;
 import org.bukkit.event.player.PlayerUnregisterChannelEvent;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapView;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scoreboard.Scoreboard;
@@ -55,6 +60,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
 import net.minecraft.client.network.packet.TitleS2CPacket;
+import net.minecraft.network.MessageType;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.scoreboard.Team;
@@ -62,9 +68,8 @@ import net.minecraft.server.WhitelistEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.packet.ChatMessageC2SPacket;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.ChatMessageType;
-import net.minecraft.text.StringTextComponent;
-import net.minecraft.text.TextComponent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 
@@ -145,7 +150,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void sendMessage(@NotNull String message) {
-        getHandle().sendChatMessage(new StringTextComponent(message), ChatMessageType.SYSTEM);
+        getHandle().sendChatMessage(new LiteralText(message), MessageType.SYSTEM);
     }
 
     @Override
@@ -268,7 +273,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull String getDisplayName() {
-        return getHandle().getDisplayName().getFormattedText();
+        return getHandle().getDisplayName().asFormattedString();
     }
 
     @Override
@@ -278,7 +283,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull String getPlayerListName() {
-        return Team.modifyText(getHandle().getScoreboardTeam(), getHandle().getName()).getFormattedText();
+        return Team.modifyText(getHandle().getScoreboardTeam(), getHandle().getName()).asFormattedString();
     }
 
     @Override
@@ -338,14 +343,14 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         if (getHandle().networkHandler == null) {
             return;
         }
-        for (TextComponent component : ChatUtilities.fromString(message)) {
+        for (Text component : ChatUtilities.fromString(message)) {
             getHandle().networkHandler.sendPacket(new ChatMessageS2CPacket(component));
         }
     }
 
     @Override
     public void kickPlayer(String message) {
-        getHandle().networkHandler.disconnect(new StringTextComponent(message));
+        getHandle().networkHandler.disconnect(new LiteralText(message));
     }
 
     @Override
@@ -688,13 +693,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public float getExp() {
-        return getHandle().experienceLevelProgress;
+        return getHandle().experienceProgress;
     }
 
     @Override
     public void setExp(float exp) {
         Preconditions.checkArgument(exp >= 0.0 && exp <= 1.0, "Experience progress must be between 0.0 and 1.0 (%s)", exp);
-        getHandle().experienceLevelProgress = exp;
+        getHandle().experienceProgress = exp;
     }
 
     @Override
@@ -709,12 +714,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public int getTotalExperience() {
-        return getHandle().experience;
+        return getHandle().totalExperience;
     }
 
     @Override
     public void setTotalExperience(int exp) {
-        getHandle().experience = exp;
+        getHandle().totalExperience = exp;
     }
 
     @Override
@@ -1035,4 +1040,40 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         }
         return hash;
     }
+
+	@Override
+	public <T> T getMemory(MemoryKey<T> memoryKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> void setMemory(MemoryKey<T> memoryKey, T memoryValue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Pose getPose() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PersistentDataContainer getPersistentDataContainer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void sendSignChange(Location loc, String[] lines, DyeColor dyeColor) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void openBook(ItemStack book) {
+		// TODO Auto-generated method stub
+		
+	}
 }

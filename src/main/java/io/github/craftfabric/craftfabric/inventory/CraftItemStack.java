@@ -1,11 +1,12 @@
 package io.github.craftfabric.craftfabric.inventory;
 
-import io.github.craftfabric.craftfabric.CraftMagicNumbers;
-import net.minecraft.item.Item;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
+
+import io.github.craftfabric.craftfabric.CraftMagicNumbers;
+import net.minecraft.item.Item;
 
 public class CraftItemStack extends ItemStack {
 
@@ -56,7 +57,7 @@ public class CraftItemStack extends ItemStack {
 
     public static net.minecraft.item.ItemStack copyNMSStack(net.minecraft.item.ItemStack original, int amount) {
         net.minecraft.item.ItemStack stack = original.copy();
-        stack.setAmount(amount);
+        stack.setCount(amount);
         return stack;
     }
 
@@ -67,7 +68,7 @@ public class CraftItemStack extends ItemStack {
         if (original.isEmpty()) {
             return new ItemStack(Material.AIR);
         }
-        ItemStack stack = new ItemStack(CraftMagicNumbers.getMaterial(original.getItem()), original.getAmount());
+        ItemStack stack = new ItemStack(CraftMagicNumbers.getMaterial(original.getItem()), original.getCount());
         if (hasItemMeta(original)) {
             stack.setItemMeta(getItemMeta(original));
         }
@@ -301,7 +302,7 @@ public class CraftItemStack extends ItemStack {
         } else if (handle == null) {
             handle = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), 1);
         } else {
-            net.minecraft.item.ItemStack replacement = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), handle.getAmount());
+            net.minecraft.item.ItemStack replacement = new net.minecraft.item.ItemStack(CraftMagicNumbers.getItem(type), handle.getCount());
             if (hasItemMeta()) {
                 // This will create the appropriate item meta, which will contain all the data we intend to keep
                 ItemMeta meta = getItemMeta(handle);
@@ -316,7 +317,7 @@ public class CraftItemStack extends ItemStack {
 
     @Override
     public int getAmount() {
-        return handle != null ? handle.getAmount() : 0;
+        return handle != null ? handle.getCount() : 0;
     }
 
     @Override
@@ -325,7 +326,7 @@ public class CraftItemStack extends ItemStack {
             return;
         }
 
-        handle.setAmount(amount);
+        handle.setCount(amount);
         if (amount == 0) {
             handle = null;
         }
@@ -350,7 +351,7 @@ public class CraftItemStack extends ItemStack {
 
     @Override
     public int getMaxStackSize() {
-        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxAmount();
+        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxCount();
     }
 
     @Override

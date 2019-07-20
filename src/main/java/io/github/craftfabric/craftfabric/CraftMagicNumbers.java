@@ -163,4 +163,10 @@ public final class CraftMagicNumbers implements UnsafeValues {
         public static final int TAG_INT_ARRAY = 11;
         public static final int TAG_ANY_NUMBER = 99;
     }
+
+	@Override
+	public Material getMaterial(String material, int version) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

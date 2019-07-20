@@ -1,18 +1,19 @@
 package io.github.craftfabric.craftfabric.block;
 
-import io.github.craftfabric.craftfabric.CraftMagicNumbers;
-import io.github.craftfabric.craftfabric.world.CraftWorld;
-import io.github.craftfabric.craftfabric.mixin.IBlockRedstoneWireMixin;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneWireBlock;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.LightType;
-import org.bukkit.*;
-import org.bukkit.block.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
+import org.bukkit.Chunk;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.inventory.ItemStack;
@@ -25,9 +26,16 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import io.github.craftfabric.craftfabric.CraftMagicNumbers;
+import io.github.craftfabric.craftfabric.world.CraftWorld;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.RedstoneWireBlock;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.LightType;
 
 public class CraftBlock implements Block {
     private final net.minecraft.world.World world;
@@ -310,22 +318,22 @@ public class CraftBlock implements Block {
         int y = getY();
         int z = getZ();
         if ((face == BlockFace.DOWN || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x, y - 1, z), Direction.DOWN)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x, y - 1, z)));
+            power = world.getBlockState(new BlockPos(x, y - 1, z)).get(RedstoneWireBlock.POWER);
         }
         if ((face == BlockFace.UP || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x, y + 1, z), Direction.UP)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x, y + 1, z)));
+            power = world.getBlockState(new BlockPos(x, y + 1, z)).get(RedstoneWireBlock.POWER);
         }
         if ((face == BlockFace.EAST || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x + 1, y, z), Direction.EAST)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x + 1, y, z)));
+            power = world.getBlockState(new BlockPos(x + 1, y, z)).get(RedstoneWireBlock.POWER);
         }
         if ((face == BlockFace.WEST || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x - 1, y, z), Direction.WEST)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x - 1, y, z)));
+            power = world.getBlockState(new BlockPos(x - 1, y, z)).get(RedstoneWireBlock.POWER);
         }
         if ((face == BlockFace.NORTH || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x, y, z - 1), Direction.NORTH)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x, y, z - 1)));
+            power = world.getBlockState(new BlockPos(x, y, z - 1)).get(RedstoneWireBlock.POWER);
         }
         if ((face == BlockFace.SOUTH || face == BlockFace.SELF) && world.isEmittingRedstonePower(new BlockPos(x, y, z + 1), Direction.SOUTH)) {
-            power = ((IBlockRedstoneWireMixin) wire).getPower(power, world.getBlockState(new BlockPos(x, y, z + 1)));
+            power = world.getBlockState(new BlockPos(x, y, z + 1)).get(RedstoneWireBlock.POWER);
         }
         return power > 0 ? power : (face == BlockFace.SELF ? isBlockIndirectlyPowered() : isBlockFaceIndirectlyPowered(face)) ? 15 : 0;
     }
@@ -347,7 +355,7 @@ public class CraftBlock implements Block {
 
     @Override
     public double getTemperature() {
-        return world.getBiome(position).getTemperature(position);
+        return world.getBiome(position).getTemperature();
     }
 
     @Override

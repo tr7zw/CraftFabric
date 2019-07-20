@@ -1,11 +1,7 @@
 package io.github.craftfabric.craftfabric.mixin.impl.client;
 
-import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.IntegratedServerImpl;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.text.StringTextComponent;
+import java.lang.reflect.Field;
+
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +9,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.Field;
+import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.IntegratedServerImpl;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.toast.SystemToast;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.text.LiteralText;
 
 @Mixin(IntegratedServer.class)
 public class IntegratedServerMixin {
@@ -23,7 +24,7 @@ public class IntegratedServerMixin {
         Object server = this;
         new IntegratedServerImpl((IntegratedServer) server);
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
-        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new StringTextComponent("Loaded " + Bukkit.getPluginManager().getPlugins().length + " Bukkit Plugin(s)"), null));
+        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new LiteralText("Loaded " + Bukkit.getPluginManager().getPlugins().length + " Bukkit Plugin(s)"), null));
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")

@@ -1,20 +1,21 @@
 package io.github.craftfabric.craftfabric.mixin.impl;
 
 import io.github.craftfabric.craftfabric.mixin.ITextFormatMixin;
-import net.minecraft.text.TextFormat;
+import net.minecraft.util.Formatting;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(TextFormat.class)
+@Mixin(Formatting.class)
 public class TextFormatMixin implements ITextFormatMixin {
 
     @Shadow
     @Final
-    private char sectionSignCode;
+    private char code;
 
     @Override
     public char getSectionSignCode() {
-        return sectionSignCode;
+        return code;
     }
 }

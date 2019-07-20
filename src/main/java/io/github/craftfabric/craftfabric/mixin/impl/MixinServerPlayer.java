@@ -5,12 +5,12 @@ import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
 import io.github.craftfabric.craftfabric.entity.CraftPlayer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.text.ChatMessageType;
-import net.minecraft.text.TextComponent;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,7 +45,7 @@ public abstract class MixinServerPlayer extends PlayerEntity implements CraftLin
     }
 
     @Shadow
-    public abstract void sendChatMessage(TextComponent textComponent_1, ChatMessageType chatMessageType_1);
+    public abstract void sendChatMessage(Text textComponent_1, MessageType chatMessageType_1);
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     public void onCreate(CallbackInfo info) {

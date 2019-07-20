@@ -1,8 +1,8 @@
 package io.github.craftfabric.craftfabric.entity;
 
-import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.CraftLink;
-import net.minecraft.entity.Entity;
+import java.util.List;
+import java.util.Objects;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -12,8 +12,9 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Objects;
+import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.CraftLink;
+import net.minecraft.entity.Entity;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
@@ -386,7 +387,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull BoundingBox getBoundingBox() {
-        net.minecraft.util.math.BoundingBox box = handle.getBoundingBox();
+        net.minecraft.util.math.Box box = handle.getBoundingBox();
         return new BoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
     }
 

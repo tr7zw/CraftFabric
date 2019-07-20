@@ -67,6 +67,7 @@ public abstract class AbstractServerImpl implements Server {
 
     // Vanilla server instance
     protected final MinecraftServer server;
+    protected final Thread mainThread;
 
     // Configuration
     // TODO: only dedicated! private YamlConfiguration configuration;
@@ -105,7 +106,9 @@ public abstract class AbstractServerImpl implements Server {
 
     public AbstractServerImpl(MinecraftServer server) {
         this.server = server;
+        this.mainThread = Thread.currentThread();
         Bukkit.setServer(this);
+        System.out.println("Classloader: " + Material.class.getClassLoader().getClass());
         // Setup console reader
         try {
             reader = new ConsoleReader(System.in, System.out);
@@ -269,16 +272,6 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     public @NotNull String getIp() {
         return server.getServerIp();
-    }
-
-    @Override
-    public @NotNull String getServerName() {
-        return ""; // // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
-    }
-
-    @Override
-    public @NotNull String getServerId() {
-        return ""; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
     @Override
@@ -755,8 +748,7 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public boolean isPrimaryThread() {
-        // TODO Auto-generated method stub
-        return false;
+        return Thread.currentThread().equals(mainThread);
     }
 
     @Override

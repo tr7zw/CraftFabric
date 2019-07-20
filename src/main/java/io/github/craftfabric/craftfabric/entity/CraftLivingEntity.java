@@ -1,32 +1,45 @@
 package io.github.craftfabric.craftfabric.entity;
 
-import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.CraftLink;
-import net.minecraft.entity.damage.DamageSource;
-import org.bukkit.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.CraftLink;
+import net.minecraft.entity.damage.DamageSource;
 
 public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
@@ -393,7 +406,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public String getName() {
-        return getHandle().getName().getFormattedText();
+        return getHandle().getName().asFormattedString();
     }
 
     @Override
@@ -771,5 +784,34 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         location.setPitch(pitch);
         teleport(location);
     }
+
+	@Override
+	public Pose getPose() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PersistentDataContainer getPersistentDataContainer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSleeping() {
+		return getHandle().isSleeping();
+	}
+
+	@Override
+	public <T> T getMemory(MemoryKey<T> memoryKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> void setMemory(MemoryKey<T> memoryKey, T memoryValue) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
