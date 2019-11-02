@@ -3,6 +3,7 @@ package io.github.craftfabric.craftfabric.mixin.impl.client;
 import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginLoadOrder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +26,12 @@ public class IntegratedServerMixin {
         new IntegratedServerImpl((IntegratedServer) server);
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
         MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new LiteralText("Loaded " + Bukkit.getPluginManager().getPlugins().length + " Bukkit Plugin(s)"), null));
+    }
+    
+    @Inject(at = @At("RETURN"), method = "setupServer")
+    private void setupServerFinished(CallbackInfoReturnable<Boolean> info) {
+        ((AbstractServerImpl) Bukkit.getServer()).enablePlugins(PluginLoadOrder.POSTWORLD);
+        MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.TUTORIAL_HINT, new LiteralText("Enabled " + Bukkit.getPluginManager().getPlugins().length + " Bukkit Plugin(s)"), null));
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")

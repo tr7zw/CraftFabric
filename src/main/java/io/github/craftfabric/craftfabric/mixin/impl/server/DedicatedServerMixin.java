@@ -4,6 +4,7 @@ import io.github.craftfabric.craftfabric.DedicatedServerImpl;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginLoadOrder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +19,11 @@ public class DedicatedServerMixin {
         Object server = this;
         new DedicatedServerImpl((MinecraftDedicatedServer) server);
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
+    }
+    
+    @Inject(at = @At("RETURN"), method = "setupServer")
+    private void setupServerFinished(CallbackInfoReturnable<Boolean> info) {
+        ((AbstractServerImpl) Bukkit.getServer()).enablePlugins(PluginLoadOrder.POSTWORLD);
     }
 
     @Inject(at = @At("HEAD"), method = "shutdown")

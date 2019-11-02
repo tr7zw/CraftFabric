@@ -184,8 +184,8 @@ public abstract class AbstractServerImpl implements Server {
             // setVanillaCommands(true);
             // commandMap.setFallbackCommands();
             // setVanillaCommands(false);
-            commandMap.registerServerAliases();
-            DefaultPermissions.registerCorePermissions();
+            //commandMap.registerServerAliases();
+            //DefaultPermissions.registerCorePermissions();
             // CraftDefaultPermissions.registerCorePermissions();
             // loadCustomPermissions();
             // helpMap.initializeCommands();
