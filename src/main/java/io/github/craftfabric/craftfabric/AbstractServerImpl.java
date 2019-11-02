@@ -378,8 +378,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public ServicesManager getServicesManager() {
-        // TODO Auto-generated method stub
-        return null;
+        return servicesManager;
     }
 
     @SuppressWarnings("unchecked")
