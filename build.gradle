@@ -54,6 +54,11 @@ dependencies {
     compile group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
     extraLibs group: 'org.fusesource.jansi', name: 'jansi', version: '1.17.1'
 
+    // For better plugin compatibility
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    extraLibs group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
     configurations.modCompile.extendsFrom(configurations.extraLibs)
 }
 

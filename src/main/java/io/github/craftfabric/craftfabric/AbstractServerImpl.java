@@ -4,6 +4,7 @@ import com.google.common.collect.MapMaker;
 import io.github.craftfabric.craftfabric.command.CraftCommandMap;
 import io.github.craftfabric.craftfabric.command.CraftConsoleCommandSender;
 import io.github.craftfabric.craftfabric.inventory.CraftItemFactory;
+import io.github.craftfabric.craftfabric.scheduler.CraftScheduler;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.VersioningUtilities;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
@@ -58,6 +59,7 @@ public abstract class AbstractServerImpl implements Server {
 
     // Services
     protected final ServicesManager servicesManager = new SimpleServicesManager();
+    protected final BukkitScheduler scheduler = new CraftScheduler();
     //protected final CraftScheduler scheduler = new CraftScheduler();
     protected CraftCommandMap commandMap;
     //protected final SimpleHelpMap helpMap = new SimpleHelpMap(this);
@@ -371,8 +373,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public BukkitScheduler getScheduler() {
-        // TODO Auto-generated method stub
-        return null;
+        return scheduler;
     }
 
     @Override
