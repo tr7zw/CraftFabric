@@ -814,4 +814,16 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 		
 	}
 
+	@Override
+	public double getAbsorptionAmount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setAbsorptionAmount(double amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

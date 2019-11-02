@@ -1030,5 +1030,42 @@ public class CraftWorld implements World {
 		return null;
 	}
 
+	@Override
+	public boolean createExplosion(double x, double y, double z, float power, boolean setFire, boolean breakBlocks,
+			Entity source) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean createExplosion(Location loc, float power, boolean setFire, boolean breakBlocks) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean createExplosion(Location loc, float power, boolean setFire, boolean breakBlocks, Entity source) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getViewDistance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Raid locateNearestRaid(Location location, int radius) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Raid> getRaids() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
