@@ -54,6 +54,7 @@ import com.mojang.authlib.GameProfile;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.command.ConversationTracker;
+import io.github.craftfabric.craftfabric.mixin.IPlayerAbilitiesMixin;
 import io.github.craftfabric.craftfabric.utility.ChatUtilities;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
@@ -799,34 +800,34 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean isFlying() {
-        return getHandle().abilities.flying;
+        return ((IPlayerAbilitiesMixin)getHandle().abilities).isFlying();
     }
 
     @Override
     public void setFlying(boolean value) {
-        getHandle().abilities.flying = value;
+    	((IPlayerAbilitiesMixin)getHandle().abilities).setFlying(value);
         getHandle().sendAbilitiesUpdate();
     }
 
     @Override
     public float getFlySpeed() {
-        return getHandle().abilities.getFlySpeed();
+        return ((IPlayerAbilitiesMixin)getHandle().abilities).getFlySpeed();
     }
 
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
-        getHandle().abilities.setFlySpeed(value);
+    	((IPlayerAbilitiesMixin)getHandle().abilities).setFlySpeed(value);
         getHandle().sendAbilitiesUpdate();
     }
 
     @Override
     public float getWalkSpeed() {
-        return getHandle().abilities.getWalkSpeed();
+        return ((IPlayerAbilitiesMixin)getHandle().abilities).getWalkSpeed();
     }
 
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
-        getHandle().abilities.setWalkSpeed(value);
+        ((IPlayerAbilitiesMixin)getHandle().abilities).setWalkSpeed(value);
         getHandle().sendAbilitiesUpdate();
     }
 

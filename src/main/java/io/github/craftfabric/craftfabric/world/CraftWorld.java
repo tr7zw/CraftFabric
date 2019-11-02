@@ -417,8 +417,7 @@ public class CraftWorld implements World {
 
     @Override
     public Location getSpawnLocation() {
-        BlockPos pos = this.world.getSpawnPos();
-        return new Location(this, pos.getX(), pos.getY(), pos.getZ());
+        return new Location(this, world.getLevelProperties().getSpawnX(), world.getLevelProperties().getSpawnY(), world.getLevelProperties().getSpawnZ());
     }
 
     @Override
