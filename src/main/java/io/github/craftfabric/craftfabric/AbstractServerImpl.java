@@ -339,29 +339,31 @@ public abstract class AbstractServerImpl implements Server {
         return 1; // FIXME: this is a new property introduced by Bukkit, we need to put this into a custom config
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Player getPlayer(@NotNull String name) {
-        // TODO Auto-generated method stub
-        return null;
+    	return server.getPlayerManager().getPlayerList().stream()
+    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> name.equals(p.getName())).findAny().get();
     }
 
     @Override
     public Player getPlayerExact(@NotNull String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return getPlayer(name);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @NotNull
     public List<Player> matchPlayer(@NotNull String name) {
-        // TODO Auto-generated method stub
-        return null;
+    	return server.getPlayerManager().getPlayerList().stream()
+    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> p.getName().contains(name)).collect(Collectors.toList());
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public Player getPlayer(@NotNull UUID id) {
-        // TODO Auto-generated method stub
-        return null;
+    	return server.getPlayerManager().getPlayerList().stream()
+    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> id.equals(p.getUniqueId())).findAny().get();
     }
 
     @Override
