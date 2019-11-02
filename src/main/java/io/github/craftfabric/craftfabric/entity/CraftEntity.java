@@ -12,9 +12,14 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import com.google.common.base.Preconditions;
+
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
@@ -415,8 +420,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public boolean teleport(@NotNull Location location, @NotNull PlayerTeleportEvent.TeleportCause cause) {
-        // TODO
-        return true;
+        Preconditions.checkArgument(location != null, "location");
+        location.checkFinite();
+        if (!location.getWorld().equals(this.getWorld())) {
+        	//this.handle.teleportTo(((CraftWorld)location.getWorld()).getHandle().getWorldProvider().getDimensionManager(), new BlockPos(location.getX(), location.getY(), location.getZ()));
+        	return true;
+        } else {
+        	this.handle.setHeadYaw(location.getYaw());
+        	this.handle.pitch = location.getPitch();
+        	this.handle.requestTeleport(location.getX(), location.getY(), location.getZ());
+        	((ServerWorld)this.handle.world).checkChunk(this.handle);
+        	return true;
+        }
+
     }
 
     @Override

@@ -415,8 +415,7 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public World getWorld(@NotNull String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return getWorlds().stream().filter(w -> name.equals(w.getName())).findAny().get();
     }
 
     @Override

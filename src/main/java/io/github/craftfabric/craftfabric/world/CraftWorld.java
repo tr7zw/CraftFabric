@@ -1,6 +1,11 @@
 package io.github.craftfabric.craftfabric.world;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.block.CraftBlock;
+import io.github.craftfabric.craftfabric.utility.EnvironmentTypeUtilities;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Heightmap.Type;
+
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -82,26 +87,26 @@ public class CraftWorld implements World {
 
     @Override
     public Block getBlockAt(int x, int y, int z) {
-        // TODO Auto-generated method stub
-        return null;
+    	return new CraftBlock(world, new BlockPos(x, y, z));
     }
 
     @Override
     public Block getBlockAt(Location location) {
-        // TODO Auto-generated method stub
-        return null;
+    	return new CraftBlock(world, new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
     @Override
     public int getHighestBlockYAt(int x, int z) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (!this.isChunkLoaded(x >> 4, z >> 4)) {
+            this.getChunkAt(x >> 4, z >> 4);
+         }
+
+         return this.world.getTopPosition(Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
     }
 
     @Override
     public int getHighestBlockYAt(Location location) {
-        // TODO Auto-generated method stub
-        return 0;
+        return getHighestBlockYAt(location.getBlockX(), location.getBlockZ());
     }
 
     @Override
@@ -412,50 +417,44 @@ public class CraftWorld implements World {
 
     @Override
     public Location getSpawnLocation() {
-        // TODO Auto-generated method stub
-        return null;
+        BlockPos pos = this.world.getSpawnPos();
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
     public boolean setSpawnLocation(Location location) {
-        // TODO Auto-generated method stub
-        return false;
+        return setSpawnLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
     @Override
     public boolean setSpawnLocation(int x, int y, int z) {
-        // TODO Auto-generated method stub
-        return false;
+        this.world.setSpawnPos(new BlockPos(x, y, z));
+        return true;
     }
 
     @Override
     public long getTime() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.world.getTimeOfDay();
     }
 
     @Override
     public void setTime(long time) {
-        // TODO Auto-generated method stub
-
+        this.world.setTimeOfDay(time);
     }
 
     @Override
     public long getFullTime() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.world.getTime();
     }
 
     @Override
     public void setFullTime(long time) {
-        // TODO Auto-generated method stub
-
+    	this.world.setTime(time);
     }
 
     @Override
     public boolean hasStorm() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.world.isRaining();
     }
 
     @Override
@@ -532,14 +531,12 @@ public class CraftWorld implements World {
 
     @Override
     public Environment getEnvironment() {
-        // TODO Auto-generated method stub
-        return null;
+        return EnvironmentTypeUtilities.fromNMS(world.getDimension().getType());
     }
 
     @Override
     public long getSeed() {
-        // TODO Auto-generated method stub
-        return 0;
+        return world.getSeed();
     }
 
     @Override
@@ -678,14 +675,12 @@ public class CraftWorld implements World {
 
     @Override
     public int getMaxHeight() {
-        // TODO Auto-generated method stub
-        return 0;
+        return world.getHeight();
     }
 
     @Override
     public int getSeaLevel() {
-        // TODO Auto-generated method stub
-        return 0;
+        return world.getSeaLevel();
     }
 
     @Override
@@ -1065,6 +1060,11 @@ public class CraftWorld implements World {
 	public List<Raid> getRaids() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj == this || !(obj instanceof CraftWorld) || ((CraftWorld)obj).getName().equals(getName()); //TODO meh
 	}
 
 

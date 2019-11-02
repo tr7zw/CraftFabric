@@ -55,6 +55,7 @@ import com.mojang.authlib.GameProfile;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.command.ConversationTracker;
 import io.github.craftfabric.craftfabric.utility.ChatUtilities;
+import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
@@ -140,12 +141,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(getHandle().interactionManager.getGameMode().name());
+        return GameModeUtilities.fromNMS(getHandle().interactionManager.getGameMode());
     }
 
     @Override
     public void setGameMode(@NotNull GameMode mode) {
-        getHandle().interactionManager.setGameMode(net.minecraft.world.GameMode.byName(mode.name(), net.minecraft.world.GameMode.SURVIVAL));
+        getHandle().setGameMode(GameModeUtilities.toNMS(mode));
     }
 
     @Override
@@ -763,6 +764,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setAllowFlight(boolean flight) {
         getHandle().abilities.allowFlying = flight;
+        getHandle().sendAbilitiesUpdate();
     }
 
     @Override
@@ -803,6 +805,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setFlying(boolean value) {
         getHandle().abilities.flying = value;
+        getHandle().sendAbilitiesUpdate();
     }
 
     @Override
@@ -813,6 +816,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
         getHandle().abilities.setFlySpeed(value);
+        getHandle().sendAbilitiesUpdate();
     }
 
     @Override
@@ -823,6 +827,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
         getHandle().abilities.setWalkSpeed(value);
+        getHandle().sendAbilitiesUpdate();
     }
 
     @Override
