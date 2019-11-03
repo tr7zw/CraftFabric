@@ -48,8 +48,9 @@ public abstract class ServerPlayNetworkHandlerMixin implements ServerPlayPacketL
 		return ((CraftLink<Player>) player).getCraftHandler();
 	}
 	
-	public void sendPacket(Packet<?> packet) {
-		this.player.networkHandler.sendPacket(packet);
+	@Shadow
+	public void sendPacket(Packet<?> packet_1) {
+		
 	}
 
 	@SuppressWarnings("unchecked")

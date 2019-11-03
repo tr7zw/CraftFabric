@@ -4,6 +4,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.Option;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.dimension.DimensionType;
+
+import java.io.File;
+
 import org.jetbrains.annotations.NotNull;
 
 public class IntegratedServerImpl extends AbstractServerImpl {
@@ -31,6 +34,17 @@ public class IntegratedServerImpl extends AbstractServerImpl {
         return server.getWorld(DimensionType.OVERWORLD).getLevelProperties().hasStructures();
     }
 
+    @Override
+    @NotNull
+    public File getUpdateFolderFile() {
+        return new File(getWorlds().get(0).getWorldFolder(), "plugins/" + getUpdateFolder());
+    }
+    
+    @Override
+    public File pluginDirectory() {
+    	return new File(server.getLevelStorage().getSavesDirectory().resolve(server.getLevelName()).toFile(), "plugins");
+    }
+    
     @Override
     public boolean getAllowNether() {
         return true; // Not a Vanilla singleplayer option

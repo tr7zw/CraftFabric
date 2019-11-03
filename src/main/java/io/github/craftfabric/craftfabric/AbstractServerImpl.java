@@ -148,10 +148,14 @@ public abstract class AbstractServerImpl implements Server {
         return commandMap;
     }
 
+    public File pluginDirectory() {
+    	return new File("plugins");
+    }
+    
     public void loadPlugins() {
         pluginManager.registerInterface(JavaPluginLoader.class);
 
-        File pluginFolder = new File("plugins"); // TODO: config
+        File pluginFolder = pluginDirectory(); 
 
         if (pluginFolder.exists()) {
             Plugin[] plugins = pluginManager.loadPlugins(pluginFolder);
@@ -323,7 +327,7 @@ public abstract class AbstractServerImpl implements Server {
     @Override
     @NotNull
     public File getUpdateFolderFile() {
-        return new File("./plugins/" + getUpdateFolder()); // FIXME: read plugin folder from cli argument
+        return new File("./plugins/" + getUpdateFolder());
     }
 
     @Override

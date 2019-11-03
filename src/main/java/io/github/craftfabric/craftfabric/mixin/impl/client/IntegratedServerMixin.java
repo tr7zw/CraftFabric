@@ -37,6 +37,7 @@ public class IntegratedServerMixin {
     @Inject(at = @At("HEAD"), method = "shutdown")
     private void shutdown(CallbackInfo info) {
         System.out.println("FabricBukkit prepare-stopping!");
+        ((AbstractServerImpl)Bukkit.getServer()).disablePlugins();
     }
 
     @Inject(at = @At("RETURN"), method = "shutdown")
