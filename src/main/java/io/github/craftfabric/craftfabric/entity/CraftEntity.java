@@ -19,6 +19,7 @@ import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
@@ -351,7 +352,9 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             return new CraftLlamaSpit(server, (EntityLlamaSpit) entity);
         }
         */
-
+    	if(entity instanceof LivingEntity) { //TODO normaly unused since all the above should be used. But maybe usefull if mods are in use that add new Entities?
+    		return new CraftLivingEntity(server, (LivingEntity) entity);
+    	}
         throw new AssertionError("Unknown entity " + (entity == null ? null : entity.getClass()));
     }
 

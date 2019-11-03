@@ -10,7 +10,8 @@
 	"ServerCommandManagerMixin",
 	"SimpleCommandMapMixin",
 	"MinecraftServerMixin",
-	"PlayerAbilitiesMixin"
+	"PlayerAbilitiesMixin",
+	"ServerPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
