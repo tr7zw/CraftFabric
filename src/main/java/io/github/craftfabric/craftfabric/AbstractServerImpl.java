@@ -5,6 +5,7 @@ import io.github.craftfabric.craftfabric.command.CraftCommandMap;
 import io.github.craftfabric.craftfabric.command.CraftConsoleCommandSender;
 import io.github.craftfabric.craftfabric.inventory.CraftItemFactory;
 import io.github.craftfabric.craftfabric.scheduler.CraftScheduler;
+import io.github.craftfabric.craftfabric.scoreboard.CraftScoreboardManager;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.VersioningUtilities;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
@@ -94,7 +95,7 @@ public abstract class AbstractServerImpl implements Server {
     //private File container;
     //private WarningState warningState = WarningState.DEFAULT;
     //private final BooleanWrapper online = new BooleanWrapper();
-    //public CraftScoreboardManager scoreboardManager;
+    public CraftScoreboardManager scoreboardManager;
     //public boolean playerCommandState;
     //private boolean printSaveWarning;
     //private CraftIconCache icon;
@@ -129,6 +130,7 @@ public abstract class AbstractServerImpl implements Server {
         commandMap = new CraftCommandMap(this);
         commandMap.setFallbackCommands();
         pluginManager = new SimplePluginManager(this, commandMap);
+        scoreboardManager = new CraftScoreboardManager(getHandler(), getHandler().getScoreboard());
     }
 
     public MinecraftServer getHandler() {
@@ -779,8 +781,7 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public ScoreboardManager getScoreboardManager() {
-        // TODO Auto-generated method stub
-        return null;
+        return scoreboardManager;
     }
 
     @Override

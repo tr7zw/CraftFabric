@@ -19,6 +19,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,9 +28,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.mojang.authlib.GameProfile;
 
 import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.mixin.IPlayerManager;
 import io.netty.channel.local.LocalAddress;
 import net.minecraft.client.render.model.CubeFace;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
@@ -37,7 +40,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ThreadExecutor;
 
 @Mixin(PlayerManager.class)
-public class PlayerManagerMixin {
+public class PlayerManagerMixin implements IPlayerManager{
 
 	private ExecutorService asyncLoginExecutor = Executors.newFixedThreadPool(4);
 	
@@ -86,5 +89,16 @@ public class PlayerManagerMixin {
     public void onQuit(ServerPlayerEntity serverPlayerEntity_1, CallbackInfo info) {
         Bukkit.getPluginManager().callEvent(new PlayerQuitEvent(((CraftLink<Player>) (Object) serverPlayerEntity_1).getCraftHandler(), "")); //FIXME message
     }
+
+    @Override
+	public void sendScoreboardWrapper(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {
+		sendScoreboard(serverScoreboard_1, serverPlayerEntity_1);
+	}
+    
+    @Shadow
+	void sendScoreboard(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -55,6 +56,7 @@ import com.mojang.authlib.GameProfile;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.command.ConversationTracker;
 import io.github.craftfabric.craftfabric.mixin.IPlayerAbilitiesMixin;
+import io.github.craftfabric.craftfabric.scoreboard.CraftScoreboardManager;
 import io.github.craftfabric.craftfabric.utility.ChatUtilities;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
@@ -67,6 +69,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.WhitelistEntry;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.packet.ChatMessageC2SPacket;
 import net.minecraft.stat.Stats;
@@ -851,13 +854,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public @NotNull Scoreboard getScoreboard() {
-        // TODO Auto-generated method stub
-        return null;
+        return ((CraftScoreboardManager)this.server.getScoreboardManager()).getPlayerBoard(this);
     }
 
     @Override
     public void setScoreboard(@NotNull Scoreboard scoreboard) throws IllegalArgumentException, IllegalStateException {
-        // TODO Auto-generated method stub
+        Validate.notNull(scoreboard, "Scoreboard cannot be null");
+        ServerPlayNetworkHandler playerConnection = this.getHandle().networkHandler;
+        if (playerConnection == null) {
+           throw new IllegalStateException("Cannot set scoreboard yet");
+        } else {
+        	((CraftScoreboardManager)this.server.getScoreboardManager()).setPlayerBoard(this, scoreboard);
+        }
 
     }
 
