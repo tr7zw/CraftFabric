@@ -272,4 +272,9 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
     public Location getLocation() {
         return holder.getLocation();
     }
+
+	@Override
+	public ItemStack[] getContents() {
+		return asCraftMirror(getInventory().main);
+	}
 }

@@ -213,12 +213,12 @@ public abstract class CraftInventory implements Inventory {
         return leftover;
     }
 
-    @Override
+    /*@Override
     public ItemStack[] getContents() {
         List<net.minecraft.item.ItemStack> mcItems = ((IBasicInventory) (Object) getInventory()).getContent();
 
         return asCraftMirror(mcItems);
-    }
+    }*/
 
     protected ItemStack[] asCraftMirror(List<net.minecraft.item.ItemStack> mcItems) {
         int size = mcItems.size();
