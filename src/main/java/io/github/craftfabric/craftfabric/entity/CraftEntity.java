@@ -1,5 +1,6 @@
 package io.github.craftfabric.craftfabric.entity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,8 +19,12 @@ import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
     private static PermissibleBase perm;
@@ -418,22 +423,56 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
         return teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
-    @Override
-    public boolean teleport(@NotNull Location location, @NotNull PlayerTeleportEvent.TeleportCause cause) {
-        Preconditions.checkArgument(location != null, "location");
-        location.checkFinite();
-        if (!location.getWorld().equals(this.getWorld())) {
-        	//this.handle.teleportTo(((CraftWorld)location.getWorld()).getHandle().getWorldProvider().getDimensionManager(), new BlockPos(location.getX(), location.getY(), location.getZ()));
-        	return true;
-        } else {
-        	this.handle.setHeadYaw(location.getYaw());
-        	this.handle.pitch = location.getPitch();
-        	this.handle.requestTeleport(location.getX(), location.getY(), location.getZ());
-        	((ServerWorld)this.handle.world).checkChunk(this.handle);
-        	return true;
-        }
+	@Override
+	public boolean teleport(@NotNull Location location, @NotNull PlayerTeleportEvent.TeleportCause cause) {
+		Preconditions.checkArgument(location != null, "location");
+		location.checkFinite();
+		ChunkPos chunkPos_1 = new ChunkPos(new BlockPos(location.getX(), location.getY(), location.getZ()));
+		((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).method_14178()
+				.addTicket(ChunkTicketType.POST_TELEPORT, chunkPos_1, 1, getEntityId());
+		leaveVehicle();
+		if (handle instanceof ServerPlayerEntity) {
+			if (((ServerPlayerEntity) handle).isSleeping()) {
+				((ServerPlayerEntity) handle).wakeUp(true, true, false);
+			}
 
-    }
+			if (location.getWorld().equals(getWorld())) {
+				System.out.println("Sameworld! " + location.getWorld().getName());
+				((ServerPlayerEntity) handle).networkHandler.teleportRequest(location.getX(), location.getY(), location.getZ(), location.getYaw(),
+						location.getPitch(), new HashSet<>());
+			} else {
+				System.out.println("OtherWorld! " + location.getWorld().getName());
+				((ServerPlayerEntity) handle).teleport(((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()), location.getX(), location.getY(), location.getZ(), location.getYaw(),
+						location.getPitch());
+			}
+
+			handle.setHeadYaw(location.getYaw());
+		} else {
+			float float_3 = MathHelper.wrapDegrees(location.getYaw());
+			float float_4 = MathHelper.wrapDegrees(location.getPitch());
+			float_4 = MathHelper.clamp(float_4, -90.0F, 90.0F);
+			if (location.getWorld().equals(getWorld())) {
+				handle.setPositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
+				handle.setHeadYaw(float_3);
+			} else {
+				handle.detach();
+				handle.dimension = ((CraftWorld) location.getWorld()).getHandle().dimension.getType();
+				Entity entity_2 = handle;
+				handle = handle.getType().create(((CraftWorld) location.getWorld()).getHandle());
+				if (handle == null) {
+					handle = entity_2;
+					return false;
+				}
+
+				handle.copyFrom(entity_2);
+				handle.setPositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
+				handle.setHeadYaw(float_3);
+				((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).method_18769(handle);
+				entity_2.removed = true;
+			}
+		}
+		return true;
+	}
 
     @Override
     public boolean teleport(org.bukkit.entity.Entity destination) {

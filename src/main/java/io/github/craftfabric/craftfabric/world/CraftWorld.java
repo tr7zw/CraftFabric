@@ -404,10 +404,21 @@ public class CraftWorld implements World {
         return null;
     }
 
-    @Override
-    public String getName() {
-        return world.getLevelProperties().getLevelName();
-    }
+	@Override
+	public String getName() {
+		// return world.getLevelProperties().getLevelName(); //TODO this would be right
+		// if there was multiworld support
+		switch (getEnvironment()) { // FIXME fix till then
+		case NORMAL:
+			return "world";
+		case NETHER:
+			return "nether";
+		case THE_END:
+			return "end";
+		default:
+			return "unknown";
+		}
+	}
 
     @Override
     public UUID getUID() {
