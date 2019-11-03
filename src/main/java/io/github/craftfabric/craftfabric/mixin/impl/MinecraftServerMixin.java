@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.craftfabric.craftfabric.scheduler.CraftScheduler;
 import net.minecraft.server.MinecraftServer;
@@ -21,4 +22,10 @@ public class MinecraftServerMixin {
     	((CraftScheduler)Bukkit.getServer().getScheduler()).mainThreadHeartbeat(ticks + 1);
     }
 
+    @Inject(at = @At("HEAD"), method = "getServerModName", cancellable=true)
+    public String getServerModName(CallbackInfoReturnable<String> ret) {
+    	ret.setReturnValue("FabricBukkit");
+    	return "FabricBukkit";
+    }
+    
 }
