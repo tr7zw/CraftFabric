@@ -21,6 +21,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
@@ -1075,6 +1076,42 @@ public class CraftWorld implements World {
 	@Override
 	public boolean equals(Object obj) {
 		return obj == this || !(obj instanceof CraftWorld) || ((CraftWorld)obj).getName().equals(getName()); //TODO meh
+	}
+
+	@Override
+	public @NotNull Biome getBiome(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setBiome(int x, int y, int z, @NotNull Biome bio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getTemperature(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getHumidity(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isHardcore() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setHardcore(boolean hardcore) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

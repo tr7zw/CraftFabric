@@ -89,7 +89,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public double getMaxHealth() {
-        return getHandle().getHealthMaximum();
+        return getHandle().getMaximumHealth();
     }
 
     @Override
@@ -325,12 +325,12 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public int getPortalCooldown() {
-        return getHandle().portalCooldown;
+        return getHandle().netherPortalCooldown;
     }
 
     @Override
     public void setPortalCooldown(int cooldown) {
-        getHandle().portalCooldown = cooldown;
+        getHandle().netherPortalCooldown = cooldown;
     }
 
     @Override
@@ -569,17 +569,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public int getRemainingAir() {
-        return getHandle().getBreath();
+        return getHandle().getAir();
     }
 
     @Override
     public void setRemainingAir(int ticks) {
-        getHandle().setBreath(ticks);
+        getHandle().setAir(ticks);
     }
 
     @Override
     public int getMaximumAir() {
-        return getHandle().getMaxBreath();
+        return getHandle().getMaxAir();
     }
 
     @Override

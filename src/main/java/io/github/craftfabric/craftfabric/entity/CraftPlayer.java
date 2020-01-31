@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Effect;
@@ -518,21 +517,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     public void updateInventory() {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void awardAchievement(@NotNull Achievement achievement) {
-        throw new UnsupportedOperationException("Please use the Advancement methods!");
-    }
-
-    @Override
-    public void removeAchievement(@NotNull Achievement achievement) {
-        throw new UnsupportedOperationException("Please use the Advancement methods!");
-    }
-
-    @Override
-    public boolean hasAchievement(@NotNull Achievement achievement) {
-        throw new UnsupportedOperationException("Please use the Advancement methods!");
     }
 
     @Override
@@ -1087,6 +1071,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
 	@Override
 	public void openBook(ItemStack book) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendExperienceChange(float progress) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendExperienceChange(float progress, int level) {
 		// TODO Auto-generated method stub
 		
 	}

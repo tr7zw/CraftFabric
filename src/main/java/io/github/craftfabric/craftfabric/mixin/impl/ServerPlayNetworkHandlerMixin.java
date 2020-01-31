@@ -66,13 +66,12 @@ public abstract class ServerPlayNetworkHandlerMixin implements ServerPlayPacketL
 				return;
 			}
 			boolean boolean_1 = this.player.canSee(entity_1);
-			float float_1 = this.player.method_21753(1.0F) + 0.25F + entity_1.getWidth() * 0.5F;
-			double double_1 = (double) (float_1 * float_1);
-			if (!boolean_1) {
-				double_1 = 9.0D;
-			}
-	
-			if (this.player.squaredDistanceTo(entity_1) < double_1) {
+	         double double_1 = 36.0D;
+	         if (!boolean_1) {
+	            double_1 = 9.0D;
+	         }
+
+	         if (this.player.squaredDistanceTo(entity_1) < double_1) {
 				if (playerInteractEntityC2SPacket_1.getType() == InteractionType.INTERACT || playerInteractEntityC2SPacket_1.getType() == InteractionType.INTERACT_AT) {
 					
 					Item origItem = this.player.inventory.getMainHandStack() == null ? null : this.player.inventory.getMainHandStack().getItem();

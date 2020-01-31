@@ -80,10 +80,10 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
     // private static final CraftCustomTagTypeRegistry TAG_TYPE_REGISTRY = new CraftCustomTagTypeRegistry();
 
     CraftMetaItem(CompoundTag tag) {
-        if (tag.containsKey(DISPLAY.NBT)) {
+        if (tag.contains(DISPLAY.NBT)) {
             CompoundTag display = tag.getCompound(DISPLAY.NBT);
 
-            if (display.containsKey(NAME.NBT)) {
+            if (display.contains(NAME.NBT)) {
                 try {
                     displayName = Text.Serializer.fromJson(display.getString(NAME.NBT));
                 } catch (JsonParseException ex) {
@@ -91,7 +91,7 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
                 }
             }
 
-            if (display.containsKey(LOCNAME.NBT)) {
+            if (display.contains(LOCNAME.NBT)) {
                 try {
                     locName = Text.Serializer.fromJson(display.getString(LOCNAME.NBT));
                 } catch (JsonParseException ex) {
@@ -99,7 +99,7 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
                 }
             }
 
-            if (display.containsKey(LORE.NBT)) {
+            if (display.contains(LORE.NBT)) {
                 ListTag list = display.getList(LORE.NBT, CraftMagicNumbers.NBT.TAG_STRING);
                 lore = new ArrayList<String>(list.size());
 
@@ -113,20 +113,20 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 		/*this.enchantments = buildEnchantments(tag, ENCHANTMENTS);
         this.attributeModifiers = buildModifiers(tag, ATTRIBUTES);*/ //FIXME
 
-        if (tag.containsKey(REPAIR.NBT)) {
+        if (tag.contains(REPAIR.NBT)) {
             repairCost = tag.getInt(REPAIR.NBT);
         }
 
-        if (tag.containsKey(HIDEFLAGS.NBT)) {
+        if (tag.contains(HIDEFLAGS.NBT)) {
             hideFlag = tag.getInt(HIDEFLAGS.NBT);
         }
-        if (tag.containsKey(UNBREAKABLE.NBT)) {
+        if (tag.contains(UNBREAKABLE.NBT)) {
             unbreakable = tag.getBoolean(UNBREAKABLE.NBT);
         }
-        if (tag.containsKey(DAMAGE.NBT)) {
+        if (tag.contains(DAMAGE.NBT)) {
             damage = tag.getInt(DAMAGE.NBT);
         }
-        if (tag.containsKey(BUKKIT_CUSTOM_TAG.NBT)) {
+        if (tag.contains(BUKKIT_CUSTOM_TAG.NBT)) {
             CompoundTag compound = tag.getCompound(BUKKIT_CUSTOM_TAG.NBT);
             Set<String> keys = compound.getKeys();
             for (String key : keys) {
@@ -375,12 +375,6 @@ public class CraftMetaItem implements ItemMeta, Damageable, Repairable {
 
     @Override
     public CustomItemTagContainer getCustomTagContainer() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Spigot spigot() {
         // TODO Auto-generated method stub
         return null;
     }

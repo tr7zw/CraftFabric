@@ -791,8 +791,6 @@ public final class SoundUtilities {
                 break;
             case ENTITY_PARROT_IMITATE_ELDER_GUARDIAN:
                 break;
-            case ENTITY_PARROT_IMITATE_ENDERMAN:
-                break;
             case ENTITY_PARROT_IMITATE_ENDERMITE:
                 break;
             case ENTITY_PARROT_IMITATE_ENDER_DRAGON:
@@ -808,8 +806,6 @@ public final class SoundUtilities {
             case ENTITY_PARROT_IMITATE_MAGMA_CUBE:
                 break;
             case ENTITY_PARROT_IMITATE_PHANTOM:
-                break;
-            case ENTITY_PARROT_IMITATE_POLAR_BEAR:
                 break;
             case ENTITY_PARROT_IMITATE_SHULKER:
                 break;
@@ -833,11 +829,7 @@ public final class SoundUtilities {
                 break;
             case ENTITY_PARROT_IMITATE_WITHER_SKELETON:
                 break;
-            case ENTITY_PARROT_IMITATE_WOLF:
-                break;
             case ENTITY_PARROT_IMITATE_ZOMBIE:
-                break;
-            case ENTITY_PARROT_IMITATE_ZOMBIE_PIGMAN:
                 break;
             case ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER:
                 break;

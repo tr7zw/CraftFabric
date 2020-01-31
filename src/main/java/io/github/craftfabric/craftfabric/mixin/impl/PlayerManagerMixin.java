@@ -8,7 +8,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -30,14 +29,12 @@ import com.mojang.authlib.GameProfile;
 import io.github.craftfabric.craftfabric.CraftLink;
 import io.github.craftfabric.craftfabric.mixin.IPlayerManager;
 import io.netty.channel.local.LocalAddress;
-import net.minecraft.client.render.model.CubeFace;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.ThreadExecutor;
 
 @Mixin(PlayerManager.class)
 public class PlayerManagerMixin implements IPlayerManager{

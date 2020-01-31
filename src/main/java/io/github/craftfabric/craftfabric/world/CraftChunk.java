@@ -55,7 +55,7 @@ public abstract class CraftChunk implements Chunk {
     public net.minecraft.world.chunk.WorldChunk getHandle() {
         net.minecraft.world.chunk.WorldChunk chunk = weakChunk.get();
         if (chunk == null) {
-            chunk = worldServer.method_8497(position.x, position.z); // TODO: is this the right method?
+            chunk = worldServer.getChunk(position.x, position.z); // TODO: is this the right method?
             weakChunk = new WeakReference<>(chunk);
         }
         return chunk;

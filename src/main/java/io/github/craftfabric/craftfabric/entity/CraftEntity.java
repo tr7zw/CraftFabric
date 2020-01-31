@@ -6,9 +6,7 @@ import java.util.Objects;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +26,9 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
-    private static PermissibleBase perm;
 
     protected final AbstractServerImpl server;
     protected Entity handle;
-    private EntityDamageEvent lastDamageEvent;
 
     public CraftEntity(final AbstractServerImpl server, final Entity entity) {
         this.server = server;
@@ -360,16 +356,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 
     @Override
     public @NotNull Location getLocation() {
-        return new Location(getWorld(), handle.x, handle.y, handle.z, handle.yaw, handle.pitch);
+        return new Location(getWorld(), handle.getX(), handle.getY(), handle.getZ(), handle.yaw, handle.pitch);
     }
 
     @Override
     public Location getLocation(Location location) {
         if (location != null) {
             location.setWorld(getWorld());
-            location.setX(handle.x);
-            location.setY(handle.y);
-            location.setZ(handle.z);
+            location.setX(handle.getX());
+            location.setY(handle.getY());
+            location.setZ(handle.getZ());
             location.setYaw(handle.yaw);
             location.setPitch(handle.pitch);
         }
@@ -401,7 +397,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
     @Override
     public @NotNull BoundingBox getBoundingBox() {
         net.minecraft.util.math.Box box = handle.getBoundingBox();
-        return new BoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ);
+        return new BoundingBox(box.x1, box.y1, box.z1, box.x2, box.y2, box.z2);
     }
 
     @Override
@@ -431,12 +427,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 		Preconditions.checkArgument(location != null, "location");
 		location.checkFinite();
 		ChunkPos chunkPos_1 = new ChunkPos(new BlockPos(location.getX(), location.getY(), location.getZ()));
-		((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).method_14178()
+		((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).getChunkManager()
 				.addTicket(ChunkTicketType.POST_TELEPORT, chunkPos_1, 1, getEntityId());
 		leaveVehicle();
 		if (handle instanceof ServerPlayerEntity) {
 			if (((ServerPlayerEntity) handle).isSleeping()) {
-				((ServerPlayerEntity) handle).wakeUp(true, true, false);
+				((ServerPlayerEntity) handle).wakeUp();
 			}
 
 			if (location.getWorld().equals(getWorld())) {
@@ -455,7 +451,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 			float float_4 = MathHelper.wrapDegrees(location.getPitch());
 			float_4 = MathHelper.clamp(float_4, -90.0F, 90.0F);
 			if (location.getWorld().equals(getWorld())) {
-				handle.setPositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
+				handle.updatePositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
 				handle.setHeadYaw(float_3);
 			} else {
 				handle.detach();
@@ -468,9 +464,9 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
 				}
 
 				handle.copyFrom(entity_2);
-				handle.setPositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
+				handle.updatePositionAndAngles(location.getX(), location.getY(), location.getZ(), float_3, float_4);
 				handle.setHeadYaw(float_3);
-				((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).method_18769(handle);
+				((ServerWorld) ((CraftWorld) location.getWorld()).getHandle()).removeEntity(handle);
 				entity_2.removed = true;
 			}
 		}
