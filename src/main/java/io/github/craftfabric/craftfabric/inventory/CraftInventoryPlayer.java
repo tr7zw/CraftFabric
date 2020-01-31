@@ -110,7 +110,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         } else if (index > 35) {
             index = 8 - (index - 36);
         }
-        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.GuiSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
+        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.ContainerSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
     }
 
     public int getHeldItemSlot() {
