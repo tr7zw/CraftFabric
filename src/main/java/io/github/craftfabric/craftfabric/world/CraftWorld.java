@@ -22,6 +22,9 @@ import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.destroystokyo.paper.HeightmapType;
 
 import java.io.File;
 import java.util.Collection;
@@ -29,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class CraftWorld implements World {
@@ -1110,6 +1114,75 @@ public class CraftWorld implements World {
 
 	@Override
 	public void setHardcore(boolean hardcore) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getEntityCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTileEntityCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTickableTileEntityCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getChunkCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getPlayerCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHighestBlockYAt(int x, int z, @NotNull HeightmapType heightmap) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public @NotNull CompletableFuture<Chunk> getChunkAtAsync(int x, int z, boolean gen) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable Entity getEntity(@NotNull UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isDayTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean createExplosion(@Nullable Entity source, @NotNull Location loc, float power, boolean setFire,
+			boolean breakBlocks) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <T> void spawnParticle(@NotNull Particle particle, @Nullable List<Player> receivers, @Nullable Player source,
+			double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra,
+			@Nullable T data, boolean force) {
 		// TODO Auto-generated method stub
 		
 	}

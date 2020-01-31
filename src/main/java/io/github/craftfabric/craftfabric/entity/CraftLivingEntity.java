@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.EntityEffect;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
@@ -24,8 +25,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.memory.MemoryKey;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -36,6 +39,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.destroystokyo.paper.block.TargetBlockInfo;
+import com.destroystokyo.paper.block.TargetBlockInfo.FluidMode;
+import com.destroystokyo.paper.entity.TargetEntityInfo;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
@@ -824,6 +833,114 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 	public void setAbsorptionAmount(double amount) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public @Nullable Location getOrigin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean fromMobSpawner() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public @NotNull Chunk getChunk() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @NotNull SpawnReason getEntitySpawnReason() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable Block getTargetBlock(int maxDistance, @NotNull FluidMode fluidMode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable BlockFace getTargetBlockFace(int maxDistance, @NotNull FluidMode fluidMode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable TargetBlockInfo getTargetBlockInfo(int maxDistance, @NotNull FluidMode fluidMode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable Entity getTargetEntity(int maxDistance, boolean ignoreBlocks) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable TargetEntityInfo getTargetEntityInfo(int maxDistance, boolean ignoreBlocks) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setKiller(@Nullable Player killer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getArrowsStuck() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setArrowsStuck(int arrows) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getShieldBlockingDelay() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setShieldBlockingDelay(int delay) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public @Nullable ItemStack getActiveItem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getItemUseRemainingTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHandRaisedTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isHandRaised() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

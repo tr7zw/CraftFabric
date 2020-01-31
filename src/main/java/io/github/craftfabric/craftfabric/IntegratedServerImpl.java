@@ -6,8 +6,12 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.dimension.DimensionType;
 
 import java.io.File;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.destroystokyo.paper.profile.PlayerProfile;
 
 public class IntegratedServerImpl extends AbstractServerImpl {
 
@@ -80,5 +84,65 @@ public class IntegratedServerImpl extends AbstractServerImpl {
         // FIXME: just a placeholder!
         server.shutdown();
     }
+
+	@Override
+	public @Nullable UUID getPlayerUniqueId(@NotNull String playerName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @NotNull double[] getTPS() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void reloadPermissions() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean reloadCommandAliases() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean suggestPlayerNamesWhenNullTabCompletions() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public @NotNull String getPermissionMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @NotNull PlayerProfile createProfile(@NotNull UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @NotNull PlayerProfile createProfile(@NotNull String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @NotNull PlayerProfile createProfile(@Nullable UUID uuid, @Nullable String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getCurrentTick() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }

@@ -169,4 +169,16 @@ public final class CraftMagicNumbers implements UnsafeValues {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String getTimingsServerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSupportedApiVersion(String apiVersion) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

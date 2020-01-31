@@ -4,12 +4,18 @@ import com.google.common.base.Preconditions;
 import io.github.craftfabric.craftfabric.entity.CraftHumanEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.server.network.ServerPlayerEntity;
+
+import java.util.HashMap;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.inventory.PlayerInventory, EntityEquipment {
 
@@ -276,5 +282,24 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
 	@Override
 	public ItemStack[] getContents() {
 		return asCraftMirror(getInventory().main);
+	}
+
+	@Override
+	public @NotNull HashMap<Integer, ItemStack> removeItemAnySlot(@NotNull ItemStack... items)
+			throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable ItemStack getItem(@NotNull EquipmentSlot slot) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setItem(@NotNull EquipmentSlot slot, @Nullable ItemStack stack) {
+		// TODO Auto-generated method stub
+		
 	}
 }

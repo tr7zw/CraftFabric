@@ -27,6 +27,7 @@ import org.bukkit.Statistic;
 import org.bukkit.WeatherType;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -36,7 +37,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.memory.MemoryKey;
+import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.bukkit.event.player.PlayerRegisterChannelEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent.Status;
 import org.bukkit.event.player.PlayerUnregisterChannelEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -48,6 +51,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.destroystokyo.paper.Title;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
@@ -60,6 +65,7 @@ import io.github.craftfabric.craftfabric.utility.ChatUtilities;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
 import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import io.netty.buffer.Unpooled;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
 import net.minecraft.client.network.packet.TitleS2CPacket;
@@ -1083,6 +1089,230 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
 	@Override
 	public void sendExperienceChange(float progress, int level) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeInventory(@NotNull Reason reason) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public @Nullable Entity releaseLeftShoulderEntity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable Entity releaseRightShoulderEntity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void openSign(@NotNull Sign sign) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public long getLastLogin() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long getLastSeen() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getProtocolVersion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public @Nullable InetSocketAddress getVirtualHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void sendActionBar(@NotNull String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendActionBar(char alternateChar, @NotNull String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPlayerListHeaderFooter(@Nullable BaseComponent[] header, @Nullable BaseComponent[] footer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPlayerListHeaderFooter(@Nullable BaseComponent header, @Nullable BaseComponent footer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setTitleTimes(int fadeInTicks, int stayTicks, int fadeOutTicks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSubtitle(BaseComponent[] subtitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSubtitle(BaseComponent subtitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showTitle(@Nullable BaseComponent[] title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showTitle(@Nullable BaseComponent title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showTitle(@Nullable BaseComponent[] title, @Nullable BaseComponent[] subtitle, int fadeInTicks,
+			int stayTicks, int fadeOutTicks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showTitle(@Nullable BaseComponent title, @Nullable BaseComponent subtitle, int fadeInTicks,
+			int stayTicks, int fadeOutTicks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendTitle(@NotNull Title title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTitle(@NotNull Title title) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hideTitle() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void giveExp(int amount, boolean applyMending) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int applyMending(int amount) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean getAffectsSpawning() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setAffectsSpawning(boolean affects) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getViewDistance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setViewDistance(int viewDistance) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setResourcePack(@NotNull String url, @NotNull String hash) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public @Nullable Status getResourcePackStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable String getResourcePackHash() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasResourcePack() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public @NotNull PlayerProfile getPlayerProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPlayerProfile(@NotNull PlayerProfile profile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float getCooldownPeriod() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getCooledAttackStrength(float adjustTicks) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void resetCooldown() {
 		// TODO Auto-generated method stub
 		
 	}

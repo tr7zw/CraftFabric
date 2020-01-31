@@ -253,7 +253,7 @@ public abstract class AbstractServerImpl implements Server {
 
     @Override
     public @NotNull String getBukkitVersion() {
-        return bukkitVersion;
+        return "1.15.2-R0.1";//bukkitVersion; //FIXME the build needs to add the data
     }
 
     @SuppressWarnings("unchecked")

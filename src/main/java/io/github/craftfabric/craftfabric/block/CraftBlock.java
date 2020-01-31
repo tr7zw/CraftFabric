@@ -26,6 +26,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.destroystokyo.paper.block.BlockSoundGroup;
+
 import io.github.craftfabric.craftfabric.CraftMagicNumbers;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.block.Blocks;
@@ -448,4 +450,22 @@ public class CraftBlock implements Block {
     public String toString() {
         return "CraftBlock{pos=" + position + ",type=" + getType() + ",data=" + getNMS() + ",fluid=" + world.getFluidState(position) + '}';
     }
+
+	@Override
+	public @NotNull BlockState getState(boolean useSnapshot) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean breakNaturally(@NotNull ItemStack tool, boolean triggerEffect) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public @NotNull BlockSoundGroup getSoundGroup() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

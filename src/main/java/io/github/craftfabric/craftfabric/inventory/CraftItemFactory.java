@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -290,5 +292,17 @@ public final class CraftItemFactory implements ItemFactory {
     public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
         return material;//FIXME ((CraftMetaItem) meta).updateMaterial(material);
     }
+
+	@Override
+	public @NotNull ItemStack ensureServerConversions(@NotNull ItemStack item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable String getI18NDisplayName(@Nullable ItemStack item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

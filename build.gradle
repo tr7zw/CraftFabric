@@ -25,6 +25,10 @@ repositories {
         url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
     }
     maven {
+        name = 'papermc'
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+    maven {
         name = 'Sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
@@ -40,9 +44,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Spigot API
-    compileOnly "org.spigotmc:spigot-api:${project.spigot_version}"
-    extraLibs "org.spigotmc:spigot-api:${project.spigot_version}"
+    // Paper API
+    compileOnly "com.destroystokyo.paper:paper-api:${project.spigot_version}"
+    extraLibs "com.destroystokyo.paper:paper-api:${project.spigot_version}"
     compileOnly "org.jetbrains:annotations:17.0.0"
 
     // CraftBukkit Dependencies
