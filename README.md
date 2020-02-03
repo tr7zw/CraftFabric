@@ -31,4 +31,4 @@ This project aims to implement the basics of the [Paper API](https://github.com/
 
 ## Legal
 
-This project uses reworked classes from [CraftBukkit](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse). Most changes are because of the different deobfuscation mappings used by Fabric compared to Spigot, but other changes may be made because of the different architecture. Mixins are used to hook into the native Minecraft code, so no direct Minecraft code is pressent in this repo.
+This project uses reworked classes from [CraftBukkit](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse). Most changes are because of the different deobfuscation mappings used by Fabric compared to Spigot, but other changes may be made because of the different architecture. Mixins are used to hook into the native Minecraft code, so no  Minecraft source code is pressent in this repo.
