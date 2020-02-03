@@ -17,7 +17,7 @@ This project aims to implement the basics of the [Paper API](https://github.com/
 - Commands are (somewhat) working (Currently a hacky solution)
 - The first parts of the API are working (Entities, ItemStacks, Inventories, Commands, Scheduler, Scoreboards)
 - First plugins loading and (somewhat) working:
-  - Essentials (Basic commands like /spawn, /home, /ci, /i, /money, /speed, /gm, /fly, /time)
+  - EssentialsX (Basic commands like /spawn, /home, /ci, /i, /money, /speed, /gm, /fly, /time, /heal, /warp)
   - QuickBoard (Shows scoreboard, animations work, placerholder API doesn't seem to work)
   - Vault (Starts without error)
 
