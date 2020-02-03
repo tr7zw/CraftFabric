@@ -512,6 +512,12 @@ public abstract class AbstractServerImpl implements Server {
         // TODO Auto-generated method stub
         return false;
     }
+    
+	@Override
+	public boolean removeRecipe(@NotNull NamespacedKey key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
     @Override
     @NotNull
