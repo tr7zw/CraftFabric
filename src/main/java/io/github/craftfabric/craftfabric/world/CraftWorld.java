@@ -2,6 +2,7 @@ package io.github.craftfabric.craftfabric.world;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.block.CraftBlock;
+import io.github.craftfabric.craftfabric.mixin.IWorldMixin;
 import io.github.craftfabric.craftfabric.utility.EnvironmentTypeUtilities;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap.Type;
@@ -116,14 +117,12 @@ public class CraftWorld implements World {
 
     @Override
     public Block getHighestBlockAt(int x, int z) {
-        // TODO Auto-generated method stub
-        return null;
+        return getBlockAt(x, getHighestBlockYAt(x, z), z);
     }
 
     @Override
     public Block getHighestBlockAt(Location location) {
-        // TODO Auto-generated method stub
-        return null;
+        return getHighestBlockAt(location.getBlockX(), location.getBlockZ());
     }
 
     @Override
@@ -469,49 +468,46 @@ public class CraftWorld implements World {
 
     @Override
     public boolean hasStorm() {
-        return this.world.isRaining();
+        return this.world.getLevelProperties().isRaining();
     }
 
     @Override
-    public void setStorm(boolean hasStorm) {
-        // TODO Auto-generated method stub
-
+    public void setStorm(boolean hasStorm) { //TODO Broken?
+        this.world.getLevelProperties().setRaining(hasStorm);
+        ((IWorldMixin)this.world).updateWeather();
     }
 
     @Override
     public int getWeatherDuration() {
-        // TODO Auto-generated method stub
-        return 0;
+        return this.world.getLevelProperties().getRainTime();
     }
 
     @Override
-    public void setWeatherDuration(int duration) {
-        // TODO Auto-generated method stub
-
+    public void setWeatherDuration(int duration) { //TODO Broken?
+        this.world.getLevelProperties().setRainTime(duration);
+        ((IWorldMixin)this.world).updateWeather();
     }
 
     @Override
     public boolean isThundering() {
-        // TODO Auto-generated method stub
-        return false;
+    	return this.world.getLevelProperties().isThundering();
     }
 
     @Override
-    public void setThundering(boolean thundering) {
-        // TODO Auto-generated method stub
-
+    public void setThundering(boolean thundering) { //TODO Broken?
+        this.world.getLevelProperties().setThundering(thundering);
+        ((IWorldMixin)this.world).updateWeather();
     }
 
     @Override
     public int getThunderDuration() {
-        // TODO Auto-generated method stub
-        return 0;
+    	return this.world.getLevelProperties().getThunderTime();
     }
 
     @Override
-    public void setThunderDuration(int duration) {
-        // TODO Auto-generated method stub
-
+    public void setThunderDuration(int duration) { //TODO Broken?
+    	this.world.getLevelProperties().setThunderTime(duration);
+    	((IWorldMixin)this.world).updateWeather();
     }
 
     @Override
@@ -722,16 +718,15 @@ public class CraftWorld implements World {
 
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Difficulty getDifficulty() {
-        // TODO Auto-generated method stub
-        return null;
+        return Difficulty.getByValue(this.getHandle().getDifficulty().ordinal());
     }
 
     @Override
     public void setDifficulty(Difficulty difficulty) {
-        // TODO Auto-generated method stub
-
+    	this.getHandle().getLevelProperties().setDifficulty(net.minecraft.world.Difficulty.byOrdinal(difficulty.getValue()));
     }
 
     @Override

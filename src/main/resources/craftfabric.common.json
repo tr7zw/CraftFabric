@@ -5,7 +5,8 @@
   "minVersion": "0.7.11",
   "mixins": [
     "MixinServerPlayer",
-	"MixinWorld",
+  "MixinWorld",
+  "MixinServerWorld",
 	"PlayerManagerMixin",
 	"ServerCommandManagerMixin",
 	"SimpleCommandMapMixin",
