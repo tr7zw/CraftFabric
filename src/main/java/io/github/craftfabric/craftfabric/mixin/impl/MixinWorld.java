@@ -2,6 +2,7 @@ package io.github.craftfabric.craftfabric.mixin.impl;
 
 import io.github.craftfabric.craftfabric.CraftLink;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(World.class)
+@Mixin(ServerWorld.class)
 public abstract class MixinWorld implements CraftLink<org.bukkit.World> {
 
     private CraftWorld craftHandler;

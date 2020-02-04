@@ -9,6 +9,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -29,8 +30,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CraftBlock implements Block {
     private final net.minecraft.world.World world;
@@ -162,7 +165,7 @@ public class CraftBlock implements Block {
 
     @Override
     public byte getData() {
-        throw new UnsupportedOperationException("FabricBukkit doesn't support legacy block data!");
+        throw new UnsupportedOperationException("CraftFabric doesn't support legacy block data!");
     }
 
     @Override
@@ -397,7 +400,6 @@ public class CraftBlock implements Block {
 
     @Override
     public @NotNull Collection<ItemStack> getDrops(@NotNull ItemStack tool) {
-        /*
         net.minecraft.block.BlockState blockState = getNMS();
         net.minecraft.item.ItemStack nms = CraftItemStack.asNMSCopy(tool);
         if (blockState.getMaterial().canBreakByHand() || nms.isEffectiveOn(blockState)) {
@@ -409,7 +411,6 @@ public class CraftBlock implements Block {
         } else {
             return Collections.emptyList();
         }
-         */
         return null;
     }
 
@@ -482,7 +483,7 @@ public class CraftBlock implements Block {
         boolean result = false;
 
         if (block != null && block != Blocks.AIR) {
-            net.minecraft.block.Block.dropStacks(getNMS(), world, position, world.getBlockEntity(position), null, CraftItemStack.asNMSCopy(item));
+            net.minecraft.block.Block.dropStacks(getNMS(), world, position, world.getBlockEntity(position), null, CraftItemStack.asNMSCopy(tool));
             if (triggerEffect) {
                 world.playGlobalEvent(org.bukkit.Effect.STEP_SOUND.getId(), position, net.minecraft.block.Block.getRawIdFromState(block.getDefaultState()));
             }

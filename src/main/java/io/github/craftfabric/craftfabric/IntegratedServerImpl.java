@@ -1,10 +1,5 @@
 package io.github.craftfabric.craftfabric;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.Option;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.world.dimension.DimensionType;
-
 import java.io.File;
 import java.util.UUID;
 
@@ -12,6 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.options.Option;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.world.dimension.DimensionType;
 
 public class IntegratedServerImpl extends AbstractServerImpl {
 
