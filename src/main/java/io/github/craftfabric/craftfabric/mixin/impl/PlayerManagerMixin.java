@@ -93,9 +93,6 @@ public class PlayerManagerMixin implements IPlayerManager{
 	}
     
     @Shadow
-	void sendScoreboard(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {
-		// TODO Auto-generated method stub
-		
-	}
+	void sendScoreboard(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {}
 
 }
