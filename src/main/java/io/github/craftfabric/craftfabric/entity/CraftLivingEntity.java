@@ -1,6 +1,8 @@
 package io.github.craftfabric.craftfabric.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +39,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import com.destroystokyo.paper.block.TargetBlockInfo;
 import com.destroystokyo.paper.block.TargetBlockInfo.FluidMode;
 import com.destroystokyo.paper.entity.TargetEntityInfo;
+import com.google.common.collect.Sets;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftLink;
@@ -536,44 +540,64 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public List<Block> getLineOfSight(Set<Material> transparent, int maxDistance) {
-        // TODO Auto-generated method stub
-        return null;
+    	return getLineOfSight(transparent, maxDistance, 0);
+    }
+    
+    private List<Block> getLineOfSight(Set<Material> transparent, int maxDistance, int maxLength) {
+        if (transparent == null) {
+            transparent = Sets.newHashSet(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR);
+        }
+        if (maxDistance > 120) {
+            maxDistance = 120;
+        }
+        ArrayList<Block> blocks = new ArrayList<Block>();
+        Iterator<Block> itr = new BlockIterator(this, maxDistance);
+        while (itr.hasNext()) {
+            Block block = itr.next();
+            blocks.add(block);
+            if (maxLength != 0 && blocks.size() > maxLength) {
+                blocks.remove(0);
+            }
+            Material material = block.getType();
+            if (!transparent.contains(material)) {
+                break;
+            }
+        }
+        return blocks;
     }
 
     @Override
     public Block getTargetBlock(Set<Material> transparent, int maxDistance) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
+        return blocks.get(0);
     }
 
     @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> transparent, int maxDistance) {
-        // TODO Auto-generated method stub
-        return null;
+    	return getLineOfSight(transparent, maxDistance, 2);
     }
 
     @Override
     public Block getTargetBlockExact(int maxDistance) {
-        // TODO Auto-generated method stub
-        return null;
+    	return this.getTargetBlockExact(maxDistance, FluidCollisionMode.NEVER);
     }
 
     @Override
     public Block getTargetBlockExact(int maxDistance, FluidCollisionMode fluidCollisionMode) {
-        // TODO Auto-generated method stub
-        return null;
+    	RayTraceResult hitResult = this.rayTraceBlocks(maxDistance, fluidCollisionMode);
+        return (hitResult != null ? hitResult.getHitBlock() : null);
     }
 
     @Override
     public RayTraceResult rayTraceBlocks(double maxDistance) {
-        // TODO Auto-generated method stub
-        return null;
+    	return this.rayTraceBlocks(maxDistance, FluidCollisionMode.NEVER);
     }
 
     @Override
     public RayTraceResult rayTraceBlocks(double maxDistance, FluidCollisionMode fluidCollisionMode) {
-        // TODO Auto-generated method stub
-        return null;
+    	Location eyeLocation = this.getEyeLocation();
+        Vector direction = eyeLocation.getDirection();
+        return this.getWorld().rayTraceBlocks(eyeLocation, direction, maxDistance, fluidCollisionMode, false);
     }
 
     @Override
@@ -777,7 +801,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
 
     @Override
     public boolean isCollidable() {
-        return getHandle().isPushable();
+        // TODO
+    	return true;
     }
 
     @Override
