@@ -1,19 +1,21 @@
 package io.github.craftfabric.craftfabric.block;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-
-import org.bukkit.Chunk;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.PistonMoveReaction;
+import com.destroystokyo.paper.block.BlockSoundGroup;
+import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.CraftMagicNumbers;
+import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
+import io.github.craftfabric.craftfabric.world.CraftWorld;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.RedstoneWireBlock;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.LightType;
+import org.bukkit.*;
+import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.inventory.ItemStack;
@@ -26,18 +28,9 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.destroystokyo.paper.block.BlockSoundGroup;
-
-import io.github.craftfabric.craftfabric.CraftMagicNumbers;
-import io.github.craftfabric.craftfabric.world.CraftWorld;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneWireBlock;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.LightType;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class CraftBlock implements Block {
     private final net.minecraft.world.World world;
@@ -137,14 +130,32 @@ public class CraftBlock implements Block {
         return position;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NotNull World getWorld() {
-        // TODO
-        return null;
+        return ((CraftLink<World>) world).getCraftHandler();
     }
 
     public CraftWorld getWorldImpl() {
         return (CraftWorld) getWorld();
+    }
+
+    public boolean setTypeAndData(net.minecraft.block.BlockState blockData, boolean applyPhysics) {
+        if (!blockData.isAir() && blockData.getBlock() instanceof BlockEntityProvider
+                && blockData.getBlock() != getNMSBlock()) {
+            world.removeBlockEntity(position);
+        }
+
+        if (applyPhysics) {
+            return world.setBlockState(position, blockData, 3);
+        } else {
+            net.minecraft.block.BlockState old = world.getBlockState(position);
+            boolean success = world.setBlockState(position, blockData, 2 | 16 | 1024); // NOTIFY | NO_OBSERVER | NO_PLACE (custom)
+            if (success) {
+                world.updateListeners(position, old, blockData, 3);
+            }
+            return success;
+        }
     }
 
     // Implementation
@@ -315,7 +326,6 @@ public class CraftBlock implements Block {
     @Override
     public int getBlockPower(@NotNull BlockFace face) {
         int power = 0;
-        RedstoneWireBlock wire = (RedstoneWireBlock) Blocks.REDSTONE_WIRE;
         int x = getX();
         int y = getY();
         int z = getZ();
@@ -372,25 +382,34 @@ public class CraftBlock implements Block {
 
     @Override
     public boolean breakNaturally() {
-        // TODO
-        return false;
+        return breakNaturally(new ItemStack(Material.AIR));
     }
 
     @Override
-    public boolean breakNaturally(@NotNull ItemStack tool) {
-        // TODO
-        return false;
+    public boolean breakNaturally(@NotNull ItemStack item) {
+        return breakNaturally(item, true);
     }
 
     @Override
     public @NotNull Collection<ItemStack> getDrops() {
-        // TODO
-        return null;
+        return getDrops(new ItemStack(Material.AIR));
     }
 
     @Override
     public @NotNull Collection<ItemStack> getDrops(@NotNull ItemStack tool) {
-        // TODO
+        /*
+        net.minecraft.block.BlockState blockState = getNMS();
+        net.minecraft.item.ItemStack nms = CraftItemStack.asNMSCopy(tool);
+        if (blockState.getMaterial().canBreakByHand() || nms.isEffectiveOn(blockState)) {
+            if (world instanceof ServerWorld) {
+                return net.minecraft.block.Block.getDroppedStacks(blockState, (ServerWorld) world, position, world.getBlockEntity(position), null, nms)
+                        .stream().map(CraftItemStack::asBukkitCopy).collect(Collectors.toList());
+            }
+            // TODO: client side?
+        } else {
+            return Collections.emptyList();
+        }
+         */
         return null;
     }
 
@@ -451,21 +470,31 @@ public class CraftBlock implements Block {
         return "CraftBlock{pos=" + position + ",type=" + getType() + ",data=" + getNMS() + ",fluid=" + world.getFluidState(position) + '}';
     }
 
-	@Override
-	public @NotNull BlockState getState(boolean useSnapshot) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public @NotNull BlockState getState(boolean useSnapshot) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean breakNaturally(@NotNull ItemStack tool, boolean triggerEffect) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean breakNaturally(@NotNull ItemStack tool, boolean triggerEffect) {
+        net.minecraft.block.Block block = getNMSBlock();
+        boolean result = false;
 
-	@Override
-	public @NotNull BlockSoundGroup getSoundGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        if (block != null && block != Blocks.AIR) {
+            net.minecraft.block.Block.dropStacks(getNMS(), world, position, world.getBlockEntity(position), null, CraftItemStack.asNMSCopy(item));
+            if (triggerEffect) {
+                world.playGlobalEvent(org.bukkit.Effect.STEP_SOUND.getId(), position, net.minecraft.block.Block.getRawIdFromState(block.getDefaultState()));
+            }
+            result = true;
+        }
+
+        return setTypeAndData(Blocks.AIR.getDefaultState(), true) && result;
+    }
+
+    @Override
+    public @NotNull BlockSoundGroup getSoundGroup() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
