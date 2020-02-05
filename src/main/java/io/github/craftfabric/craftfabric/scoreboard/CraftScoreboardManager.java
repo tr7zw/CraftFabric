@@ -9,14 +9,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Consumer;
+
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import io.github.craftfabric.craftfabric.entity.CraftPlayer;
 import io.github.craftfabric.craftfabric.mixin.IPlayerManager;
-import net.minecraft.client.network.packet.ScoreboardObjectiveUpdateS2CPacket;
-import net.minecraft.client.network.packet.TeamS2CPacket;
+import net.minecraft.network.packet.s2c.play.ScoreboardObjectiveUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.TeamS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardObjective;

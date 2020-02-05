@@ -1,10 +1,5 @@
 package io.github.craftfabric.craftfabric.inventory;
 
-import com.google.common.base.Preconditions;
-import io.github.craftfabric.craftfabric.entity.CraftHumanEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.server.network.ServerPlayerEntity;
-
 import java.util.HashMap;
 
 import org.apache.commons.lang.Validate;
@@ -16,6 +11,14 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.google.common.base.Preconditions;
+
+import io.github.craftfabric.craftfabric.entity.CraftHumanEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.packet.s2c.play.ContainerSlotUpdateS2CPacket;
+import net.minecraft.network.packet.s2c.play.HeldItemChangeS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.inventory.PlayerInventory, EntityEquipment {
 
@@ -110,7 +113,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         } else if (index > 35) {
             index = 8 - (index - 36);
         }
-        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.ContainerSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
+        player.networkHandler.sendPacket(new ContainerSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
     }
 
     public int getHeldItemSlot() {
@@ -122,7 +125,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         this.getInventory().selectedSlot = slot;
         if (!(holder.getHandle() instanceof ServerPlayerEntity)) return;
         ServerPlayerEntity player = (ServerPlayerEntity) holder.getHandle();
-        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.HeldItemChangeS2CPacket(slot));
+        player.networkHandler.sendPacket(new HeldItemChangeS2CPacket(slot));
     }
 
     public ItemStack getHelmet() {
