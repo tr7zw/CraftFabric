@@ -349,7 +349,7 @@ public abstract class AbstractServerImpl implements Server {
 	@Override
     public Player getPlayer(@NotNull String name) {
     	return server.getPlayerManager().getPlayerList().stream()
-    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> name.equals(p.getName())).findAny().get();
+    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> name.equals(p.getName())).findAny().orElse(null);
     }
 
     @Override
@@ -369,7 +369,7 @@ public abstract class AbstractServerImpl implements Server {
 	@Override
     public Player getPlayer(@NotNull UUID id) {
     	return server.getPlayerManager().getPlayerList().stream()
-    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> id.equals(p.getUniqueId())).findAny().get();
+    			.map(player -> ((CraftLink<Player>) player).getCraftHandler()).filter(p -> id.equals(p.getUniqueId())).findAny().orElse(null);
     }
 
     @Override
