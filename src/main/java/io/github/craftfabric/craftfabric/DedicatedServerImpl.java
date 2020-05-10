@@ -124,10 +124,4 @@ public class DedicatedServerImpl extends AbstractServerImpl {
 		return null;
 	}
 
-	@Override
-	public int getCurrentTick() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

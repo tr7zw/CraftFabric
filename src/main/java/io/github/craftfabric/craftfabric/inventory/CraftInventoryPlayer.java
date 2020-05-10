@@ -110,7 +110,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         } else if (index > 35) {
             index = 8 - (index - 36);
         }
-        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.ContainerSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
+        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.ContainerSlotUpdateS2CPacket(player.container.syncId, index, CraftItemStack.asNMSCopy(item)));
     }
 
     public int getHeldItemSlot() {
@@ -122,7 +122,7 @@ public class CraftInventoryPlayer extends CraftInventory implements org.bukkit.i
         this.getInventory().selectedSlot = slot;
         if (!(holder.getHandle() instanceof ServerPlayerEntity)) return;
         ServerPlayerEntity player = (ServerPlayerEntity) holder.getHandle();
-        player.networkHandler.sendPacket(new net.minecraft.client.network.packet.HeldItemChangeS2CPacket(slot));
+        player.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.HeldItemChangeS2CPacket(slot));
     }
 
     public ItemStack getHelmet() {

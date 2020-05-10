@@ -946,6 +946,11 @@ public abstract class AbstractServerImpl implements Server {
     }
 
     @Override
+    public int getCurrentTick() {
+        return server.getTicks();
+    }
+
+    @Override
     @NotNull
     public Spigot spigot() {
         // TODO Auto-generated method stub
