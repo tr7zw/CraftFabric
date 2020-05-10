@@ -3,6 +3,8 @@ package io.github.craftfabric.craftfabric;
 import java.io.File;
 import java.util.UUID;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +15,7 @@ import net.minecraft.client.options.Option;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.dimension.DimensionType;
 
+@Environment(EnvType.CLIENT)
 public class IntegratedServerImpl extends AbstractServerImpl {
 
     private IntegratedServer server;
