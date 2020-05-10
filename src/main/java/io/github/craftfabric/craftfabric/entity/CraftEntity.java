@@ -348,20 +348,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             return new CraftLlamaSpit(server, (EntityLlamaSpit) entity);
         }
         */
-		//TODO normaly unused since all the above should be used. But maybe usefull if mods are in use that add new Entities?
-		/* Response (i509):
-		 *
-		 * I'd say the best approach for allowing modded entities is to have a sort of "createCraftEntity" method (albeit protected method) in a special "EntityCraftLink<E extend Entity>" that is invoked at the TAIL of EntityMixin.
-		 * All the implementations of craft entity would just override that method to their pleasing to create their own CraftXYZEntity. And if they dont, well the last override will take effect.
-		 * So if someone adds a new Illager, craftfabric would still hold a "CraftIllagerEntity" on that entity so events can fire and bukkit plugins see an illager entity.
-		 * However this would prevent us from making every entity impl bukkit does abstract.
-		 * So in that case we may not have the option to make CraftLivingEntity abstract at all, or be forced to implement a sort of "CraftLivingEntityImpl". that LivingEntity will return by default
-		 *
-		 * Response End
-		 */
-    	if(entity instanceof LivingEntity) {
-    		return new CraftLivingEntity(server, (LivingEntity) entity);
-    	}
+        //TODO normaly unused since all the above should be used. But maybe usefull if mods are in use that add new Entities?
+        /* Response (i509):
+         *
+         * I'd say the best approach for allowing modded entities is to have a sort of "createCraftEntity" method (albeit protected method) in a special "EntityCraftLink<E extend Entity>" that is invoked at the TAIL of EntityMixin.
+         * All the implementations of craft entity would just override that method to their pleasing to create their own CraftXYZEntity. And if they dont, well the last override will take effect.
+         * So if someone adds a new Illager, craftfabric would still hold a "CraftIllagerEntity" on that entity so events can fire and bukkit plugins see an illager entity.
+         * However this would prevent us from making every entity impl bukkit does abstract.
+         * So in that case we may not have the option to make CraftLivingEntity abstract at all, or be forced to implement a sort of "CraftLivingEntityImpl". that LivingEntity will return by default
+         *
+         * Response End
+         */
+        if (entity instanceof LivingEntity) {
+            return new CraftLivingEntity(server, (LivingEntity) entity);
+        }
         throw new AssertionError("Unknown entity " + (entity == null ? null : entity.getClass()));
     }
 
