@@ -1,17 +1,38 @@
 {
+  "schemaVersion": 1,
   "id": "craftfabric",
+  "version": "${version}",
+
   "name": "CraftFabric",
   "description": "Fabric <3 Bukkit!",
-  "version": "${version}",
-  "side": "universal",
-  "initializers": [
-    "io.github.craftfabric.craftfabric.CraftFabric"
+  "authors": [
+    {
+      "name": "tr7zw",
+      "contact": {
+        "sources": "https://github.com/tr7zw"
+      }
+    }
   ],
-  "requires": {
+  "license": "LGPLv3",
+  "environment": "*",
+
+  "entrypoints": {
+    "main": [
+      "io.github.craftfabric.craftfabric.CraftFabric"
+    ]
   },
-  "mixins": {
-    "common": "craftfabric.common.json",
-    "client": "craftfabric.client.json",
-    "server": "craftfabric.server.json"
-  }
+
+  "depends": {
+  },
+  "mixins": [
+    "mixins.craftfabric.common.json",
+    {
+      "environment": "client",
+      "config": "mixins.craftfabric.client.json"
+    },
+    {
+      "environment": "server",
+      "config": "mixins.craftfabric.server.json"
+    }
+  ]
 }
