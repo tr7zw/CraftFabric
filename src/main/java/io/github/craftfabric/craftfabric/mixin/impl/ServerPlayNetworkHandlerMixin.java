@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import io.github.craftfabric.craftfabric.CraftLink;
-import net.minecraft.client.network.packet.EntitySpawnS2CPacket;
-import net.minecraft.client.network.packet.EntityTrackerUpdateS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.item.Item;
@@ -24,11 +22,13 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkThreadUtils;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ServerPlayPacketListener;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.InteractionType;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket;
-import net.minecraft.server.network.packet.PlayerInteractEntityC2SPacket.InteractionType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
@@ -37,7 +37,7 @@ import net.minecraft.util.math.Vec3d;
 public abstract class ServerPlayNetworkHandlerMixin implements ServerPlayPacketListener {
 
 	@Shadow
-	public ClientConnection client;
+	public ClientConnection connection;
 	@Shadow
 	private MinecraftServer server;
 	@Shadow

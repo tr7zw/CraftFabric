@@ -87,3 +87,4 @@ nb-configuration.xml
 
 # Fabric
 run/
+remappedSrc/
