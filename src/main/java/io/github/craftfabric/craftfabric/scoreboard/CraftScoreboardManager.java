@@ -9,12 +9,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Consumer;
+
+import io.github.craftfabric.craftfabric.accessor.server.PlayerManagerAccessor;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import io.github.craftfabric.craftfabric.entity.CraftPlayer;
-import io.github.craftfabric.craftfabric.mixin.IPlayerManager;
 import net.minecraft.network.packet.s2c.play.ScoreboardObjectiveUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.TeamS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
@@ -83,7 +84,7 @@ public final class CraftScoreboardManager implements ScoreboardManager {
             entityplayer.networkHandler.sendPacket(new TeamS2CPacket(scoreboardteam, 1));
          }
 
-         ((IPlayerManager)this.server.getPlayerManager()).sendScoreboardWrapper((ServerScoreboard)newboard, player.getHandle());
+         ((PlayerManagerAccessor) this.server.getPlayerManager()).invokeSendScoreboard((ServerScoreboard) newboard, player.getHandle());
       }
    }
 

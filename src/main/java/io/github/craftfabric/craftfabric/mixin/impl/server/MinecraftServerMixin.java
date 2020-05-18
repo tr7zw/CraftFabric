@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.mixin.impl;
+package io.github.craftfabric.craftfabric.mixin.impl.server;
 
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +12,7 @@ import io.github.craftfabric.craftfabric.scheduler.CraftScheduler;
 import net.minecraft.server.MinecraftServer;
 
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
 
 	@Shadow
 	private int ticks;
@@ -23,9 +23,8 @@ public class MinecraftServerMixin {
     }
 
     @Inject(at = @At("HEAD"), method = "getServerModName", cancellable=true)
-    public String getServerModName(CallbackInfoReturnable<String> ret) {
-    	ret.setReturnValue("FabricBukkit");
-    	return "FabricBukkit";
+    public void getServerModName(CallbackInfoReturnable<String> ret) {
+    	ret.setReturnValue("FabricBukkit"); // TODO: i509VCB - should we even do this? Fabric already sets a brand
     }
     
 }

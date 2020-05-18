@@ -1,7 +1,8 @@
-package io.github.craftfabric.craftfabric.mixin.impl.server;
+package io.github.craftfabric.craftfabric.mixin.impl.server.dedicated;
 
 import io.github.craftfabric.craftfabric.DedicatedServerImpl;
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
+import io.github.craftfabric.craftfabric.mixin.impl.server.MinecraftServerMixin;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginLoadOrder;
@@ -12,12 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftDedicatedServer.class)
-public class DedicatedServerMixin {
+public abstract class MinecraftDedicatedServerMixin extends MinecraftServerMixin {
 
     @Inject(at = @At("HEAD"), method = "setupServer")
     private void setupServer(CallbackInfoReturnable<Boolean> info) {
-        Object server = this;
-        new DedicatedServerImpl((MinecraftDedicatedServer) server);
+        new DedicatedServerImpl((MinecraftDedicatedServer) (Object) this);
         ((AbstractServerImpl) Bukkit.getServer()).setupServer();
     }
     

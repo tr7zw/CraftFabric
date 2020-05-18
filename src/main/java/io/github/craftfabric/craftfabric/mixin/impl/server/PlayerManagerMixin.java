@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.mixin.impl;
+package io.github.craftfabric.craftfabric.mixin.impl.server;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -18,7 +18,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,27 +25,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
-import io.github.craftfabric.craftfabric.CraftLink;
-import io.github.craftfabric.craftfabric.mixin.IPlayerManager;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import io.netty.channel.local.LocalAddress;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 @Mixin(PlayerManager.class)
-public class PlayerManagerMixin implements IPlayerManager{
+public abstract class PlayerManagerMixin {
 
 	private ExecutorService asyncLoginExecutor = Executors.newFixedThreadPool(4);
 	
     @Inject(at = @At("HEAD"), method = "checkCanJoin", cancellable=true)
-    public Text checkCanJoin(SocketAddress socketAddress_1, GameProfile gameProfile_1, CallbackInfoReturnable<Text> info) {
+    public void checkCanJoin(SocketAddress socketAddress, GameProfile profile, CallbackInfoReturnable<Text> info) {
         InetAddress address = null;
-        if (socketAddress_1 instanceof InetSocketAddress) {
-            address = ((InetSocketAddress) socketAddress_1).getAddress();
-        } else if (socketAddress_1 instanceof LocalAddress) {
+        if (socketAddress instanceof InetSocketAddress) {
+            address = ((InetSocketAddress) socketAddress).getAddress();
+        } else if (socketAddress instanceof LocalAddress) {
             address = new InetSocketAddress("localhost", 25565).getAddress(); // Maybe FIXME?
         }
         final InetAddress fAddress = address;
@@ -54,7 +51,7 @@ public class PlayerManagerMixin implements IPlayerManager{
 
 			@Override
 			public AsyncPlayerPreLoginEvent call() throws Exception {
-				AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(gameProfile_1.getName(), fAddress, gameProfile_1.getId());
+				AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(profile.getName(), fAddress, profile.getId());
 				Bukkit.getPluginManager().callEvent(event);
 				return event;
 			}
@@ -63,36 +60,28 @@ public class PlayerManagerMixin implements IPlayerManager{
         try {
         	AsyncPlayerPreLoginEvent event = futureEvent.get(10, TimeUnit.SECONDS);
         	if(event.getLoginResult() == Result.ALLOWED) {
-        		return null;
+        		info.setReturnValue(null);
         	} else {
         		info.setReturnValue(new LiteralText(event.getKickMessage()));
         	}
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
-			return new LiteralText("Internal Server error!");
+            info.setReturnValue(new LiteralText("Internal Server error!"));
 		}
-        
-        return null;
+
+        info.setReturnValue(null);
     }
 
     @SuppressWarnings("unchecked")
     @Inject(at = @At("RETURN"), method = "onPlayerConnect")
-    public void onPlayerConnect(ClientConnection clientConnection_1, ServerPlayerEntity serverPlayerEntity_1, CallbackInfo info) {
-        Bukkit.getPluginManager().callEvent(new PlayerJoinEvent(((CraftLink<Player>) (Object) serverPlayerEntity_1).getCraftHandler(), "")); //FIXME message
+    public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity playerEntity, CallbackInfo info) {
+        Bukkit.getPluginManager().callEvent(new PlayerJoinEvent(((CraftLink<Player>) (Object) playerEntity).getCraftHandler(), "")); //FIXME message
     }
 
     @SuppressWarnings("unchecked")
     @Inject(at = @At("HEAD"), method = "remove")
-    public void onQuit(ServerPlayerEntity serverPlayerEntity_1, CallbackInfo info) {
-        Bukkit.getPluginManager().callEvent(new PlayerQuitEvent(((CraftLink<Player>) (Object) serverPlayerEntity_1).getCraftHandler(), "")); //FIXME message
+    public void onQuit(ServerPlayerEntity playerEntity, CallbackInfo info) {
+        Bukkit.getPluginManager().callEvent(new PlayerQuitEvent(((CraftLink<Player>) (Object) playerEntity).getCraftHandler(), "")); //FIXME message
     }
-
-    @Override
-	public void sendScoreboardWrapper(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {
-		sendScoreboard(serverScoreboard_1, serverPlayerEntity_1);
-	}
-    
-    @Shadow
-	void sendScoreboard(ServerScoreboard serverScoreboard_1, ServerPlayerEntity serverPlayerEntity_1) {}
 
 }

@@ -1,7 +1,7 @@
 package io.github.craftfabric.craftfabric.block;
 
 import com.destroystokyo.paper.block.BlockSoundGroup;
-import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import io.github.craftfabric.craftfabric.CraftMagicNumbers;
 import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
@@ -291,12 +291,12 @@ public class CraftBlock implements Block {
 
     @Override
     public @NotNull Biome getBiome() {
-        return getWorld().getBiome(getX(), getZ());
+        return getWorld().getBiome(getX(), getY(), getZ());
     }
 
     @Override
     public void setBiome(@NotNull Biome biome) {
-        getWorld().setBiome(getX(), getZ(), biome);
+        getWorld().setBiome(getX(), getY(), getZ(), biome);
     }
 
     @Override

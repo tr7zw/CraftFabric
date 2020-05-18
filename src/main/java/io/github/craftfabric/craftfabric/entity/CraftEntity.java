@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import com.google.common.base.Preconditions;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

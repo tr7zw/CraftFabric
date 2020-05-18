@@ -4,15 +4,15 @@
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7.11",
   "mixins": [
-    "MixinServerPlayer",
-  "MixinWorld",
-  "MixinServerWorld",
-	"PlayerManagerMixin",
-	"ServerCommandManagerMixin",
-	"SimpleCommandMapMixin",
-	"MinecraftServerMixin",
-	"PlayerAbilitiesMixin",
-	"ServerPlayNetworkHandlerMixin"
+    "entity.EntityMixin",
+    "entity.LivingEntityMixin",
+    "server.MinecraftServerMixin",
+    "server.PlayerManagerMixin",
+    "server.command.ServerCommandManagerMixin",
+    "server.dedicated.MinecraftDedicatedServerMixin",
+    "server.network.ServerPlayerEntityMixin",
+    "server.network.ServerPlayNetworkHandlerMixin",
+    "world.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

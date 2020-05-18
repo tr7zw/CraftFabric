@@ -25,14 +25,12 @@
   "depends": {
   },
   "mixins": [
+    "mixins.craftfabric.accessors.json",
+    "mixins.craftfabric.bukkit.json",
     "mixins.craftfabric.common.json",
     {
       "environment": "client",
       "config": "mixins.craftfabric.client.json"
-    },
-    {
-      "environment": "server",
-      "config": "mixins.craftfabric.server.json"
     }
   ]
 }

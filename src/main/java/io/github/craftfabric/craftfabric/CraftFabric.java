@@ -2,20 +2,23 @@ package io.github.craftfabric.craftfabric;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class CraftFabric implements ModInitializer {
 
-    private static final Logger LOG = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     @Override
     public void onInitialize() {
-        LOG.info("FabricBukkit loaded...");
+        LOGGER.info("FabricBukkit loaded...");
+        //Enchantment.isAcceptingRegistrations();
+        // TODO: Hook into fabric api so we can:
+        // Filter registries for new enchantments other mods have already added.
+        // Hook into "RegistryEntryAddedCallback" so we can automatically register new enchantments added by other mods
+        // Use either ServerStartCallback or an equivalent hook in the client to lock registrations.
+        // TODO: Similar thing with Potions
+        //PotionEffectType.values();
+        // May require some additional work since potions use numerical ids in bukkit, but registry identifiers in nms
     }
 }

@@ -1,6 +1,5 @@
 package io.github.craftfabric.craftfabric.inventory;
 
-import io.github.craftfabric.craftfabric.mixin.IBasicInventory;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -215,7 +214,7 @@ public abstract class CraftInventory implements Inventory {
 
     /*@Override
     public ItemStack[] getContents() {
-        List<net.minecraft.item.ItemStack> mcItems = ((IBasicInventory) (Object) getInventory()).getContent();
+        List<net.minecraft.item.ItemStack> mcItems = ((BasicInventoryAccessor) getInventory()).getStackList();
 
         return asCraftMirror(mcItems);
     }*/
