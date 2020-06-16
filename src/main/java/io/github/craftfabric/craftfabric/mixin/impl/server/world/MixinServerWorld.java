@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.mixin.impl;
+package io.github.craftfabric.craftfabric.mixin.impl.server.world;
 
 import org.bukkit.World.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import io.github.craftfabric.craftfabric.world.CraftWorld;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;

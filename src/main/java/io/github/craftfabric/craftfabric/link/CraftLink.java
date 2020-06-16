@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric;
+package io.github.craftfabric.craftfabric.link;
 
 public interface CraftLink<T> {
 

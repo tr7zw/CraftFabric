@@ -1,10 +1,10 @@
 {
   "required": true,
-  "package": "io.github.craftfabric.craftfabric.mixin.impl.server",
+  "package": "io.github.craftfabric.craftfabric.mixin.bukkit",
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7.11",
   "mixins": [
-    "DedicatedServerMixin"
+    "SimpleCommandMapMixin"
   ],
   "injectors": {
     "defaultRequire": 1

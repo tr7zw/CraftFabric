@@ -1,4 +1,4 @@
-package io.github.craftfabric.craftfabric.mixin.impl;
+package io.github.craftfabric.craftfabric.mixin.impl.server.network;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.FishEntity;
 import net.minecraft.item.Item;

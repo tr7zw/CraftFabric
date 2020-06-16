@@ -51,7 +51,7 @@ import com.destroystokyo.paper.entity.TargetEntityInfo;
 import com.google.common.collect.Sets;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
-import io.github.craftfabric.craftfabric.CraftLink;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import net.minecraft.entity.damage.DamageSource;
 
 public class CraftLivingEntity extends CraftEntity implements LivingEntity {

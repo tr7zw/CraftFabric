@@ -7,6 +7,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import io.github.craftfabric.craftfabric.accessor.entity.player.ItemCooldownManagerAccessor;
+import io.github.craftfabric.craftfabric.accessor.entity.player.PlayerEntityAccessor;
+import io.github.craftfabric.craftfabric.accessor.server.network.ServerPlayerEntityAccessor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,10 +37,6 @@ import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.CraftMagicNumbers;
 import io.github.craftfabric.craftfabric.inventory.CraftInventoryPlayer;
 import io.github.craftfabric.craftfabric.inventory.CraftItemStack;
-import io.github.craftfabric.craftfabric.mixin.IItemCooldownManagerMixin;
-import io.github.craftfabric.craftfabric.mixin.ILivingEntityMixin;
-import io.github.craftfabric.craftfabric.mixin.IPlayerEntityMixin;
-import io.github.craftfabric.craftfabric.mixin.IServerPlayerEntityMixin;
 import io.github.craftfabric.craftfabric.utility.NamespaceUtilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.recipe.Recipe;
@@ -102,7 +101,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
         net.minecraft.item.ItemStack stack = CraftItemStack.asNMSCopy(item);
         getHandle().inventory.setCursorStack(stack);
         if (this instanceof CraftPlayer) {
-            ((IServerPlayerEntityMixin) getHandle()).updateCursorStack();
+            ((ServerPlayerEntityAccessor) getHandle()).invokeUpdateCursorStack();
         }
     }
 
@@ -159,7 +158,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public boolean isOp() {
-        return op;
+        return getHandle().allowsPermissionLevel(2);
     }
 
     @Override
@@ -281,12 +280,12 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public void closeInventory() {
-        ((IPlayerEntityMixin) getHandle()).closeInventory();
+        ((PlayerEntityAccessor) getHandle()).invokeCloseContainer();
     }
 
     @Override
     public boolean isBlocking() {
-        return ((ILivingEntityMixin) getHandle()).isBlocking();
+        return getHandle().isBlocking();
     }
 
     @Override
@@ -301,7 +300,8 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
 
     @Override
     public int getExpToLevel() {
-        return ((IPlayerEntityMixin) getHandle()).getExpToLevel();
+        return 0; // TODO Implement me
+        //return ((IPlayerEntityMixin) getHandle()).getExpToLevel();
     }
 
     @Override
@@ -313,7 +313,7 @@ public abstract class CraftHumanEntity extends CraftLivingEntity implements Huma
     @Override
     public int getCooldown(@NotNull Material material) {
         Objects.requireNonNull(material, "material");
-        return (int) getHandle().getItemCooldownManager().getCooldownProgress(CraftMagicNumbers.getItem(material), ((IItemCooldownManagerMixin) (Object) getHandle().getItemCooldownManager()).getTick());
+        return (int) getHandle().getItemCooldownManager().getCooldownProgress(CraftMagicNumbers.getItem(material), ((ItemCooldownManagerAccessor) getHandle().getItemCooldownManager()).getTicks());
     }
 
     @Override

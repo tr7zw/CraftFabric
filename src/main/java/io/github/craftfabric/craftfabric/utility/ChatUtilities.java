@@ -2,7 +2,7 @@ package io.github.craftfabric.craftfabric.utility;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
-import io.github.craftfabric.craftfabric.mixin.ITextFormatMixin;
+import io.github.craftfabric.craftfabric.accessor.util.FormattingAccessor;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
@@ -32,7 +32,7 @@ public final class ChatUtilities {
     }
 
     public static ChatColor getColor(Formatting format) {
-        return ChatColor.getByChar(((ITextFormatMixin) (Object) format).getSectionSignCode());
+        return ChatColor.getByChar(((FormattingAccessor) (Object) format).getCode());
     }
 
     private static class StringMessage {

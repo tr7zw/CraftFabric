@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import io.github.craftfabric.craftfabric.accessor.entity.player.PlayerAbilitiesAccessor;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -59,7 +60,6 @@ import com.mojang.authlib.GameProfile;
 
 import io.github.craftfabric.craftfabric.AbstractServerImpl;
 import io.github.craftfabric.craftfabric.command.ConversationTracker;
-import io.github.craftfabric.craftfabric.mixin.IPlayerAbilitiesMixin;
 import io.github.craftfabric.craftfabric.scoreboard.CraftScoreboardManager;
 import io.github.craftfabric.craftfabric.utility.ChatUtilities;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
@@ -793,34 +793,34 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean isFlying() {
-        return ((IPlayerAbilitiesMixin)getHandle().abilities).isFlying();
+        return ((PlayerAbilitiesAccessor) getHandle().abilities).allowsFlight();
     }
 
     @Override
     public void setFlying(boolean value) {
-    	((IPlayerAbilitiesMixin)getHandle().abilities).setFlying(value);
+    	((PlayerAbilitiesAccessor) getHandle().abilities).setAllowsFlight(value);
         getHandle().sendAbilitiesUpdate();
     }
 
     @Override
     public float getFlySpeed() {
-        return ((IPlayerAbilitiesMixin)getHandle().abilities).getFlySpeed();
+        return ((PlayerAbilitiesAccessor) getHandle().abilities).getFlySpeed();
     }
 
     @Override
     public void setFlySpeed(float value) throws IllegalArgumentException {
-    	((IPlayerAbilitiesMixin)getHandle().abilities).setFlySpeed(value);
+    	((PlayerAbilitiesAccessor) getHandle().abilities).setFlySpeed(value);
         getHandle().sendAbilitiesUpdate();
     }
 
     @Override
     public float getWalkSpeed() {
-        return ((IPlayerAbilitiesMixin)getHandle().abilities).getWalkSpeed();
+        return ((PlayerAbilitiesAccessor) getHandle().abilities).getWalkSpeed();
     }
 
     @Override
     public void setWalkSpeed(float value) throws IllegalArgumentException {
-        ((IPlayerAbilitiesMixin)getHandle().abilities).setWalkSpeed(value);
+        ((PlayerAbilitiesAccessor) getHandle().abilities).setWalkSpeed(value);
         getHandle().sendAbilitiesUpdate();
     }
 

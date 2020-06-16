@@ -4,6 +4,7 @@ import com.google.common.collect.MapMaker;
 import io.github.craftfabric.craftfabric.command.CraftCommandMap;
 import io.github.craftfabric.craftfabric.command.CraftConsoleCommandSender;
 import io.github.craftfabric.craftfabric.inventory.CraftItemFactory;
+import io.github.craftfabric.craftfabric.link.CraftLink;
 import io.github.craftfabric.craftfabric.scheduler.CraftScheduler;
 import io.github.craftfabric.craftfabric.scoreboard.CraftScoreboardManager;
 import io.github.craftfabric.craftfabric.utility.GameModeUtilities;
@@ -39,7 +40,6 @@ import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.CachedServerIcon;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -130,7 +130,7 @@ public abstract class AbstractServerImpl implements Server {
         commandMap = new CraftCommandMap(this);
         commandMap.setFallbackCommands();
         pluginManager = new SimplePluginManager(this, commandMap);
-        scoreboardManager = new CraftScoreboardManager(getHandler(), getHandler().getScoreboard());
+        scoreboardManager = new CraftScoreboardManager(server, server.getScoreboard());
     }
 
     public MinecraftServer getHandler() {

@@ -2,6 +2,7 @@ package io.github.craftfabric.craftfabric.mixin.impl.client;
 
 import java.lang.reflect.Field;
 
+import io.github.craftfabric.craftfabric.CraftFabric;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,13 +37,13 @@ public class IntegratedServerMixin {
 
     @Inject(at = @At("HEAD"), method = "shutdown")
     private void shutdown(CallbackInfo info) {
-        System.out.println("FabricBukkit prepare-stopping!");
+        CraftFabric.LOGGER.info("FabricBukkit prepare-stopping!");
         ((AbstractServerImpl)Bukkit.getServer()).disablePlugins();
     }
 
     @Inject(at = @At("RETURN"), method = "shutdown")
     private void shutdownFinal(CallbackInfo info) {
-        System.out.println("FabricBukkit stopped!");
+        CraftFabric.LOGGER.info("FabricBukkit stopped!");
         try {
             Field f = Bukkit.class.getDeclaredField("server");
             f.setAccessible(true);
